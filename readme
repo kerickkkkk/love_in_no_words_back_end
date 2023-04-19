@@ -1,0 +1,12 @@
+# 將 express 轉成 TypeScript
+
+- 進入點是 www
+- 將套件加入 @types
+- 專案內要有 nodemon, typescript 
+
+# 專案使用 
+
+- npm install
+- 環境
+    - 開發中： npm run start:dev
+    - 正式環境： npm run start
