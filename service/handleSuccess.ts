@@ -1,8 +1,9 @@
 import { Response } from 'express';
 
-const handleSuccess = (res: Response, data: any) => {
+const handleSuccess = (res: Response, msg: String, data: any) => {
     res.status(200).send({
-        success: true,
+        status: 'OK',
+        message: msg,
         data
     })
 }
