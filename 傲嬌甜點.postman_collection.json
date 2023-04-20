@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "5e115b95-2c79-4497-8c99-c94040328e38",
+		"_postman_id": "5818f42f-ba26-49c3-8b9b-2ef1d307786a",
 		"name": "傲嬌甜點",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "6878038"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -11,6 +10,23 @@
 			"item": [
 				{
 					"name": "註冊",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Renew token',function(){\r",
+									"  if(pm.response.to.have.status(200))  {\r",
+									"   pm.collectionVariables.set('token','Bearer '+pm.response.json().data.user.token)\r",
+									"  }\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -39,6 +55,23 @@
 				},
 				{
 					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Renew token',function(){\r",
+									"  if(pm.response.to.have.status(200))  {\r",
+									"   pm.collectionVariables.set('token','Bearer '+pm.response.json().data.user.token)\r",
+									"  }\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
