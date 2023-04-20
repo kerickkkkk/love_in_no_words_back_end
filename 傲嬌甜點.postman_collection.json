@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "90a34513-b6c6-4ca3-99ab-4c159f0f044c",
+		"_postman_id": "5e115b95-2c79-4497-8c99-c94040328e38",
 		"name": "傲嬌甜點",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "6878038"
@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"qqb\",\n    \"phone\": \"091234567890\",\n    \"password\": \"12345678\",\n    \"confirmPassword\": \"12345678\",\n    \"sex\": \"123\"\n}",
+							"raw": "{\n    \"name\": \"註冊店員\",\n    \"phone\": \"0912345678912\",\n    \"password\": \"12345678\",\n    \"confirmPassword\": \"12345678\",\n    \"disabled\" : true,\n    \"titleNo\": \"2\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -24,11 +24,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/users/sign_up",
+							"raw": "{{base_url}}/v1/users/sign_up",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
+								"v1",
 								"users",
 								"sign_up"
 							]
@@ -43,7 +44,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "\n    {\n        \"phone\": \"09123456789\",\n        \"password\": \"123456789\"\n    }\n",
+							"raw": "\n    {\n        \"phone\": \"0912345678912\",\n        \"password\": \"12345678\"\n    }\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -51,11 +52,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/users/login",
+							"raw": "{{base_url}}/v1/users/login",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
+								"v1",
 								"users",
 								"login"
 							]
@@ -64,7 +66,7 @@
 					"response": []
 				},
 				{
-					"name": "修改使用者profile",
+					"name": "修改使用者",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -76,7 +78,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"QQ2\"\n}",
+							"raw": "{\n    \"name\": \"店員改改\",\n    \"phone\": \"091234567812\",\n    \"titleNo\": 1,\n    \"disabled\":false,\n    \"password\":\"123456789\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -84,13 +86,51 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/users/profile",
+							"raw": "{{base_url}}/v1/users/6440ec209fbd8473221d14c3",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
+								"v1",
 								"users",
-								"profile"
+								"6440ec209fbd8473221d14c3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "取得單一使用者Ｘ",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"員工CCC\",\n    \"phone\": \"0912345678\",\n    \"titleNo\": 1,\n    \"disabled\":false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/users/6441159e5d22d0ac85ee1fdb",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"users",
+								"6441159e5d22d0ac85ee1fdb"
 							]
 						}
 					},
@@ -117,11 +157,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/users/reset_password",
+							"raw": "{{base_url}}/v1/users/reset_password",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
+								"v1",
 								"users",
 								"reset_password"
 							]
@@ -153,11 +194,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/users/profile",
+							"raw": "{{base_url}}/v1/users/profile",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
+								"v1",
 								"users",
 								"profile"
 							]
@@ -166,7 +208,41 @@
 					"response": []
 				},
 				{
-					"name": "查全部使用者",
+					"name": "軟刪除使用者",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/users/6440cf7aa5761e36fd428600",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"users",
+								"6440cf7aa5761e36fd428600"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "取得使用者列表",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -190,11 +266,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/users",
+							"raw": "{{base_url}}/v1/users",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
+								"v1",
 								"users"
 							]
 						}

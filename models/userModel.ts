@@ -1,11 +1,16 @@
 import { Schema, Document, model } from 'mongoose';
 interface IUser extends Document {
-  name: string;
-  phone: string;
-  email ?: string;
-  photo ?: string;
-  sex : 'male'|'female';
-  password:string;
+  name : string ;
+  number : string ;
+  phone : string ;
+  titleNo : number ;
+  title : string ;
+  password : string ;
+  disabled : boolean ;
+  createAt : Date ;
+  revisedAt ?: Date ;
+  isDeleted : boolean ;
+  deletedAt ?: Date ;
 }
 
 const userSchema = new Schema(
@@ -14,21 +19,21 @@ const userSchema = new Schema(
       type: String,
       required: [true, '請輸入您的名字'],
     },
+    number:{
+      type: String
+    },
     phone: {
       type: String,
       required: [true, '請輸入您的手機'],
       unique: true,
     },
-    email: {
+    titleNo : {
       type: String,
+      default: 4
     },
-    photo: {
-      type: String,
-      default: '',
-    },
-    sex: {
-      type: String,
-      enum: ['male', 'female'],
+    title:{
+      type:String,
+      default: '會員'
     },
     password: {
       type: String,
@@ -36,10 +41,29 @@ const userSchema = new Schema(
       minlength: 8,
       select: false,
     },
-    createAt: {
+    disabled:{
+      type: Boolean,
+      default: true,
+      select: false,
+    },
+    revisedAt:{
+      type: Date,
+      default: null,
+      select: false,
+    },
+    createdAt: {
       type: Date,
       default: Date.now,
-      select: false
+      select: false,
+    },
+    isDeleted:{
+      type: Boolean,
+      default: false,
+      select: false,
+    },
+    deletedAt: {
+      type: Date,
+      select: false,
     }
   },
   { versionKey: false }
