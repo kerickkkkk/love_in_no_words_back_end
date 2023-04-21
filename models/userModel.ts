@@ -6,7 +6,7 @@ interface IUser extends Document {
   titleNo: number;
   title: string;
   password: string;
-  disabled: boolean;
+  isDisabled: boolean;
   createAt: Date;
   revisedAt?: Date;
   isDeleted: boolean;
@@ -46,7 +46,7 @@ const userSchema = new Schema(
       default: Date.now,
       select: false,
     },
-    isdisabled: {
+    isDisabled: {
       type: Boolean,
       default: true,
       select: false,

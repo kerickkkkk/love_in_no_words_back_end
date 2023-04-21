@@ -7,7 +7,7 @@ import { User } from '../models/userModel'
 import { generateJWT } from '../middleware/auth'
 import handleSuccess from '../service/handleSuccess'
 import { isoDate } from '../utils/dayjs'
-
+import { autoIncrement } from '../utils/modelsExtensions'
 
 export const users = {
   getUsers: handleErrorAsync(async (req: Request, res: Response,) => {
@@ -16,9 +16,7 @@ export const users = {
   }),
   signUp: handleErrorAsync(async (req: Request, res: Response, next: NextFunction) => {
     // 姓名 電話 職位(預設給 4 ) 密碼  
-    const { name, phone, titleNo = 4, password, confirmPassword, disabled = true } = req.body
-    // todo 
-    // number 要自己生成 暫時不做
+    const { name, phone, titleNo = 4, password, confirmPassword, isDisabled = true } = req.body
     // title 
     const titleMap: string[] = ['', '店長', '店員', '廚師', '會員']
 
@@ -48,7 +46,7 @@ export const users = {
       return next(appError(400, '電話重複', next))
     }
     let revisedAt: (null | string) = null
-    if (disabled) {
+    if (isDisabled) {
       revisedAt = isoDate()
     } else {
       revisedAt = null
@@ -56,6 +54,7 @@ export const users = {
     const title = titleMap[titleNo]
     // 加密
     const bcryptPassword = await bcrypt.hash(password, 12)
+    const autoIncrementIndex = await autoIncrement( User, 'A')
 
     const newUser = await User.create({
       name,
@@ -63,8 +62,9 @@ export const users = {
       password: bcryptPassword,
       titleNo,
       title,
-      disabled,
-      revisedAt
+      isDisabled,
+      revisedAt,
+      number: autoIncrementIndex
     })
 
     generateJWT(newUser, res)
@@ -139,7 +139,7 @@ export const users = {
       return next(appError(400, '查無使用者', next))
     }
 
-    const { name, phone, titleNo = 4, password, disabled = true } = req.body
+    const { name, phone, titleNo = 4, password, isDisabled = true } = req.body
     // todo 
     // title 
     const titleMap: string[] = ['', '店長', '店員', '廚師', '會員']
@@ -151,7 +151,7 @@ export const users = {
       password?: string;
       titleNo: number;
       title: string;
-      disabled: boolean;
+      isDisabled: boolean;
       revisedAt: string;
     }
     // 驗證 
@@ -182,7 +182,7 @@ export const users = {
       phone,
       titleNo,
       title,
-      disabled,
+      isDisabled,
       revisedAt: isoDate()
     }
     if (password) {
