@@ -10,7 +10,7 @@ import handleSuccess from "../service/handleSuccess";
 import { isoDate, slashDate } from "../utils/dayjs";
 import { autoIncrement } from "../utils/modelsExtensions";
 import { Message } from "../constants/messages";
-
+import { Meta } from "../models/paginationInterface";
 export const users = {
   getUsers: handleErrorAsync(
     async (req: Request, res: Response, next: NextFunction) => {
@@ -58,19 +58,6 @@ export const users = {
       // 整合為單一使用者數組
       const usersList = [...clerksList, ...membersList];
 
-      // 定義返回meta
-      interface Meta {
-        pagination: {
-          total: number;
-          perPage: number;
-          currentPage: number;
-          lastPage: number;
-          nextPage: number | null;
-          prevPage: number | null;
-          from: number;
-          to: number;
-        };
-      }
       // 迴圈確認是否有符合輸入的頁碼資料
       for (let p = 0; p <= Math.ceil(usersList.length / 10); p++) {
         const lastPage = Math.ceil(usersList.length / 10);
