@@ -1,4 +1,4 @@
-import { Schema, Document, model } from 'mongoose';
+import { Schema, Document, model } from "mongoose";
 interface IUser extends Document {
   name: string;
   number: string;
@@ -7,7 +7,7 @@ interface IUser extends Document {
   title: string;
   password: string;
   isDisabled: boolean;
-  createAt: Date;
+  createdAt: Date;
   revisedAt?: Date;
   isDeleted: boolean;
   deletedAt?: Date;
@@ -17,39 +17,36 @@ const userSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, '請輸入您的名字'],
+      required: [true, "請輸入姓名"],
     },
     number: {
-      type: String
+      type: String,
     },
     phone: {
       type: String,
-      required: [true, '請輸入您的手機'],
+      required: [true, "請輸入正確電話格式"],
       unique: true,
     },
     titleNo: {
       type: Number,
-      default: 4
+      required: [true, "請輸入正確職位代號"],
     },
     title: {
       type: String,
-      default: '會員'
     },
     password: {
       type: String,
-      required: [true, '請輸入密碼'],
+      required: [true, "請輸入密碼"],
       minlength: 8,
       select: false,
     },
     createdAt: {
       type: Date,
       default: Date.now,
-      select: false,
     },
     isDisabled: {
       type: Boolean,
-      default: true,
-      select: false,
+      required: [true, "狀態請以布林值形式輸入"],
     },
     revisedAt: {
       type: Date,
@@ -64,11 +61,9 @@ const userSchema = new Schema(
     deletedAt: {
       type: Date,
       select: false,
-    }
+    },
   },
   { versionKey: false }
 );
 
-export const User = model<IUser>('User', userSchema);
-
-
+export const User = model<IUser>("User", userSchema);

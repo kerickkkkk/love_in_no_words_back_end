@@ -9,7 +9,7 @@
 			"name": "users",
 			"item": [
 				{
-					"name": "註冊",
+					"name": "註冊店長",
 					"event": [
 						{
 							"listen": "test",
@@ -25,6 +25,15 @@
 								],
 								"type": "text/javascript"
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
 						}
 					],
 					"request": {
@@ -32,7 +41,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"註冊店員\",\n    \"phone\": \"0912345678912\",\n    \"password\": \"12345678\",\n    \"confirmPassword\": \"12345678\",\n    \"isDisabled\" : true,\n    \"titleNo\": \"2\"\n}",
+							"raw": "{\n\n    \"name\": \"註冊店員\",\n    \"phone\": \"0912345678912\",\n    \"password\": \"12345678\",\n    \"confirmPassword\": \"12345678\",\n    \"isDisabled\" : false,\n    \"titleNo\": \"1\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -54,7 +63,7 @@
 					"response": []
 				},
 				{
-					"name": "login",
+					"name": "P-1 登入",
 					"event": [
 						{
 							"listen": "test",
@@ -111,7 +120,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"店員改改\",\n    \"phone\": \"091234567812\",\n    \"titleNo\": 1,\n    \"isDisabled\":false,\n    \"password\":\"123456789\"\n}",
+							"raw": "{\n    \"name\": \"店員改改\",\n    \"number\":\"A00001\",\n    \"phone\": \"091234567812\",\n    \"titleNo\": 1,\n    \"disabled\":false,\n    \"password\":\"123456789\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -119,14 +128,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/users/6440ec209fbd8473221d14c3",
+							"raw": "{{base_url}}/v1/users/644150d167f7f5414bbbddb2",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"users",
-								"6440ec209fbd8473221d14c3"
+								"644150d167f7f5414bbbddb2"
 							]
 						}
 					},
@@ -148,7 +157,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"員工CCC\",\n    \"phone\": \"0912345678\",\n    \"titleNo\": 1,\n    \"isDisabled\":false\n}",
+							"raw": "{\n    \"name\": \"員工CCC\",\n    \"phone\": \"0912345678\",\n    \"titleNo\": 1,\n    \"disabled\":false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -275,7 +284,7 @@
 					"response": []
 				},
 				{
-					"name": "取得使用者列表",
+					"name": "O-1-1 取得使用者列表",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -285,8 +294,7 @@
 							{
 								"key": "Authorization",
 								"value": "{{token}}",
-								"type": "default",
-								"isDisabled": true
+								"type": "default"
 							}
 						],
 						"body": {
@@ -299,13 +307,19 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/users",
+							"raw": "{{base_url}}/v1/users?page=5",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"users"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "5"
+								}
 							]
 						}
 					},
@@ -344,7 +358,7 @@
 			"key": "base_url",
 			"value": "http://localhost:3000",
 			"type": "string",
-			"isDisabled": true
+			"disabled": true
 		},
 		{
 			"key": "token",
