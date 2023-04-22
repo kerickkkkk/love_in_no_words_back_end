@@ -10,7 +10,7 @@ import handleSuccess from "../service/handleSuccess";
 import { isoDate, slashDate } from "../utils/dayjs";
 import { autoIncrement } from "../utils/modelsExtensions";
 import { Message } from "../constants/messages";
-import { Meta } from "../models/paginationInterface";
+import { Meta } from "../types/Pagination";
 export const users = {
   getUsers: handleErrorAsync(
     async (req: Request, res: Response, next: NextFunction) => {
