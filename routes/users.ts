@@ -5,6 +5,7 @@ const router = express.Router();
 
 /* GET users listing. */
 router.get("/", isOwnerAuth, usersController.getUsers);
+router.post("/", isOwnerAuth, usersController.creatUser);
 router.delete("/:id", isAuth, usersController.softDeleteUser);
 router.post("/sign_up", usersController.signUp);
 router.post("/login", usersController.login);
