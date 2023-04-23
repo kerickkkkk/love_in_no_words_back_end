@@ -28,13 +28,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(history());
+app.use('/api/v1/users', usersRouter);
 
-app.get('*', (req, res) => {
+app.get('/*', (req, res) => {
+    console.log('get all')
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
   
-app.use('/', indexRouter);
-app.use('/api/v1/users', usersRouter);
+
 
 // 404 錯誤
 app.use( notFound );
