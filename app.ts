@@ -29,8 +29,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(history());
 
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+  
 app.use('/', indexRouter);
-app.use('/v1/users', usersRouter);
+app.use('/api/v1/users', usersRouter);
 
 // 404 錯誤
 app.use( notFound );
