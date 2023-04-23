@@ -3,6 +3,7 @@ import path from 'path'
 import cookieParser from 'cookie-parser'
 import logger from 'morgan'
 import cors from 'cors'
+import history from 'connect-history-api-fallback'
 import indexRouter from './routes/index'
 import usersRouter from './routes/users'
 import handleAllError from './service/handleAllError'
@@ -26,6 +27,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(history());
 
 app.use('/', indexRouter);
 app.use('/v1/users', usersRouter);
