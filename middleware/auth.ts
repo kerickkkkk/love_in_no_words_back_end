@@ -97,8 +97,11 @@ export const generateJWT = (user: any, res: Response) => {
   user.password = undefined;
   handleSuccess(res, "成功", {
     user: {
+      _id: user._id,
       name: user.name,
       token,
+      titleNo : user.titleNo,
+      title : user.title
     },
   });
 };
