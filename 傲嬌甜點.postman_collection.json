@@ -41,7 +41,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\n    \"name\": \"註冊店員\",\n    \"phone\": \"0912345678912\",\n    \"password\": \"12345678\",\n    \"confirmPassword\": \"12345678\",\n    \"isDisabled\" : false,\n    \"titleNo\": \"1\"\n}",
+							"raw": "{\n\n    \"name\": \"註冊店員\",\n    \"phone\": \"0975026593\",\n    \"password\": \"12345678\",\n    \"confirmPassword\": \"12345678\",\n    \"isDisabled\" : false,\n    \"titleNo\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -86,7 +86,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "\n    {\n        \"phone\": \"0912345678912\",\n        \"password\": \"12345678\"\n    }\n",
+							"raw": "\n    {\n        \"phone\": \"0975026593\",\n        \"password\": \"12345678\"   \n    }\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -102,40 +102,6 @@
 								"v1",
 								"users",
 								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "修改使用者",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{token}}",
-								"type": "default"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"店員改改\",\n    \"number\":\"A00001\",\n    \"phone\": \"091234567812\",\n    \"titleNo\": 1,\n    \"disabled\":false,\n    \"password\":\"123456789\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/v1/users/644150d167f7f5414bbbddb2",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"v1",
-								"users",
-								"644150d167f7f5414bbbddb2"
 							]
 						}
 					},
@@ -250,7 +216,116 @@
 					"response": []
 				},
 				{
-					"name": "軟刪除使用者",
+					"name": "O-1-1 取得使用者列表",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/users?page=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"users"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "O-1-2 新增使用者",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n    \"name\": \"註冊店員\",\r\n    \"phone\": \"0975026595\",\r\n    \"titleNo\": \"2\",\r\n    \"isDisabled\" : false,\r\n    \"password\": \"12345678\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "O-1-3 修改使用者",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"店員改改\",\n    \"phone\": \"0975026590\",\n    \"titleNo\": 1,\n    \"isDisabled\":false,\n    \"password\":\"123456789\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/users/644150d167f7f5414bbbddb2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"users",
+								"644150d167f7f5414bbbddb2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "O-1-4 軟刪除使用者",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -278,48 +353,6 @@
 								"v1",
 								"users",
 								"6440cf7aa5761e36fd428600"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "O-1-1 取得使用者列表",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{token}}",
-								"type": "default"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/v1/users?page=5",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"v1",
-								"users"
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "5"
-								}
 							]
 						}
 					},
