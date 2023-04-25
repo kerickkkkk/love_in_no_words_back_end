@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "5818f42f-ba26-49c3-8b9b-2ef1d307786a",
+		"_postman_id": "e653bd9b-35e5-47fa-91de-a73a34995765",
 		"name": "傲嬌甜點",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6878038"
 	},
 	"item": [
 		{
@@ -353,6 +354,254 @@
 								"v1",
 								"users",
 								"6440cf7aa5761e36fd428600"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "seats",
+			"item": [
+				{
+					"name": "座位狀態顯示 取得所有",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/seats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"seats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "新增座位(發布時不可使用)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"tableNo\" :1,\n        \"tableName\" :\"111\",\n        \"seatsType\": 1,\n        \"isWindowSeat\": false,\n        \"isDisabled\" : true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/seats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"seats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "修改 座位",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"seatsType\": 1,\n        \"isWindowSeat\": true,\n        \"isDisabled\" : false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/seats/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"seats",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "軟刪 座位",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/seats/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"seats",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "取得 座位上限",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/seats/table-code",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"seats",
+								"table-code"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "新增 座位上限",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"seats\" : 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/seats/table-code",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"seats",
+								"table-code"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "刪除 座位上限",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/seats/table-code/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"seats",
+								"table-code",
+								"2"
 							]
 						}
 					},

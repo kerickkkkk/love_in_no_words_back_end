@@ -18,3 +18,11 @@ export const autoIncrement = async (
   const index = `${word}${tempNum.toString().padStart(9, "0")}`;
   return index;
 };
+export const autoIncrementNumber = async (
+  model: Model<any>,
+  columnName = ""
+): Promise<number> => {
+  const lastObj = (await model.findOne({ isDisabled: false }).sort({ createdAt: -1 }))
+  const index = lastObj !== null ? lastObj[columnName] + 1 : 1
+  return index
+};
