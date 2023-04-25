@@ -55,7 +55,7 @@ const tableManagementSchema = new Schema(
       select: false,
     },
   },
-  { versionKey: false }
+  { versionKey: false, collection: "tableManagement" }
 );
 
 export default model<TableManagement>("TableManagement", tableManagementSchema);

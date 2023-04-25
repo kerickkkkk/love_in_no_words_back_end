@@ -1,4 +1,5 @@
 import { Schema, Document, model } from "mongoose";
+import { Message } from "../constants/messages";
 interface Member extends Document {
   name: string;
   number: string;
@@ -16,14 +17,14 @@ const memberSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, "請輸入姓名"],
+      required: [true, Message.NEED_INPUT_NAME],
     },
     number: {
       type: String,
     },
     phone: {
       type: String,
-      required: [true, "請輸入正確電話格式"],
+      required: [true, Message.NEED_INPUT_PHONE],
       unique: true,
     },
     titleNo: {
@@ -40,7 +41,7 @@ const memberSchema = new Schema(
     },
     isDisabled: {
       type: Boolean,
-      required: [true, "狀態請以布林值形式輸入"],
+      required: [true, Message.NEED_INPUT_STATUS],
       default: false,
     },
     revisedAt: {
