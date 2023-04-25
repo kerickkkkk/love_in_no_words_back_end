@@ -1,7 +1,11 @@
 import { Schema, Document, model } from "mongoose";
-interface TableCode extends Document {
-  seatsType: number;
-  seats: number;
+// couponNo 隨機五碼 改用 mongo objectId
+interface Coupon extends Document {
+  serialNo: number;
+  couponName: string;
+  couponCode: string;
+  discount: string;
+  stoppedAt?: Date;
   createdAt: Date;
   isDisabled: boolean;
   revisedAt?: Date;
@@ -9,15 +13,27 @@ interface TableCode extends Document {
   deletedAt?: Date;
 }
 
-const tableCodeSchema = new Schema(
+const couponSchema = new Schema(
   {
-    seatsType: {
+    serialNo: {
       type: Number,
-      required: [true, "請輸入座位人數代號"],
+      required: [true, "優惠卷編號必填"],
     },
-    seats: {
+    couponName: {
+      type: String,
+      required: [true, "優惠卷名稱必填"],
+    },
+    couponCode: {
+      type: String,
+      required: [true, "優惠卷代碼必填"],
+    },
+    discount: {
       type: Number,
-      required: [true, "請輸入座位人數上限"],
+      required: [true, "優惠卷折扣必填"],
+    },
+    stoppedAt: {
+      type: Date,
+      default: null
     },
     createdAt: {
       type: Date,
@@ -46,4 +62,4 @@ const tableCodeSchema = new Schema(
   { versionKey: false }
 );
 
-export default model<TableCode>("TableCode", tableCodeSchema);
+export default model<Coupon>("Coupon", couponSchema);
