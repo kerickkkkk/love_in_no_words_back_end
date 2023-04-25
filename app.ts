@@ -6,6 +6,7 @@ import cors from "cors";
 import history from "connect-history-api-fallback";
 import indexRouter from "./routes/index";
 import usersRouter from "./routes/users";
+import seatsRouter from "./routes/seats";
 import handleAllError from "./service/handleAllError";
 import notFound from "./service/notFound";
 
@@ -31,6 +32,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/v1/users", usersRouter);
+app.use("/v1/seats", seatsRouter);
 
 // 404 錯誤
 app.use(notFound);

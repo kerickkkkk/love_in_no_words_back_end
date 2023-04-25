@@ -18,3 +18,12 @@ export const autoIncrement = async (
   const index = `${word}${tempNum.toString().padStart(9, "0")}`;
   return index;
 };
+export const autoIncrementNumber = async (
+  model: Model<any>,
+  columnName = ""
+): Promise<number> => {
+  // 因為排序是全部 需無視 isDisabled, isDeleted
+  const lastObj = await model.findOne().sort({ createdAt: -1 })
+  const index = lastObj !== null ? lastObj[columnName] + 1 : 1
+  return index
+};
