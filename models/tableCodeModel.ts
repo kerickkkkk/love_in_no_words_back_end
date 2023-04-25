@@ -2,7 +2,6 @@ import { Schema, Document, model } from "mongoose";
 interface TableCode extends Document {
   seatsType: number;
   seats: number;
-  isWindowSeat: boolean;
   createdAt: Date;
   isDisabled: boolean;
   revisedAt?: Date;
