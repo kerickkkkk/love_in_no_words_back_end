@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "e653bd9b-35e5-47fa-91de-a73a34995765",
+		"_postman_id": "b8d7d858-3bac-4209-860b-d7b49e794da8",
 		"name": "傲嬌甜點",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "6878038"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -401,7 +400,7 @@
 					"response": []
 				},
 				{
-					"name": "新增座位(發布時不可使用)",
+					"name": "新增座位",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -413,7 +412,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"tableNo\" :1,\n        \"tableName\" :\"111\",\n        \"seatsType\": 1,\n        \"isWindowSeat\": false,\n        \"isDisabled\" : true\n}",
+							"raw": "{\n        \"tableName\" :\"111\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -421,13 +420,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/seats",
+							"raw": "{{base_url}}/v1/coupons",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
-								"seats"
+								"coupons"
 							]
 						}
 					},
@@ -601,6 +600,152 @@
 								"v1",
 								"seats",
 								"table-code",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "[admin] coupons",
+			"item": [
+				{
+					"name": "取得所有",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/admin/coupons",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"admin",
+								"coupons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "新增",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"couponName\" :\"優惠活動名稱\",\n        \"couponCode\" : \"ABC\",\n        \"discount\" : 99,\n        \"isDisabled\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/admin/coupons",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"admin",
+								"coupons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "修改",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"couponName\" :\"優惠活動名稱123\",\n        \"couponCode\" : \"ABCd\",\n        \"discount\" : 99,\n        \"isDisabled\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/admin/coupons/4",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"admin",
+								"coupons",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "刪除",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/admin/coupons/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"admin",
+								"coupons",
 								"2"
 							]
 						}
