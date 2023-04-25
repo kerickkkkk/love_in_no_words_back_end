@@ -43,7 +43,7 @@ const tableCodeSchema = new Schema(
       select: false,
     },
   },
-  { versionKey: false }
+  { versionKey: false, collection: "tableCode" }
 );
 
 export default model<TableCode>("TableCode", tableCodeSchema);
