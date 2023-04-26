@@ -1,4 +1,5 @@
 import { Schema, Document, model } from "mongoose";
+import { Message } from "../constants/messages";
 interface IUser extends Document {
   name: string;
   number: string;
@@ -17,26 +18,26 @@ const userSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, "請輸入姓名"],
+      required: [true, Message.NEED_INPUT_NAME],
     },
     number: {
       type: String,
     },
     phone: {
       type: String,
-      required: [true, "請輸入正確電話格式"],
+      required: [true, Message.NEED_INPUT_PHONE],
       unique: true,
     },
     titleNo: {
       type: Number,
-      required: [true, "請輸入正確職位代號"],
+      required: [true, Message.NEED_INPUT_TITLENO],
     },
     title: {
       type: String,
     },
     password: {
       type: String,
-      required: [true, "請輸入密碼"],
+      required: [true, Message.NEED_INPUT_PASSWORD],
       minlength: 8,
       select: false,
     },
@@ -46,7 +47,7 @@ const userSchema = new Schema(
     },
     isDisabled: {
       type: Boolean,
-      required: [true, "狀態請以布林值形式輸入"],
+      required: [true, Message.NEED_INPUT_STATUS],
     },
     revisedAt: {
       type: Date,
