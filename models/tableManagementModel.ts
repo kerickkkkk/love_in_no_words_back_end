@@ -2,7 +2,7 @@ import { Schema, Document, model } from "mongoose";
 interface TableManagement extends Document {
   tableNo: number;
   tableName: string;
-  seatsType: number;
+  tableCode?: string;
   seats: number;
   isWindowSeat: boolean;
   createdAt: Date;
@@ -25,7 +25,6 @@ const tableManagementSchema = new Schema(
     tableCode: {
       type: Schema.Types.ObjectId,
       ref: "TableCode",
-      required: [true, "請輸入座位人數上限"],
     },
     isWindowSeat: {
       type: Boolean,

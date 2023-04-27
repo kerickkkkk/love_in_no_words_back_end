@@ -41,17 +41,17 @@ export const seats = {
         return next(appError(400, errorMsgArray.join(";"), next));
       }
       // 取得 tableCode 第一筆
-      const tableCodeObj = await TableCodeModel.findOne({
-        $and: [
-          { isDeleted: false },
-          { seatsType: { $gt: 0 } }
-        ]
-      }).sort({ seatsType: 1 }).limit(1);
+      // const tableCodeObj = await TableCodeModel.findOne({
+      //   $and: [
+      //     { isDeleted: false, isDisabled : false },
+      //     { seatsType: { $gt: 0 } }
+      //   ]
+      // }).sort({ seatsType: 1 }).limit(1);
 
       const newSeat = await TableManagementModel.create({
         tableNo,
         tableName,
-        tableCode: tableCodeObj?._id,
+        // tableCode: tableCodeObj?._id,
         isWindowSeat: false,
         isDisabled: false
       });
@@ -72,7 +72,9 @@ export const seats = {
         errorMsgArray.push('請選擇座位類型');
       }
 
-      const tableCodeObj = await TableCodeModel.findOne({ seatsType, isDeleted: false })
+      const tableCodeObj = await TableCodeModel.findOne({ seatsType, 
+        isDisabled:false, 
+        isDeleted: false })
       if (tableCodeObj === null) {
         errorMsgArray.push('無此座位類型');
       }
