@@ -35,7 +35,13 @@ export const seats = {
       if (!tableName) {
         errorMsgArray.push('請給座位資訊');
       }
-
+      const hasSameTableName = await TableManagementModel.findOne({
+        tableName,
+        isDeleted: false,
+      })
+      if (hasSameTableName) {
+        errorMsgArray.push('有相同座位名稱');
+      }
       // 如果有錯誤訊息有返回400
       if (errorMsgArray.length > 0) {
         return next(appError(400, errorMsgArray.join(";"), next));
@@ -72,9 +78,11 @@ export const seats = {
         errorMsgArray.push('請選擇座位類型');
       }
 
-      const tableCodeObj = await TableCodeModel.findOne({ seatsType, 
-        isDisabled:false, 
-        isDeleted: false })
+      const tableCodeObj = await TableCodeModel.findOne({
+        seatsType,
+        isDisabled: false,
+        isDeleted: false
+      })
       if (tableCodeObj === null) {
         errorMsgArray.push('無此座位類型');
       }
