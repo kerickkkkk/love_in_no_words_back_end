@@ -3,6 +3,7 @@
 /**
  * Module dependencies.
  */
+import {Server} from "socket.io";
 
 import app from '../app';
 
@@ -22,7 +23,27 @@ app.set('port', port);
  */
 
 const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ['GET', 'POST'],
+    // credentials: true
+  }
+});
+app.set("io",io)
 
+io.on("connection", function(socket: any) {
+  console.log("通道建立");
+  socket.on('chef', (msg :any) => {
+    console.log('into chef')
+    socket.broadcast.emit('chef', msg)
+  })
+  socket.on('employee', (msg :any) => {
+    console.log('into employee');
+    socket.broadcast.emit('employee', msg)
+  })
+
+});
 /**
  * Listen on provided port, on all network interfaces.
  */
