@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "b8d7d858-3bac-4209-860b-d7b49e794da8",
+		"_postman_id": "7f2d5b1c-8ef3-4b9f-a95e-d693b0c3aad5",
 		"name": "傲嬌甜點",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6878038"
 	},
 	"item": [
 		{
@@ -420,13 +421,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/coupons",
+							"raw": "{{base_url}}/v1/seats",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
-								"coupons"
+								"seats"
 							]
 						}
 					},
@@ -453,14 +454,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/seats/1",
+							"raw": "{{base_url}}/v1/seats/2",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"seats",
-								"1"
+								"2"
 							]
 						}
 					},
@@ -487,14 +488,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/seats/1",
+							"raw": "{{base_url}}/v1/seats/4",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"seats",
-								"1"
+								"4"
 							]
 						}
 					},
@@ -592,7 +593,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/seats/table-code/2",
+							"raw": "{{base_url}}/v1/seats/table-code/1",
 							"host": [
 								"{{base_url}}"
 							],
@@ -600,7 +601,7 @@
 								"v1",
 								"seats",
 								"table-code",
-								"2"
+								"1"
 							]
 						}
 					},
@@ -695,7 +696,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"couponName\" :\"優惠活動名稱123\",\n        \"couponCode\" : \"ABCd\",\n        \"discount\" : 99,\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"couponName\" :\"2222\",\n        \"couponCode\" : \"2222aaa\",\n        \"discount\" : 22,\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -703,7 +704,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/admin/coupons/4",
+							"raw": "{{base_url}}/v1/admin/coupons/2",
 							"host": [
 								"{{base_url}}"
 							],
@@ -711,7 +712,7 @@
 								"v1",
 								"admin",
 								"coupons",
-								"4"
+								"2"
 							]
 						}
 					},
@@ -753,6 +754,62 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "socket 測試",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Renew token',function(){\r",
+							"  if(pm.response.to.have.status(200))  {\r",
+							"   pm.collectionVariables.set('token','Bearer '+pm.response.json().data.user.token)\r",
+							"  }\r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/v1/socket",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"v1",
+						"socket"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [

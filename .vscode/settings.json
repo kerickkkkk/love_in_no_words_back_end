@@ -1,6 +1,9 @@
 {
-    "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": true,
-    },
-    "eslint.validate": ["javascript", "ts"],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "eslint.validate": ["javascript", "ts"],
+  "editor.formatOnSave": true,
+  "files.autoSave": "onFocusChange",
+  "editor.defaultFormatter": "vscode.typescript-language-features",
 }
