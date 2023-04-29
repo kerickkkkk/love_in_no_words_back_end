@@ -1,9 +1,9 @@
 import { Schema, Document, model } from "mongoose";
-interface TableManagement extends Document {
+import { TableCode } from "../models/tableCodeModel";
+export interface TableManagement extends Document {
   tableNo: number;
   tableName: string;
-  tableCode?: string;
-  seats: number;
+  tableCode?: TableCode;
   isWindowSeat: boolean;
   createdAt: Date;
   isDisabled: boolean;
@@ -56,5 +56,11 @@ const tableManagementSchema = new Schema(
   },
   { versionKey: false, collection: "tableManagement" }
 );
-
+tableManagementSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "tableCode",
+    select: "seatsType seats",
+  });
+  next();
+});
 export default model<TableManagement>("TableManagement", tableManagementSchema);

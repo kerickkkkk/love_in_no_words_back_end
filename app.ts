@@ -32,11 +32,11 @@ app.use(express.static(path.join(__dirname, "public")));
 // app.use(history());
 
 app.use("/", indexRouter);
-app.use("/v1/users", usersRouter);
+app.use("/v1", usersRouter);
 app.use("/v1/seats", seatsRouter);
 app.use("/v1", couponsRouter);
 // socket 方式 暫時寫在 indexRouter之後要拿掉
-app.use("/v1/", indexRouter)
+app.use("/v1/", indexRouter);
 // 404 錯誤
 app.use(notFound);
 
