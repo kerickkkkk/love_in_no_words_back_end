@@ -3,10 +3,6 @@ import { Message } from "../constants/messages";
 import { TableManagement } from "../models/tableManagementModel";
 interface Reservation extends Document {
   tableInofo: TableManagement;
-  // tableNo: number;
-  // tableName: string;
-  // seatsType: number;
-  // seats: number;
   name: string;
   phone: string;
   reservationTime: string;
@@ -25,22 +21,6 @@ const reservationSchema = new Schema(
       ref: "TableManagement",
       required: [true, "請輸入座位代號"],
     },
-    // tableNo: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "TableManagement",
-    //   required: [true, "請設定系統桌號"],
-    // },
-    // tableName: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "TableManagement",
-    // },
-    // seatsType: {
-    //   type: Number,
-    //   required: [true, "請設定座位人數代號"],
-    // },
-    // seats: {
-    //   type: Number,
-    // },
     name: {
       type: String,
       required: [true, Message.NEED_INPUT_NAME],
