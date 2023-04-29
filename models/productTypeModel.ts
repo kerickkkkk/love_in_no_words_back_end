@@ -1,7 +1,7 @@
 import { Schema, Document, model } from "mongoose";
 interface ProductType extends Document {
   productsType: number;
-  productsTypeName: number;
+  productsTypeName: string;
   createdAt: Date;
   isDisabled: boolean;
   revisedAt?: Date;
@@ -16,7 +16,7 @@ const productTypeSchema = new Schema(
       required: [true, "請輸入商品分類編號"],
     },
     productsTypeName: {
-      type: Number,
+      type: String,
       required: [true, "請輸入商品分類名稱"],
     },
     createdAt: {
@@ -43,9 +43,9 @@ const productTypeSchema = new Schema(
       select: false,
     },
   },
-  { 
-    versionKey: false, 
-    collection: "productType" 
+  {
+    versionKey: false,
+    collection: "productType"
   }
 );
 
