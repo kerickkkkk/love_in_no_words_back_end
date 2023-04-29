@@ -7,6 +7,7 @@ import history from "connect-history-api-fallback";
 import indexRouter from "./routes/index";
 import usersRouter from "./routes/users";
 import seatsRouter from "./routes/seats";
+import productsRouter from "./routes/products";
 import couponsRouter from "./routes/coupons";
 import handleAllError from "./service/handleAllError";
 import notFound from "./service/notFound";
@@ -34,6 +35,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/v1", usersRouter);
 app.use("/v1/seats", seatsRouter);
+app.use("/v1/products", productsRouter);
 app.use("/v1", couponsRouter);
 // socket 方式 暫時寫在 indexRouter之後要拿掉
 app.use("/v1/", indexRouter);

@@ -45,8 +45,8 @@ const productManagementSchema = new Schema(
     },
     amountStatus: {
       type: String,
-      enum:['safe', 'danger', 'zero'],
-      default : 'safe'
+      enum: ["safe", "danger", "zero"],
+      default: "safe"
     },
     productsType: {
       type: Schema.Types.ObjectId,
@@ -67,11 +67,9 @@ const productManagementSchema = new Schema(
     isDisabled: {
       type: Boolean,
       required: [true, "狀態請以布林值形式輸入"],
-      default: false,
     },
     revisedAt: {
       type: Date,
-      default: null,
       select: false,
     },
     isDeleted: {
@@ -84,9 +82,9 @@ const productManagementSchema = new Schema(
       select: false,
     },
   },
-  { 
-    versionKey: false, 
-    collection: "productManagement" 
+  {
+    versionKey: false,
+    collection: "productManagement"
   }
 );
 
