@@ -11,7 +11,16 @@ import { Message } from "../constants/messages";
 export const products = {
   getProducts: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
-      const products = await ProductManagementModel.find({ isDeleted: false }).populate({
+      const productsTypeQuery = req.query.productsType !== undefined ? {
+        "productsTypeName": new RegExp(req.query.productsType)
+      } : {}
+      const productTypeObj = await ProductTypeModel.find(productsTypeQuery)
+      const productsTypeAry = productTypeObj.map(item => item._id)
+      const query = {
+        productsType: productsTypeAry,
+        isDeleted: false
+      }
+      const products = await ProductManagementModel.find(query).populate({
         path: 'productsType',
         select: "productsType productsTypeName"
       }).sort({ productNo: 1 });
