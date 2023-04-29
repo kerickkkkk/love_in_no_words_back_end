@@ -1,5 +1,5 @@
 import { Schema, Document, model } from "mongoose";
-interface TableCode extends Document {
+export interface TableCode extends Document {
   seatsType: number;
   seats: number;
   createdAt: Date;
