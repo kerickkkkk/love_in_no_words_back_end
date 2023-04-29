@@ -3,11 +3,13 @@ import isLeapYear from "dayjs/plugin/isLeapYear";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import "dayjs/locale/zh-tw"; // import locale
+import customParseFormat from "dayjs/plugin/customParseFormat"
 
 dayjs.locale("zh-tw"); // use locale
 dayjs.extend(isLeapYear); // use plugin
 dayjs.extend(utc);
 dayjs.extend(timezone);
+dayjs.extend(customParseFormat)
 
 export const isoDate = (): string =>
   dayjs().utcOffset(8).format("YYYY-MM-DDTHH:mm:ss.SSS") + "Z";
