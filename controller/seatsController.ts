@@ -11,7 +11,7 @@ import { Message } from "../constants/messages";
 export const seats = {
   getSeats: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
-      const seats = await TableManagementModel.find({ isDisabled: false }).populate({
+      const seats = await TableManagementModel.find({ isDeleted: false }).populate({
         path: 'tableCode',
         select: "seatsType seats"
       }).sort({ tableNo: 1 });
@@ -46,13 +46,6 @@ export const seats = {
       if (errorMsgArray.length > 0) {
         return next(appError(400, errorMsgArray.join(";"), next));
       }
-      // 取得 tableCode 第一筆
-      // const tableCodeObj = await TableCodeModel.findOne({
-      //   $and: [
-      //     { isDeleted: false, isDisabled : false },
-      //     { seatsType: { $gt: 0 } }
-      //   ]
-      // }).sort({ seatsType: 1 }).limit(1);
 
       const newSeat = await TableManagementModel.create({
         tableNo,
@@ -195,10 +188,10 @@ export const seats = {
       const tableCodeObj = await TableCodeModel.findOneAndUpdate(
         {
           seatsType,
-          isDisabled: false
+          isDeleted: false
         },
         {
-          isDisabled: true,
+          isDeleted: true,
           deletedAt: isoDate(),
         },
         {
