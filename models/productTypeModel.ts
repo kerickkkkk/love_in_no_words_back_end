@@ -1,7 +1,7 @@
 import { Schema, Document, model } from "mongoose";
-export interface TableCode extends Document {
-  seatsType: number;
-  seats: number;
+interface ProductType extends Document {
+  productsType: number;
+  productsTypeName: string;
   createdAt: Date;
   isDisabled: boolean;
   revisedAt?: Date;
@@ -9,15 +9,15 @@ export interface TableCode extends Document {
   deletedAt?: Date;
 }
 
-const tableCodeSchema = new Schema(
+const productTypeSchema = new Schema(
   {
-    seatsType: {
+    productsType: {
       type: Number,
-      required: [true, "請輸入座位人數代號"],
+      required: [true, "請輸入商品分類編號"],
     },
-    seats: {
-      type: Number,
-      required: [true, "請輸入座位人數上限"],
+    productsTypeName: {
+      type: String,
+      required: [true, "請輸入商品分類名稱"],
     },
     createdAt: {
       type: Date,
@@ -43,7 +43,10 @@ const tableCodeSchema = new Schema(
       select: false,
     },
   },
-  { versionKey: false, collection: "tableCode" }
+  {
+    versionKey: false,
+    collection: "productType"
+  }
 );
 
-export default model<TableCode>("TableCode", tableCodeSchema);
+export default model<ProductType>("ProductType", productTypeSchema);
