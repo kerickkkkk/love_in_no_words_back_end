@@ -63,6 +63,7 @@ export const seats = {
       const newSeat = await TableManagementModel.create({
         tableNo,
         tableName,
+        seats,
         // tableCode: tableCodeObj?._id,
         isWindowSeat: false,
         isDisabled: false
@@ -110,6 +111,7 @@ export const seats = {
         },
         {
           // tableCode: tableCodeObj?._id,
+          seats,
           tableName,
           isWindowSeat,
           isDisabled
