@@ -17,5 +17,10 @@ router.post("/users/login", usersController.login);
 router.post("/users/reset_password", isAuth, usersController.resetPassword);
 router.get("/users/profile", isAuth, usersController.profile);
 router.get("/users/:id", isAuth, usersController.getUser);
+//members
+router.post("/members", usersController.signUpMember);
+router.get("/members", usersController.searchMember);
+router.delete("/members/:id", usersController.softDeleteMember);
+router.patch("/members/:id", usersController.updateMember);
 
 export default router;
