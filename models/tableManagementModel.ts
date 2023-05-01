@@ -1,9 +1,12 @@
 import { Schema, Document, model } from "mongoose";
 import { TableCode } from "../models/tableCodeModel";
+// 保留座位功能 改成直接寫入 seats 座位人數上限
 export interface TableManagement extends Document {
   tableNo: number;
-  tableName: string;
-  tableCode?: TableCode;
+  // tableName: string;
+  tableName: number;
+  // tableCode?: TableCode;
+  seats?: number;
   isWindowSeat: boolean;
   createdAt: Date;
   isDisabled: boolean;
@@ -19,13 +22,20 @@ const tableManagementSchema = new Schema(
       required: [true, "請設定系統桌號"],
     },
     tableName: {
-      type: String,
-      required: [true, "請輸入桌號命名"],
+      type: Number,
+      required: [true, "請設定座位名稱"],
     },
-    tableCode: {
-      type: Schema.Types.ObjectId,
-      ref: "TableCode",
+    seats: {
+      type: Number,
     },
+    // tableName: {
+    //   type: String,
+    //   required: [true, "請輸入桌號命名"],
+    // },
+    // tableCode: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "TableCode",
+    // },
     isWindowSeat: {
       type: Boolean,
       default: false,
@@ -56,11 +66,12 @@ const tableManagementSchema = new Schema(
   },
   { versionKey: false, collection: "tableManagement" }
 );
-tableManagementSchema.pre(/^find/, function (next) {
-  this.populate({
-    path: "tableCode",
-    select: "seatsType seats",
-  });
-  next();
-});
+// 人數上限直接用 tableName 上限 20
+// tableManagementSchema.pre(/^find/, function (next) {
+//   this.populate({
+//     path: "tableCode",
+//     select: "seatsType seats",
+//   });
+//   next();
+// });
 export default model<TableManagement>("TableManagement", tableManagementSchema);
