@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "11e29276-b454-4d57-962f-64c41cf9f584",
+		"_postman_id": "c1ea3231-5c6a-4e35-a2d3-588938532503",
 		"name": "傲嬌甜點",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "6878038"
+		"_exporter_id": "26724792"
 	},
 	"item": [
 		{
@@ -354,6 +354,180 @@
 								"v1",
 								"users",
 								"6440cf7aa5761e36fd428600"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "S-4-1 加入會員",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"member5\",\r\n    \"phone\": \"0912345674\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/members",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"members"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "S-4-2 查詢會員",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/members/?phone=0900000000",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"members",
+								""
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "title",
+									"value": "會員",
+									"disabled": true
+								},
+								{
+									"key": "phone",
+									"value": "0900000000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "S-4-3 刪除會員",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/members/:memberUId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"members",
+								":memberUId"
+							],
+							"variable": [
+								{
+									"key": "memberUId",
+									"value": "644fc900c2d73cbd500e7c80"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "S-4-4 修改會員",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"店員改歐哈\",\n    \"phone\": \"0912345674\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/members/:memberUId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"members",
+								":memberUId"
+							],
+							"query": [
+								{
+									"key": null,
+									"value": "644fbbedb295c6f53e4ddb66",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "memberUId",
+									"value": "644fc900c2d73cbd500e7c80"
+								}
 							]
 						}
 					},
