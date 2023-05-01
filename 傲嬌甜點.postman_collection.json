@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "b8d7d858-3bac-4209-860b-d7b49e794da8",
+		"_postman_id": "11e29276-b454-4d57-962f-64c41cf9f584",
 		"name": "傲嬌甜點",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6878038"
 	},
 	"item": [
 		{
@@ -41,7 +42,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\n    \"name\": \"註冊店員\",\n    \"phone\": \"0975026593\",\n    \"password\": \"12345678\",\n    \"confirmPassword\": \"12345678\",\n    \"isDisabled\" : false,\n    \"titleNo\": 1\n}",
+							"raw": "{\n\n    \"name\": \"我是店長\",\n    \"phone\": \"0912345678\",\n    \"password\": \"12345678\",\n    \"confirmPassword\": \"12345678\",\n    \"isDisabled\" : false,\n    \"titleNo\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -86,7 +87,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "\n    {\n        \"phone\": \"0975026593\",\n        \"password\": \"12345678\"   \n    }\n",
+							"raw": "\n    {\n        \"phone\": \"0912345678\",\n        \"password\": \"12345678\"   \n    }\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -364,7 +365,7 @@
 			"name": "seats",
 			"item": [
 				{
-					"name": "座位狀態顯示 取得所有",
+					"name": "座位 取得所有",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -412,7 +413,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"tableName\" :\"111\"\n}",
+							"raw": "{\n        \"tableName\" : 3,\n        \"seats\" : 20\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -445,7 +446,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"seatsType\": 1,\n        \"isWindowSeat\": true,\n        \"isDisabled\" : false\n}",
+							"raw": "{\n        \"tableName\": 10,\n        \"seats\": 10,\n        \"isWindowSeat\": true,\n        \"isDisabled\" : false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -501,7 +502,7 @@
 					"response": []
 				},
 				{
-					"name": "取得 座位上限",
+					"name": "[保留]取得 座位上限",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -538,7 +539,7 @@
 					"response": []
 				},
 				{
-					"name": "新增 座位上限",
+					"name": "[保留]新增 座位上限",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -572,7 +573,7 @@
 					"response": []
 				},
 				{
-					"name": "刪除 座位上限",
+					"name": "[保留]刪除 座位上限",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -635,20 +636,28 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products",
+							"raw": "{{base_url}}/v1/products/",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
-								"products"
+								"products",
+								""
+							],
+							"query": [
+								{
+									"key": "productsType",
+									"value": "飲",
+									"disabled": true
+								}
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "新增座位",
+					"name": "新增",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -660,7 +669,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"tableName\" :\"111\"\n}",
+							"raw": "{\n        \"productName\":\"無料產品3\",\n        \"photo\":\"productName\",\n        \"price\":123,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 200,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"644cb8f0d7ceca12e9920657\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -681,7 +690,7 @@
 					"response": []
 				},
 				{
-					"name": "修改 座位",
+					"name": "修改",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -693,7 +702,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"seatsType\": 1,\n        \"isWindowSeat\": true,\n        \"isDisabled\" : false\n}",
+							"raw": "{\n        \"productName\":\"QQ3\",\n        \"photo\":\"QWER\",\n        \"price\":123,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 200,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"644bbd2fd72ef5ab2381157c\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -701,21 +710,21 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/1",
+							"raw": "{{base_url}}/v1/products/3",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"products",
-								"1"
+								"3"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "軟刪 座位",
+					"name": "軟刪",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -735,14 +744,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/1",
+							"raw": "{{base_url}}/v1/products/3",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"products",
-								"1"
+								"3"
 							]
 						}
 					},
@@ -798,7 +807,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"productsTypeName\" : \"甜點\"\n}",
+							"raw": "{\n    \"productsTypeName\" : \"無料\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -909,7 +918,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"couponName\" :\"優惠活動名稱\",\n        \"couponCode\" : \"ABC\",\n        \"discount\" : 99,\n        \"isDisabled\": true\n}",
+							"raw": "{\n        \"couponName\" :\"優惠活動名稱2\",\n        \"couponCode\" : \"ABC33\",\n        \"discount\" : 99,\n        \"isDisabled\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -995,6 +1004,80 @@
 								"admin",
 								"coupons",
 								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "orders",
+			"item": [
+				{
+					"name": "訂單試算",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"tableNo\": 1,\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 4,\n\t\t    \"qty\" : 10,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t},\n\t\t{\n\t\t\t\"productNo\" : 6,\n\t\t    \"qty\" : 10,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A01\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/orders/calculate/total-price",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"orders",
+								"calculate",
+								"total-price"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "訂單送出",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"tableNo\": 1,\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 4,\n\t\t    \"qty\" : 10,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t},\n\t\t{\n\t\t\t\"productNo\" : 6,\n\t\t    \"qty\" : 10,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A01\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/orders/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"orders",
+								""
 							]
 						}
 					},

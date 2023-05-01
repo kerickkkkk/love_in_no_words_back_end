@@ -83,7 +83,9 @@ export const reservation = {
       });
       const reservation = {
         tableNo,
-        seatsType: tableNoInfo?.tableCode?.seatsType,
+        // 保留座位功能 改成直接寫入 seats 座位人數上限 
+        // 註解掉 tableCode 會有錯誤先註解掉
+        // seatsType: tableNoInfo?.tableCode?.seatsType,
         reservationDate,
         reservationTime,
         name,

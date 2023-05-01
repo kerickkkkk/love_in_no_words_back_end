@@ -1,20 +1,21 @@
 import { Request, Response, NextFunction } from "express";
+import validator from "validator";
 import handleErrorAsync from "../service/handleErrorAsync";
 import { autoIncrementNumber } from "../utils/modelsExtensions";
 import appError from "../service/appError";
 import handleSuccess from "../service/handleSuccess";
 import TableManagementModel from "../models/tableManagementModel";
-import TableCodeModel from "../models/tableCodeModel";
-import { isoDate } from "../utils/dayjs";
+// import TableCodeModel from "../models/tableCodeModel";
 import { Message } from "../constants/messages";
 
 export const seats = {
   getSeats: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
-      const seats = await TableManagementModel.find({ isDeleted: false }).populate({
-        path: 'tableCode',
-        select: "seatsType seats"
-      }).sort({ tableNo: 1 });
+      const seats = await TableManagementModel.find({ isDeleted: false }).sort({ tableName: 1 });
+      // .populate({
+      //   path: 'tableCode',
+      //   select: "seatsType seats"
+      // })
       handleSuccess(res, "成功", seats);
     }
   ),
@@ -22,18 +23,30 @@ export const seats = {
   // 簡易的處理
   createSeat: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
-      // 只需要給 tableName 其他是預設
-      const { tableName } = req.body;
+      const { tableName, seats } = req.body;
+      console.log(tableName, seats);
 
-      const tableNo = await autoIncrementNumber(TableManagementModel, 'tableNo')
+      const tableNo = await autoIncrementNumber(TableManagementModel)
+
       const tableManagementObj = await TableManagementModel.findOne({ tableNo })
       if (tableManagementObj !== null) {
         return next(appError(400, '重複座位編號', next));
       }
 
+
+      if (tableManagementObj !== null) {
+        return next(appError(400, '重複座位編號', next));
+      }
+
+      // 空直要篩掉不然驗證會出錯
+      if (!tableName || !seats) {
+        return next(appError(400, '請填桌子名稱，或者人數上限', next));
+      }
+
       const errorMsgArray: string[] = []
-      if (!tableName) {
-        errorMsgArray.push('請給座位資訊');
+      // 座位人數上限最大二十人
+      if (!validator.isInt(seats.toString(), { min: 1, max: 20 })) {
+        errorMsgArray.push("座位人數最大上限 20 人");
       }
       const hasSameTableName = await TableManagementModel.findOne({
         tableName,
@@ -60,25 +73,26 @@ export const seats = {
   patchSeat: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
       const { tableNo } = req.params;
-      const { seatsType, isWindowSeat = false, isDisabled = false } = req.body
+      const { tableName, seats, isWindowSeat = false, isDisabled = false } = req.body
       const errorMsgArray: string[] = []
 
+      // 空直要篩掉不然驗證會出錯
+      if (!tableName || !seats) {
+        return next(appError(400, '請填桌子名稱，或者人數上限', next));
+      }
       if (!tableNo) {
         errorMsgArray.push('桌號資訊為空');
       }
 
-      if (!seatsType) {
-        errorMsgArray.push('請選擇座位類型');
-      }
-
-      const tableCodeObj = await TableCodeModel.findOne({
-        seatsType,
-        isDisabled: false,
-        isDeleted: false
-      })
-      if (tableCodeObj === null) {
-        errorMsgArray.push('無此座位類型');
-      }
+      // 保留 座位資訊
+      // const tableCodeObj = await TableCodeModel.findOne({
+      //   seatsType,
+      //   isDisabled: false,
+      //   isDeleted: false
+      // })
+      // if (tableCodeObj === null) {
+      //   errorMsgArray.push('無此座位類型');
+      // }
 
       if (typeof isDisabled !== 'boolean') {
         errorMsgArray.push('啟用狀態有誤');
@@ -95,7 +109,8 @@ export const seats = {
           isDeleted: false,
         },
         {
-          tableCode: tableCodeObj?._id,
+          // tableCode: tableCodeObj?._id,
+          tableName,
           isWindowSeat,
           isDisabled
         },
@@ -135,7 +150,7 @@ export const seats = {
           isDeleted: false,
         },
         {
-          isDisabled: true
+          isDeleted: true
         },
         {
           returnDocument: "after",
@@ -152,66 +167,67 @@ export const seats = {
       return handleSuccess(res, "刪除成功", null);
     }
   ),
-  // 取得座位人數上限
-  getTableCode: handleErrorAsync(
-    async (req: any, res: Response, next: NextFunction) => {
-      const seats = await TableCodeModel.find({ isDeleted: false }).sort({ seats: 1 });
-      handleSuccess(res, "成功", seats);
-    }),
-  createTableCode: handleErrorAsync(
-    async (req: any, res: Response, next: NextFunction) => {
-      const { seats } = req.body;
+  // 保留座位功能 改成直接寫入 seats 座位人數上限
+  // // 取得座位人數上限
+  // getTableCode: handleErrorAsync(
+  //   async (req: any, res: Response, next: NextFunction) => {
+  //     const seats = await TableCodeModel.find({ isDeleted: false }).sort({ seats: 1 });
+  //     handleSuccess(res, "成功", seats);
+  //   }),
+  // createTableCode: handleErrorAsync(
+  //   async (req: any, res: Response, next: NextFunction) => {
+  //     const { seats } = req.body;
 
-      const errorMsgArray: string[] = []
+  //     const errorMsgArray: string[] = []
 
-      if (!seats) {
-        errorMsgArray.push('座位上限不得為空');
-      }
+  //     if (!seats) {
+  //       errorMsgArray.push('座位上限不得為空');
+  //     }
 
-      // 如果有錯誤訊息有返回400
-      if (errorMsgArray.length > 0) {
-        return next(appError(400, errorMsgArray.join(";"), next));
-      }
-      const seatsTypeIndex = await autoIncrementNumber(TableCodeModel, 'seatsType')
+  //     // 如果有錯誤訊息有返回400
+  //     if (errorMsgArray.length > 0) {
+  //       return next(appError(400, errorMsgArray.join(";"), next));
+  //     }
+  //     const seatsTypeIndex = await autoIncrementNumber(TableCodeModel, 'seatsType')
 
-      await TableCodeModel.create({
-        seatsType: seatsTypeIndex,
-        seats
-      });
+  //     await TableCodeModel.create({
+  //       seatsType: seatsTypeIndex,
+  //       seats
+  //     });
 
-      handleSuccess(res, "座位人數上限設定成功", null);
-    }),
-  deleteTableCode: handleErrorAsync(
-    async (req: any, res: Response, next: NextFunction) => {
-      const { seatsType } = req.params;
+  //     handleSuccess(res, "座位人數上限設定成功", null);
+  //   }),
+  // deleteTableCode: handleErrorAsync(
+  //   async (req: any, res: Response, next: NextFunction) => {
+  //     const { seatsType } = req.params;
 
-      const tableCodeObj = await TableCodeModel.findOneAndUpdate(
-        {
-          seatsType,
-          isDeleted: false
-        },
-        {
-          isDeleted: true,
-          deletedAt: isoDate(),
-        },
-        {
-          returnDocument: "after",
-        }
-      );
+  //     const tableCodeObj = await TableCodeModel.findOneAndUpdate(
+  //       {
+  //         seatsType,
+  //         isDeleted: false
+  //       },
+  //       {
+  //         isDeleted: true,
+  //         deletedAt: isoDate(),
+  //       },
+  //       {
+  //         returnDocument: "after",
+  //       }
+  //     );
 
-      const errorMsgArray: string[] = []
+  //     const errorMsgArray: string[] = []
 
-      if (tableCodeObj === null) {
-        errorMsgArray.push('查無座位編號');
-      }
+  //     if (tableCodeObj === null) {
+  //       errorMsgArray.push('查無座位編號');
+  //     }
 
-      // 如果有錯誤訊息有返回400
-      if (errorMsgArray.length > 0) {
-        return next(appError(400, errorMsgArray.join(";"), next));
-      }
+  //     // 如果有錯誤訊息有返回400
+  //     if (errorMsgArray.length > 0) {
+  //       return next(appError(400, errorMsgArray.join(";"), next));
+  //     }
 
-      handleSuccess(res, "刪除成功", null);
-    })
+  //     handleSuccess(res, "刪除成功", null);
+  //   })
 };
 
 export default seats;
