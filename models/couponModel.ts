@@ -1,7 +1,7 @@
 import { Schema, Document, model } from "mongoose";
 // couponNo 隨機五碼 改用 mongo objectId
 interface Coupon extends Document {
-  serialNo: number;
+  couponNo: string;
   couponName: string;
   couponCode: string;
   discount: string;
@@ -15,8 +15,8 @@ interface Coupon extends Document {
 
 const couponSchema = new Schema(
   {
-    serialNo: {
-      type: Number,
+    couponNo: {
+      type: String,
       required: [true, "優惠卷編號必填"],
     },
     couponName: {
