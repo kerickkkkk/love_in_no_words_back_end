@@ -453,138 +453,90 @@ export const users = {
   signUpMember: handleErrorAsync(
     async (req: Request, res: Response, next: NextFunction) => {
       // 姓名 電話 職位(預設給 4 ) 密碼
-      const { name, phone, titleNo, isDisabled } =
+      const { name, phone } =
         req.body;
-
       // title
       const titleMap: string[] = ["", "店長", "店員", "廚師", "會員"];
-
       // 驗證
       if (!name || !phone) {
         return next(appError(400, "欄位不可為空", next));
       }
-
-      if (!validator.isLength(phone, { min: 8 })) {
+      if (!validator.isMobilePhone(phone, "zh-TW")) {
         return next(appError(400, "電話長度需大於 8 碼", next));
       }
-
-      if (!validator.isInt(titleNo.toString(), { min: 1, max: 4 })) {
-        return next(appError(400, "職位有誤", next));
-      }
-
-      const hasSamePhone = await User.findOne({ phone });
+      const hasSamePhone = await Member.findOne({ phone });
       if (hasSamePhone !== null) {
         return next(appError(400, "電話重複", next));
       }
       let revisedAt: null | string = null;
-      if (isDisabled) {
-        revisedAt = isoDate();
-      } else {
-        revisedAt = null;
-      }
-      const title = titleMap[titleNo];
       // 加密
-      const autoIncrementIndex = await autoIncrement(User, "A");
+      const autoIncrementIndex = await autoIncrement(Member, "B");
 
-      const newUser = await User.create({
+      const newMember = await Member.create({
         name,
         phone,
-        titleNo,
-        title,
-        isDisabled,
         revisedAt,
         number: autoIncrementIndex,
+        isDisabled: false,
       });
-
-      generateJWT(newUser, res);
+      // generateJWT(newMember, res);
+      //
+      handleSuccess(res, Message.REVISE_SUCCESS, newMember);
     }
   ),
   //S-4-2 查詢會員
-  //searchMember:
   searchMember: handleErrorAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-      const { page } = req.query;
-      // 頁碼不是數字就返回錯誤訊息
-      if (Number.isNaN(Number(page))) {
-        return next(appError(400, Message.PAGE_NEED_IN_NUMBER, next));
+      const { phone, page } = req.query;
+      const perPage = 10; // 每頁回傳的筆數
+      if (!phone) {
+        return next(appError(400, "電話長度需大於 8 碼", next));
       }
-
-      // 進入User跟Member Collection獲取沒被刪除的資料，並由舊到新排列
-      const members = await Member.find({ isDeleted: false }).sort({
-        createdAt: "asc",
-      });
-      // 會員人員中取出需要的資訊
-      const membersList = members.map(
-        ({ _id, number, name, phone, title, createdAt, isDisabled }) => {
-          let transferDate = slashDate(createdAt);
+      try {
+        const totalNum = await Member.countDocuments({ phone }); // 搜尋符合該電話的會員總數
+        const members = await Member.find({ phone })
+          .limit(perPage); // 搜尋符合該電話的會員資料，並使用分頁的方式回傳結果
+        const membersList = members.map((member) => {
+          const { _id, number, name, phone, createdAt, isDisabled } = member;
+          const transferDate = slashDate(createdAt);
           return {
             _id,
             number,
             name,
             phone,
-            title,
             createdAt: transferDate,
             isDisabled,
           };
-        }
-      );
-
-      // 迴圈確認是否有符合輸入的頁碼資料
-      for (let p = 0; p <= Math.ceil(membersList.length / 10); p++) {
-        const lastPage = Math.ceil(membersList.length / 10);
-        const currentPage = Number(page);
-        if (p == Number(page)) {
-          const meta: Meta = {
-            pagination: {
-              total: membersList.length,
-              perPage: 10,
-              currentPage: currentPage,
-              lastPage: lastPage,
-              nextPage: currentPage == lastPage ? null : currentPage + 1,
-              prevPage: currentPage == 1 ? null : currentPage - 1,
-              from: (currentPage - 1) * 10 + 1,
-              to:
-                currentPage * 10 > membersList.length
-                  ? membersList.length
-                  : currentPage * 10,
-            },
-          };
-
-          // 返回成功相對應資訊
-          return handleSuccess(res, Message.RESULT_SUCCESS, {
-            membersList: membersList.slice(
-              (currentPage - 1) * 10,
-              currentPage * 10
-            ),
-            meta,
-          });
-        }
+        });
+        const totalPages = Math.ceil(totalNum / perPage); // 總頁數
+        return handleSuccess(res, Message.RESULT_SUCCESS, {
+          membersList,
+          totalNum,
+          totalPages,
+        });
+      } catch (err) {
+        return next(appError(400, "查詢會員失敗", next));
       }
-      // 頁碼可能超過實際頁數、小數點頁碼、負數頁碼等情況
-      return next(appError(400, Message.PAGE_NOT_FOUND, next));
     }
   ),
   //S-4-3 刪除會員 
   softDeleteMember: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
       const memberUId = req.params.id;
-      // 排除已經被軟廚的人員
+      // 排除已經被軟刪除的人員
       let hasRightUser = {} || null;
-
       hasRightUser = await Member.findById(memberUId)
         .where("isDeleted")
         .ne(true);
-
       if (hasRightUser === null) {
         return next(appError(400, Message.ID_NOT_FOUND, next));
       }
-
       const deleteItem = {
         isDeleted: true,
         deletedAt: isoDate(),
+        _id: req.params.id, // 假設使用者 ID 存在 req.params.id
       };
       await Member.findByIdAndUpdate(memberUId, deleteItem);
-
       handleSuccess(res, Message.DELETE_SUCCESS, null);
     }
   ),
@@ -592,18 +544,14 @@ export const users = {
   updateMember: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
       const memberUId: string = req.params.id;
-      const hasRightUser = await User.findById(memberUId)
+      const hasRightUser = await Member.findById(memberUId)
         .where("isDeleted")
         .ne(true);
-
       if (hasRightUser === null) {
         return next(appError(400, Message.ID_NOT_FOUND, next));
       }
-      // 姓名 電話
+      // 姓名 電話 職位 密碼
       const { name, phone } = req.body;
-      // title
-      const titleMap: string[] = ["", "店長", "店員", "廚師", "會員"];
-
       let errorMsgArray = [];
       // 驗證
       if (!name) {
@@ -612,40 +560,33 @@ export const users = {
       if (!phone || !validator.isMobilePhone(phone, "zh-TW")) {
         errorMsgArray.push(Message.NEED_INPUT_PHONE);
       }
-
       // 如果電話號碼與原本不同
       if (phone != hasRightUser.phone) {
         let hasSamePhone = null;
         // 依照職位代號去相對應的collection搜尋是否已有相同電話號碼
         if (hasRightUser.titleNo != 4) {
-          hasSamePhone = await User.findOne({ phone });
-        } else {
           hasSamePhone = await Member.findOne({ phone });
         }
-
         if (hasSamePhone != null) {
           errorMsgArray.push(Message.SAME_PHONE_REGISTERED);
         }
-
-        // 如果有錯誤訊息有返回400
-        if (errorMsgArray.length > 0) {
-          return next(appError(400, errorMsgArray.join(";"), next));
-        }
-
-        interface IUserParam {
-          name: string;
-          phone: string;
-        }
-
-        const params: IUserParam = {
-          name,
-          phone,
-        };
-
-        await Member.findByIdAndUpdate(memberUId, params);
-
-        handleSuccess(res, Message.REVISE_SUCCESS, null);
       }
+
+      // 如果有錯誤訊息有返回400
+      if (errorMsgArray.length > 0) {
+        return next(appError(400, errorMsgArray.join(";"), next));
+      }
+
+      interface MemberParam {
+        name: string;
+        phone: string;
+      }
+      const params: MemberParam = {
+        name,
+        phone,
+      };
+      await Member.findByIdAndUpdate(memberUId, params);
+      handleSuccess(res, Message.REVISE_SUCCESS, null);
     }
   )
 };
