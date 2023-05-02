@@ -6,6 +6,8 @@ interface OrderDetail extends Document {
   totalTime: number;
   discount: number;
   totalPrice: number;
+  couponNo?: string;
+  couponName?: string;
   status: string;
   createdAt: Date;
   revisedAt: Date;
@@ -39,6 +41,12 @@ const orderDetailSchema = new Schema(
     totalPrice: {
       type: Number,
       required: [true, "總價必填"],
+    },
+    couponNo: {
+      type: String,
+    },
+    couponName: {
+      type: String,
     },
     status: {
       type: String,

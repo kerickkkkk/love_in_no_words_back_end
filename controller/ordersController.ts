@@ -170,7 +170,7 @@ export const orders = {
           select: "tableNo tableName"
         }).populate({
           path: "orderDetail",
-          select: "orderList totalTime discount totalPrice status"
+          select: "orderList totalTime discount totalPrice status couponNo couponName"
         })
 
         // 通知廚師 要注意 手機與使用者名稱是否會被看到
