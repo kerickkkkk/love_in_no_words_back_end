@@ -5,6 +5,7 @@ import appError from "../service/appError";
 import TableManagementModel from "../models/tableManagementModel";
 import ProductManagementModel from '../models/productManagementModel';
 import Order from "../models/orderModel";
+import CouponModel from "../models/couponModel"
 import OrderDetail from "../models/orderDetailModel";
 import { autoIncrementNumber } from "../utils/modelsExtensions";
 
@@ -29,9 +30,8 @@ export const orders = {
         }, {})
         return result
       }
+      // 確認購物車內產品編號是否有誤
       const inputProductsObj = arrayPutKeyToObj(inputProducts, 'productNo')
-
-
       // 取得 產品編號
       const productNoList = inputProducts.map((item: {
         productNo: number;
@@ -49,7 +49,6 @@ export const orders = {
         select: "productsType productsTypeName"
       }).lean()
 
-
       if (tempProducts.length < productNoList.length) {
         const tempProductsObj = arrayPutKeyToObj(tempProducts, 'productNo')
         const errorList = productNoList.filter((no: any) => (tempProductsObj[no] === undefined))
@@ -60,6 +59,7 @@ export const orders = {
       const errorMsgArray: string[] = []
       const tableObj = await TableManagementModel.findOne({
         tableName,
+        isDisabled: false,
         isDeleted: false
       })
 
@@ -67,12 +67,20 @@ export const orders = {
         errorMsgArray.push('查無座位');
       }
 
+      const couponObj = await CouponModel.findOne({
+        couponNo,
+        isDisabled: false,
+        isDeleted: false
+      })
+      if (couponNo) {
+        if (couponObj === null) {
+          errorMsgArray.push('查無優惠代碼');
+        }
+      }
 
       if (errorMsgArray.length > 0) {
         return next(appError(400, errorMsgArray.join(";"), next));
       }
-
-
 
       // 出餐數量大於於庫存量阻擋掉 
       const dangerAmount = tempProducts.filter(item => {
@@ -97,21 +105,25 @@ export const orders = {
           description,
           subTotal: next.price * qty
         }
-        totalTime += next.productionTime
+        totalTime += next.productionTime * qty
         totalPrice += next.price * qty
         prev.push(product)
         return prev
       }, [])
-
-
-      const result = {
+      const result: any = {
         tableName: tableObj?.tableName,
         orderList: products,
         totalTime,
-        // couponNo,
-        // couponName,
-        // discount,
         totalPrice
+      }
+
+      if (couponObj !== null) {
+        const originalPrice = totalPrice
+        totalPrice = Math.round(totalPrice * (100 - Number(couponObj.discount)) * 100 / 10000)
+        result.couponNo = couponNo
+        result.couponName = couponObj.couponName
+        result.discount = originalPrice - totalPrice
+        result.totalPrice = totalPrice
       }
 
       if (req.path === "/calculate/total-price") {
@@ -129,9 +141,11 @@ export const orders = {
         const newOrderDetail = await OrderDetail.create({
           orderList: products,
           totalTime,
-          // discount,
-          totalPrice,
-          status: "未出餐"
+          status: "未出餐",
+          couponNo: result.couponNo,
+          couponName: result.couponName,
+          discount: result.discount,
+          totalPrice: result.totalPrice
         })
 
         const newOrder = await Order.create({
