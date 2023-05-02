@@ -11,7 +11,7 @@ interface Order extends Document {
   deletedAt?: Date;
 }
 
-const productManagementSchema = new Schema(
+const orderSchema = new Schema(
   {
     orderNo: {
       type: Number,
@@ -23,13 +23,17 @@ const productManagementSchema = new Schema(
     },
     time: {
       type: String,
-      enum:['上午','下午'],
+      enum: ['上午', '下午'],
       required: [true, "請選擇時段"]
     },
     tableNo: {
       type: Schema.Types.ObjectId,
-      ref: "tableManagementModel",
+      ref: "TableManagement",
       required: [true, "請輸入桌號"],
+    },
+    orderDetail: {
+      type: Schema.Types.ObjectId,
+      ref: "OrderDetail",
     },
     createdAt: {
       type: Date,
@@ -55,9 +59,9 @@ const productManagementSchema = new Schema(
       select: false,
     },
   },
-  { 
-    versionKey: false, 
+  {
+    versionKey: false,
   }
 );
 
-export default model<Order>("Order", productManagementSchema);
+export default model<Order>("Order", orderSchema);

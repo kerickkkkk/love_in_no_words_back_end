@@ -1,8 +1,8 @@
 import { Schema, Document, model } from "mongoose";
 interface OrderDetail extends Document {
-  orderNo: number;
-  tableNo: string;
-  orderList: Array<any>;
+  // orderNo: number;
+  // tableNo: string;
+  orderList: any[]
   totalTime: number;
   discount: number;
   totalPrice: number;
@@ -15,15 +15,15 @@ interface OrderDetail extends Document {
 const orderDetailSchema = new Schema(
   {
     // 等待討論呈現方式
-    orderNo: {
-      type: Number,
-      required: [true, "請設定訂單編號"],
-    },
-    tableNo: {
-      type: Schema.Types.ObjectId,
-      ref: "tableManagementModel",
-      required: [true, "請輸入桌號"],
-    },
+    // orderNo: {
+    //   type: Number,
+    //   required: [true, "請設定訂單編號"],
+    // },
+    // tableNo: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "tableManagementModel",
+    //   required: [true, "請輸入桌號"],
+    // },
     orderList: {
       type: Array,
     },
@@ -34,6 +34,7 @@ const orderDetailSchema = new Schema(
     discount: {
       type: Number,
       required: [true, "折扣必填"],
+      default: 0
     },
     totalPrice: {
       type: Number,
@@ -41,7 +42,8 @@ const orderDetailSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ['未出餐', '已出餐'],
+      enum: ["未出餐", "已出餐"],
+      default: "未出餐"
     },
     createdAt: {
       type: Date,
@@ -64,6 +66,7 @@ const orderDetailSchema = new Schema(
   },
   {
     versionKey: false,
+    collection: "orderDetail"
   }
 );
 

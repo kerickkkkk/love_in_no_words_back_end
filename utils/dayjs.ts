@@ -16,4 +16,9 @@ export const isoDate = (): string =>
 export const slashDate = (date: Date): string =>
   dayjs(date).utcOffset(8).format("YYYY/MM/DD");
 
+// 判斷系統當下時段 上午 下午 晚上
+// 晚上時間會變成晚上 暫時先用非上午 就是下午
+export const period = (): string =>
+  (dayjs().utcOffset(8).format("A") === "上午" ? "上午" : "下午")
+
 export default dayjs;
