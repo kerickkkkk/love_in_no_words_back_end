@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "d16e4c9c-d901-43ed-99c9-d1aa5e2731bd",
+		"_postman_id": "4db8d0f9-517e-4c44-a39b-942b2a191ae5",
 		"name": "傲嬌甜點",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6878038"
 	},
 	"item": [
 		{
@@ -842,7 +843,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"productName\":\"甜點2\",\n        \"photo\":\"productName\",\n        \"price\":100,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 200,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"644b4620a641102ee99f2df0\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"productName\":\"飲料\",\n        \"photo\":\"productName\",\n        \"price\":100,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 200,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"644fa4619e4019674ba5f03d\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1125,7 +1126,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"couponName\" :\"優惠活動名稱123\",\n        \"couponCode\" : \"ABCd\",\n        \"discount\" : 99,\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"couponName\" :\"優惠活動名稱22\",\n        \"couponCode\" : \"ABC22\",\n        \"discount\" : 10,\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1133,7 +1134,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/admin/coupons/4",
+							"raw": "{{base_url}}/v1/admin/coupons/A000000001",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1141,7 +1142,7 @@
 								"v1",
 								"admin",
 								"coupons",
-								"4"
+								"A000000001"
 							]
 						}
 					},
@@ -1200,7 +1201,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableName\": 1,\n  \"time\": \"上午\",\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 2,\n\t\t    \"qty\" : 1,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t},\n\t\t{\n\t\t\t\"productNo\" : 4,\n\t\t    \"qty\" : 1,\n\t\t\t\"descript1ion\" : \"這個是附註\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A01\"\n}",
+							"raw": "{\n  \"tableName\": 3,\n  \"time\": \"上午\",\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 5,\n\t\t    \"qty\" : 10,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A000000001\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1235,7 +1236,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableName\": 1,\n\"time\": \"上午\",\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 4,\n\t\t    \"qty\" : 50,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t},\n\t\t{\n\t\t\t\"productNo\" : 3,\n\t\t    \"qty\" : 50,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A01\"\n}",
+							"raw": "{\n  \"tableName\": 3,\n\"time\": \"上午\",\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 5,\n\t\t    \"qty\" : 10,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A000000001\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
