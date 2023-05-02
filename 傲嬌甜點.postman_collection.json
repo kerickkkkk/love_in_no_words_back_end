@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "c1ea3231-5c6a-4e35-a2d3-588938532503",
+		"_postman_id": "4db8d0f9-517e-4c44-a39b-942b2a191ae5",
 		"name": "傲嬌甜點",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "26724792"
+		"_exporter_id": "6878038"
 	},
 	"item": [
 		{
@@ -843,7 +843,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"productName\":\"無料產品3\",\n        \"photo\":\"productName\",\n        \"price\":123,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 200,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"644cb8f0d7ceca12e9920657\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"productName\":\"飲料\",\n        \"photo\":\"productName\",\n        \"price\":100,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 200,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"644fa4619e4019674ba5f03d\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -876,7 +876,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"productName\":\"QQ3\",\n        \"photo\":\"QWER\",\n        \"price\":123,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 200,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"644bbd2fd72ef5ab2381157c\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"productName\":\"QQ3\",\n        \"photo\":\"QWER\",\n        \"price\":123,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 50,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"644b43507109d75ecc4f2866\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1092,7 +1092,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"couponName\" :\"優惠活動名稱2\",\n        \"couponCode\" : \"ABC33\",\n        \"discount\" : 99,\n        \"isDisabled\": true\n}",
+							"raw": "{\n        \"couponName\" :\"優惠活動名稱22\",\n        \"couponCode\" : \"ABC22\",\n        \"discount\" : 99,\n        \"isDisabled\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1126,7 +1126,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"couponName\" :\"優惠活動名稱123\",\n        \"couponCode\" : \"ABCd\",\n        \"discount\" : 99,\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"couponName\" :\"優惠活動名稱22\",\n        \"couponCode\" : \"ABC22\",\n        \"discount\" : 10,\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1134,7 +1134,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/admin/coupons/4",
+							"raw": "{{base_url}}/v1/admin/coupons/A000000001",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1142,7 +1142,7 @@
 								"v1",
 								"admin",
 								"coupons",
-								"4"
+								"A000000001"
 							]
 						}
 					},
@@ -1201,7 +1201,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableNo\": 1,\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 4,\n\t\t    \"qty\" : 10,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t},\n\t\t{\n\t\t\t\"productNo\" : 6,\n\t\t    \"qty\" : 10,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A01\"\n}",
+							"raw": "{\n  \"tableName\": 3,\n  \"time\": \"上午\",\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 5,\n\t\t    \"qty\" : 10,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A000000001\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1236,7 +1236,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableNo\": 1,\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 4,\n\t\t    \"qty\" : 10,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t},\n\t\t{\n\t\t\t\"productNo\" : 6,\n\t\t    \"qty\" : 10,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A01\"\n}",
+							"raw": "{\n  \"tableName\": 3,\n\"time\": \"上午\",\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 5,\n\t\t    \"qty\" : 10,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A000000001\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"

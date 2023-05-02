@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import handleErrorAsync from "../service/handleErrorAsync";
 import validator from "validator";
-import { autoIncrementNumber } from "../utils/modelsExtensions";
+import { autoIncrement } from "../utils/modelsExtensions";
 import appError from "../service/appError";
 import handleSuccess from "../service/handleSuccess";
 import CouponModel from "../models/couponModel";
@@ -19,13 +19,13 @@ export const coupons = {
     async (req: any, res: Response, next: NextFunction) => {
       const { couponName, couponCode, discount, isDisabled = false } = req.body;
 
-      const serialNo = await autoIncrementNumber(CouponModel, 'serialNo')
-      const couponModelObj = await CouponModel.findOne({ serialNo })
-      if (couponModelObj !== null) {
-        return next(appError(400, '優惠卷編號有誤', next));
-      }
-
+      const couponNo = await autoIncrement(CouponModel, 'A', 'couponNo')
+      const couponModelObj = await CouponModel.findOne({ $or: [{ couponNo }, { couponName }] });
       const errorMsgArray: string[] = []
+
+      if (couponModelObj !== null) {
+        errorMsgArray.push('優惠卷編號或代碼重複');
+      }
       if (!couponName) {
         errorMsgArray.push('請填優惠卷名稱');
       }
@@ -50,7 +50,7 @@ export const coupons = {
       // 取得 tableCode 第一筆
 
       const newObj = await CouponModel.create({
-        serialNo,
+        couponNo,
         couponName,
         couponCode,
         discount,
@@ -62,11 +62,10 @@ export const coupons = {
   ),
   patchCoupons: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
-      const { couponNo: serialNo } = req.params;
+      const { couponNo } = req.params;
       const { couponName, couponCode, discount, isDisabled = false } = req.body;
-      // const serialNo =  couponNo * 1
       const errorMsgArray: string[] = []
-      const couponModelObj = await CouponModel.findOne({ serialNo, isDeleted: false })
+      const couponModelObj = await CouponModel.findOne({ couponNo, isDeleted: false })
 
       if (couponModelObj === null) {
         return next(appError(400, '優惠卷編號有誤', next));
@@ -97,7 +96,7 @@ export const coupons = {
 
       const updatedSeat = await CouponModel.findOneAndUpdate(
         {
-          serialNo,
+          couponNo,
           isDeleted: false,
         },
         {
@@ -141,7 +140,7 @@ export const coupons = {
 
       const updatedObj = await CouponModel.findOneAndUpdate(
         {
-          serialNo: couponNo,
+          couponNo,
           isDeleted: false,
         },
         {
