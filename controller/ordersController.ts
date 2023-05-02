@@ -7,7 +7,6 @@ import ProductManagementModel from '../models/productManagementModel';
 import Order from "../models/orderModel";
 import OrderDetail from "../models/orderDetailModel";
 import { autoIncrementNumber } from "../utils/modelsExtensions";
-import dayjs, { period } from "../utils/dayjs"
 
 export const orders = {
   handleOrder: handleErrorAsync(
@@ -15,29 +14,25 @@ export const orders = {
       const {
         tableName,
         products: inputProducts,
-        // time,
-        // couponNo
+        time,
+        couponNo
       } = req.body
 
       if (inputProducts.length <= 0) {
         return next(appError(400, "購物車內無產品，請選購", next));
       }
 
-      // 驗證
-      const errorMsgArray: string[] = []
-      const tableObj = await TableManagementModel.findOne({
-        tableName,
-        isDeleted: false
-      })
-      if (tableObj === null) {
-        errorMsgArray.push('查無座位');
+      const arrayPutKeyToObj = (array: any[], columnName: string) => {
+        const result = array.reduce((prev: any, next: any) => {
+          prev[next[columnName]] = next
+          return prev
+        }, {})
+        return result
       }
+      const inputProductsObj = arrayPutKeyToObj(inputProducts, 'productNo')
 
 
-      if (errorMsgArray.length > 0) {
-        return next(appError(400, errorMsgArray.join(";"), next));
-      }
-      // 取得 產品
+      // 取得 產品編號
       const productNoList = inputProducts.map((item: {
         productNo: number;
         qty: number;
@@ -54,13 +49,30 @@ export const orders = {
         select: "productsType productsTypeName"
       }).lean()
 
-      if (tempProducts.length <= 0) {
-        return next(appError(400, "查無訂單內產品", next));
+
+      if (tempProducts.length < productNoList.length) {
+        const tempProductsObj = arrayPutKeyToObj(tempProducts, 'productNo')
+        const errorList = productNoList.filter((no: any) => (tempProductsObj[no] === undefined))
+        return next(appError(400, `訂單產品編號有誤: ${errorList.join(';')}`, next));
       }
-      const inputProductsObj = inputProducts.reduce((prev: any, next: any) => {
-        prev[next.productNo] = next
-        return prev
-      }, {})
+
+      // 驗證
+      const errorMsgArray: string[] = []
+      const tableObj = await TableManagementModel.findOne({
+        tableName,
+        isDeleted: false
+      })
+
+      if (tableObj === null) {
+        errorMsgArray.push('查無座位');
+      }
+
+
+      if (errorMsgArray.length > 0) {
+        return next(appError(400, errorMsgArray.join(";"), next));
+      }
+
+
 
       // 出餐數量大於於庫存量阻擋掉 
       const dangerAmount = tempProducts.filter(item => {
@@ -125,7 +137,7 @@ export const orders = {
         const newOrder = await Order.create({
           orderNo,
           orderStatus: "未啟用",
-          time: period(),
+          time,
           tableNo: tableObj?._id,
           orderDetail: newOrderDetail._id
         })
@@ -151,10 +163,27 @@ export const orders = {
         const { io } = req.app.settings;
         io.emit("chef", order);
 
-        // 扣除產品當下的數量 如果不足需標示？
+        // 更新產品庫存與庫存狀態
+        const updateObjs = products.reduce((prev: any[], next: any) => {
 
-        // inStockAmount - qty
-
+          const obj = {
+            updateOne: {
+              filter: {
+                productNo: next.productNo,
+                inStockAmount: { $gte: next.qty }
+              },
+              update: {
+                $inc: { inStockAmount: -next.qty },
+                $set: {
+                  amountStatus: (next.qty === 0 ? "zero" : next.inStockAmount - next.qty) >= next.safeStockAmount ? "safe" : "danger"
+                },
+              }
+            }
+          }
+          prev.push(obj)
+          return prev
+        }, [])
+        await ProductManagementModel.bulkWrite(updateObjs);
         return handleSuccess(res, "訂單成功建立成功", order);
       } else {
         return next(appError(400, "訂單路由錯誤", next));
