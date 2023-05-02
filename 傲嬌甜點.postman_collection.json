@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "c1ea3231-5c6a-4e35-a2d3-588938532503",
+		"_postman_id": "d16e4c9c-d901-43ed-99c9-d1aa5e2731bd",
 		"name": "傲嬌甜點",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "26724792"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -843,7 +842,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"productName\":\"無料產品3\",\n        \"photo\":\"productName\",\n        \"price\":123,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 200,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"644cb8f0d7ceca12e9920657\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"productName\":\"甜點2\",\n        \"photo\":\"productName\",\n        \"price\":100,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 200,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"644b4620a641102ee99f2df0\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -876,7 +875,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"productName\":\"QQ3\",\n        \"photo\":\"QWER\",\n        \"price\":123,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 200,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"644bbd2fd72ef5ab2381157c\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"productName\":\"QQ3\",\n        \"photo\":\"QWER\",\n        \"price\":123,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 50,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"644b43507109d75ecc4f2866\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1092,7 +1091,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"couponName\" :\"優惠活動名稱2\",\n        \"couponCode\" : \"ABC33\",\n        \"discount\" : 99,\n        \"isDisabled\": true\n}",
+							"raw": "{\n        \"couponName\" :\"優惠活動名稱22\",\n        \"couponCode\" : \"ABC22\",\n        \"discount\" : 99,\n        \"isDisabled\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1201,7 +1200,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableNo\": 1,\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 4,\n\t\t    \"qty\" : 10,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t},\n\t\t{\n\t\t\t\"productNo\" : 6,\n\t\t    \"qty\" : 10,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A01\"\n}",
+							"raw": "{\n  \"tableName\": 1,\n  \"time\": \"上午\",\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 2,\n\t\t    \"qty\" : 1,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t},\n\t\t{\n\t\t\t\"productNo\" : 4,\n\t\t    \"qty\" : 1,\n\t\t\t\"descript1ion\" : \"這個是附註\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A01\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1236,7 +1235,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableNo\": 1,\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 4,\n\t\t    \"qty\" : 10,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t},\n\t\t{\n\t\t\t\"productNo\" : 6,\n\t\t    \"qty\" : 10,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A01\"\n}",
+							"raw": "{\n  \"tableName\": 1,\n\"time\": \"上午\",\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 4,\n\t\t    \"qty\" : 50,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t},\n\t\t{\n\t\t\t\"productNo\" : 3,\n\t\t    \"qty\" : 50,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A01\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
