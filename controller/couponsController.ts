@@ -19,13 +19,13 @@ export const coupons = {
     async (req: any, res: Response, next: NextFunction) => {
       const { couponName, couponCode, discount, isDisabled = false } = req.body;
 
-      const couponNo = await autoIncrement(CouponModel, 'A', "couponNo")
-      const couponModelObj = await CouponModel.findOne({ couponNo })
-      if (couponModelObj !== null) {
-        return next(appError(400, '優惠卷編號有誤', next));
-      }
-
+      const couponNo = await autoIncrement(CouponModel, 'A', 'couponNo')
+      const couponModelObj = await CouponModel.findOne({ $or: [{ couponNo }, { couponName }] });
       const errorMsgArray: string[] = []
+
+      if (couponModelObj !== null) {
+        errorMsgArray.push('優惠卷編號或代碼重複');
+      }
       if (!couponName) {
         errorMsgArray.push('請填優惠卷名稱');
       }
