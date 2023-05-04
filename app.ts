@@ -10,6 +10,7 @@ import seatsRouter from "./routes/seats";
 import ordersRouter from "./routes/orders";
 import productsRouter from "./routes/products";
 import couponsRouter from "./routes/coupons";
+import membersRouter from "./routes/members";
 import handleAllError from "./service/handleAllError";
 import notFound from "./service/notFound";
 
@@ -34,7 +35,8 @@ app.use(express.static(path.join(__dirname, "public")));
 // app.use(history());
 
 app.use("/", indexRouter);
-app.use("/v1", usersRouter);
+app.use("/v1/users", usersRouter);
+app.use("/v1/members", membersRouter);
 app.use("/v1/seats", seatsRouter);
 app.use("/v1/orders", ordersRouter);
 app.use("/v1/products", productsRouter);

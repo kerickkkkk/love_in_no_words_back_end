@@ -18,4 +18,16 @@ router.delete("/:tableNo", isOwnerAuth, seatsController.softDeleteSeat);
 // );
 
 router.post("/reservation", isAuth, reservationController.createReservation);
+router.post("/no-reservation", isAuth, reservationController.setSeats);
+router.get("/reservation", isAuth, reservationController.searchSeats);
+router.patch(
+  "/reservation/:reservationId",
+  isAuth,
+  reservationController.reviseReservation
+);
+router.delete(
+  "/reservation/:reservationId",
+  isAuth,
+  reservationController.softDeleteReservation
+);
 export default router;

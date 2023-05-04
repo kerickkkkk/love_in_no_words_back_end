@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "4db8d0f9-517e-4c44-a39b-942b2a191ae5",
+		"_postman_id": "344a9283-b468-40a2-a1e5-e2c1a80e9735",
 		"name": "傲嬌甜點",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "6878038"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -42,7 +41,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\n    \"name\": \"我是店長\",\n    \"phone\": \"0912345678\",\n    \"password\": \"12345678\",\n    \"confirmPassword\": \"12345678\",\n    \"isDisabled\" : false,\n    \"titleNo\": 1\n}",
+							"raw": "{\n\n    \"name\": \"我是店長\",\n    \"phone\": \"0912345679\",\n    \"password\": \"12345678\",\n    \"confirmPassword\": \"12345678\",\n    \"isDisabled\" : false,\n    \"titleNo\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -87,7 +86,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "\n    {\n        \"phone\": \"0912345678\",\n        \"password\": \"12345678\"   \n    }\n",
+							"raw": "\n    {\n        \"phone\": \"0912345679\",\n        \"password\": \"12345678\"   \n    }\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -240,13 +239,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/users?page=1",
+							"raw": "{{base_url}}/v1/users/admin?page=1",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
-								"users"
+								"users",
+								"admin"
 							],
 							"query": [
 								{
@@ -279,13 +279,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/users",
+							"raw": "{{base_url}}/v1/users/admin",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
-								"users"
+								"users",
+								"admin"
 							]
 						}
 					},
@@ -304,7 +305,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"店員改改\",\n    \"phone\": \"0975026590\",\n    \"titleNo\": 1,\n    \"isDisabled\":false,\n    \"password\":\"123456789\"\n}",
+							"raw": "{\n    \"name\": \"祥\",\n    \"phone\": \"0975026590\",\n    \"titleNo\": 3,\n    \"isDisabled\":false,\n    \"password\":\"123456789\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -312,14 +313,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/users/644150d167f7f5414bbbddb2",
+							"raw": "{{base_url}}/v1/users/admin/6453286ca72b9435971e38cf",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"users",
-								"644150d167f7f5414bbbddb2"
+								"admin",
+								"6453286ca72b9435971e38cf"
 							]
 						}
 					},
@@ -346,14 +348,16 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/users/6440cf7aa5761e36fd428600",
+							"raw": "{{base_url}}/v1/users/admin/6453286ca72b9435971e38cf/3",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"users",
-								"6440cf7aa5761e36fd428600"
+								"admin",
+								"6453286ca72b9435971e38cf",
+								"3"
 							]
 						}
 					},
@@ -416,7 +420,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/members/?phone=0900000000",
+							"raw": "{{base_url}}/v1/members/?phone=0912345674",
 							"host": [
 								"{{base_url}}"
 							],
@@ -438,7 +442,7 @@
 								},
 								{
 									"key": "phone",
-									"value": "0900000000"
+									"value": "0912345674"
 								}
 							]
 						}
@@ -539,7 +543,7 @@
 			"name": "seats",
 			"item": [
 				{
-					"name": "座位 取得所有",
+					"name": "O-2-1 座位狀態顯示",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -575,7 +579,7 @@
 					"response": []
 				},
 				{
-					"name": "新增座位",
+					"name": "O-2-4 新增桌號",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -608,7 +612,7 @@
 					"response": []
 				},
 				{
-					"name": "修改 座位",
+					"name": "O-2-2 修改座位",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -1252,6 +1256,200 @@
 								"v1",
 								"orders",
 								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "reservations",
+			"item": [
+				{
+					"name": "S-1-1 帶位",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"tableNo\": 2,\r\n  //  帶位只能輸入今日日期\r\n  \"reservationDate\": \"2023-05-04\",\r\n  \"reservationTime\": \"上午\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/seats/no-reservation",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"seats",
+								"no-reservation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "S-1-2 查詢座位",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/seats/reservation?reservationDate=2023-06-03&reservationTime=下午&status=已預約",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"seats",
+								"reservation"
+							],
+							"query": [
+								{
+									"key": "reservationDate",
+									"value": "2023-06-03"
+								},
+								{
+									"key": "reservationTime",
+									"value": "下午"
+								},
+								{
+									"key": "status",
+									"value": "已預約"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "S-1-3 新增訂位",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"tableNo\": 2,\r\n  \"reservationDate\": \"2023-06-03\",\r\n  \"reservationTime\": \"下午\",\r\n  \"name\": \"日檢絕對合格\",\r\n  \"phone\": \"0912345678\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/seats/reservation",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"seats",
+								"reservation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "S-1-4 修改訂位",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"reservationDate\": \"2023-06-03\",\r\n  \"reservationTime\": \"下午\",\r\n  \"name\": \"日檢絕對合格\",\r\n  \"phone\": \"0912345670\",\r\n  \"status\":\"已預約\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/seats/reservation/64532e22c74f276c9c9fdd9b",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"seats",
+								"reservation",
+								"64532e22c74f276c9c9fdd9b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "S-1-5 取消訂位",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/seats/reservation/64532e22c74f276c9c9fdd9b",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"seats",
+								"reservation",
+								"64532e22c74f276c9c9fdd9b"
 							]
 						}
 					},

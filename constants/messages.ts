@@ -11,19 +11,23 @@ export enum Message {
   SAME_PHONE_REGISTERED = "相同電話已註冊",
   TITLENO_TRANSFER_ERROR = "店家人員與會員轉換不可直接修改轉換",
   NEED_INPUT_TABLENO = "請輸入正確桌號",
-  NEED_CORRECT_RESERVATION_DATE = "請輸入正確訂位日期格式，且預定日必須等於或大於當日",
+  NEED_CORRECT_RESERVATION_DATE = "請輸入正確訂位日期格式",
   NEED_CORRECT_RESERVATION_TIME = "請輸入正確訂位時段",
   // API返回內容錯誤訊息
   PAGE_NEED_IN_NUMBER = "頁碼請以數字輸入",
   PAGE_NOT_FOUND = "查無此頁碼",
   ID_NOT_FOUND = "無該使用者資料",
+  RESERVATION_ID_NOT_FOUND = "無該訂位ID",
   HAD_RESERVARTION = "相同時段該坐位已被預約",
+  RESERVATIONDATE_NEED_NEWER_THAN_TODAY = "預定日必須等於或大於當日",
+  SET_SEATS_ONLY_TODAY = "帶位僅限當日",
 
   // API結果
   RESULT_SUCCESS = "成功",
   CREATE_SUCCESS = "新增成功",
   REVISE_SUCCESS = "修改成功",
   DELETE_SUCCESS = "刪除成功",
+  RESERVATION_CANCEL_SUCCESS = "預約取消成功",
 
   // Token錯誤訊息
   NO_TOKEN = "請輸入token",
