@@ -40,7 +40,7 @@ app.use("/v1/members", membersRouter);
 app.use("/v1/seats", seatsRouter);
 app.use("/v1/orders", ordersRouter);
 app.use("/v1/products", productsRouter);
-app.use("/v1", couponsRouter);
+app.use("/v1/coupons", couponsRouter);
 // socket 方式 暫時寫在 indexRouter之後要拿掉
 app.use("/v1/", indexRouter);
 // 404 錯誤

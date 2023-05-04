@@ -1057,10 +1057,10 @@
 			]
 		},
 		{
-			"name": "[admin] coupons",
+			"name": "coupons",
 			"item": [
 				{
-					"name": "取得所有",
+					"name": "O-4-2 店長獲取 優惠活動列表",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -1083,21 +1083,21 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/admin/coupons",
+							"raw": "{{base_url}}/v1/coupons/admin",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
-								"admin",
-								"coupons"
+								"coupons",
+								"admin"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "新增",
+					"name": "O-4-3 新增 優惠活動",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1117,21 +1117,21 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/admin/coupons",
+							"raw": "{{base_url}}/v1/coupons/admin",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
-								"admin",
-								"coupons"
+								"coupons",
+								"admin"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "修改",
+					"name": "O-4-4 修改 優惠活動",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -1151,14 +1151,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/admin/coupons/A000000001",
+							"raw": "{{base_url}}/v1/coupons/admin/A000000001",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
-								"admin",
 								"coupons",
+								"admin",
 								"A000000001"
 							]
 						}
@@ -1166,7 +1166,7 @@
 					"response": []
 				},
 				{
-					"name": "刪除",
+					"name": "O-4-5 刪除 優惠活動",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -1186,15 +1186,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/admin/coupons/2",
+							"raw": "{{base_url}}/v1/coupons/admin/A000000001",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
-								"admin",
 								"coupons",
-								"2"
+								"admin",
+								"A000000001"
 							]
 						}
 					},
@@ -1206,7 +1206,7 @@
 			"name": "orders",
 			"item": [
 				{
-					"name": "訂單試算",
+					"name": "S-2-2 金額試算",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1226,13 +1226,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/orders/calculate/total-price",
+							"raw": "{{base_url}}/v1/orders/admin/calculate/total-price",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"orders",
+								"admin",
 								"calculate",
 								"total-price"
 							]
@@ -1241,7 +1242,7 @@
 					"response": []
 				},
 				{
-					"name": "訂單送出",
+					"name": "S-2-3 新增訂單",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1261,14 +1262,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/orders/",
+							"raw": "{{base_url}}/v1/orders/admin",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"orders",
-								""
+								"admin"
 							]
 						}
 					},
