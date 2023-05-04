@@ -22,4 +22,16 @@ router.post("/table-code", isOwnerAuth, seatsController.createTableCode);
 router.delete("/table-code/:seatsType", isOwnerAuth, seatsController.deleteTableCode);
 
 router.post("/reservation", isAuth, reservationController.createReservation);
+router.post("/no-reservation", isAuth, reservationController.setSeats);
+router.get("/reservation", isAuth, reservationController.searchSeats);
+router.patch(
+  "/reservation/:reservationId",
+  isAuth,
+  reservationController.reviseReservation
+);
+router.delete(
+  "/reservation/:reservationId",
+  isAuth,
+  reservationController.softDeleteReservation
+);
 export default router;

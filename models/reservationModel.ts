@@ -1,7 +1,7 @@
 import { Schema, Document, model } from "mongoose";
 import { Message } from "../constants/messages";
 import { TableManagement } from "../models/tableManagementModel";
-interface Reservation extends Document {
+export interface Reservation extends Document {
   tableInofo: TableManagement;
   name: string;
   phone: string;
@@ -23,11 +23,9 @@ const reservationSchema = new Schema(
     },
     name: {
       type: String,
-      required: [true, Message.NEED_INPUT_NAME],
     },
     phone: {
       type: String,
-      required: [true, Message.NEED_INPUT_PHONE],
     },
     reservationTime: {
       type: String,
@@ -53,6 +51,7 @@ const reservationSchema = new Schema(
     isCanceled: {
       type: Boolean,
       required: [true, "取消" + Message.NEED_INPUT_STATUS],
+      default: false,
     },
 
     canceledAt: {
@@ -65,8 +64,9 @@ const reservationSchema = new Schema(
 reservationSchema.pre(/^find/, function (next) {
   this.populate({
     path: "tableInofo",
-    select: "tableNo tableName tableCode",
+    select: "tableNo tableName seats",
   });
+
   next();
 });
 export default model<Reservation>("Reservation", reservationSchema);

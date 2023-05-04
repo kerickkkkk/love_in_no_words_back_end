@@ -3,24 +3,20 @@ import express from "express";
 import { isAuth, isOwnerAuth } from "../middleware/auth";
 const router = express.Router();
 
-/* GET users listing. */
-router.get("/admin/users/", isOwnerAuth, usersController.getUsers);
-router.post("/admin/users/", isOwnerAuth, usersController.creatUser);
-router.patch("/admin/users/:id", isOwnerAuth, usersController.updateUser);
+/* 後台使用者管理API */
+router.get("/admin/", isOwnerAuth, usersController.getUsers);
+router.post("/admin/", isOwnerAuth, usersController.creatUser);
+router.patch("/admin/:id", isOwnerAuth, usersController.updateUser);
 router.delete(
-  "/admin/users/:id/:titleNo",
+  "/admin/:id/:titleNo",
   isOwnerAuth,
   usersController.softDeleteUser
 );
-router.post("/users/sign_up", usersController.signUp);
-router.post("/users/login", usersController.login);
-router.post("/users/reset_password", isAuth, usersController.resetPassword);
-router.get("/users/profile", isAuth, usersController.profile);
-router.get("/users/:id", isAuth, usersController.getUser);
-//members
-router.post("/members", usersController.signUpMember);
-router.get("/members", usersController.searchMember);
-router.delete("/members/:id", usersController.softDeleteMember);
-router.patch("/members/:id", usersController.updateMember);
+/* POS系統初期建立用API */
+router.post("/sign_up", usersController.signUp);
+router.post("/login", usersController.login);
+router.post("/reset_password", isAuth, usersController.resetPassword);
+router.get("/profile", isAuth, usersController.profile);
+router.get("/:id", isAuth, usersController.getUser);
 
 export default router;
