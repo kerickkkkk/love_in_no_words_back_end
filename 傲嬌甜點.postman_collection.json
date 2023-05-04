@@ -798,7 +798,7 @@
 			"name": "products",
 			"item": [
 				{
-					"name": "取得 產品",
+					"name": "O-3-1 條件搜尋 商品",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -821,14 +821,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/",
+							"raw": "{{base_url}}/v1/products/admin",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"products",
-								""
+								"admin"
 							],
 							"query": [
 								{
@@ -842,7 +842,7 @@
 					"response": []
 				},
 				{
-					"name": "新增",
+					"name": "O-3-2 新增 商品",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -854,7 +854,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"productName\":\"飲料\",\n        \"photo\":\"productName\",\n        \"price\":100,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 200,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"644fa4619e4019674ba5f03d\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"productName\":\"飲料33\",\n        \"photo\":\"productName\",\n        \"price\":100,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 200,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"644fa4619e4019674ba5f03d\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -862,20 +862,21 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products",
+							"raw": "{{base_url}}/v1/products/admin",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
-								"products"
+								"products",
+								"admin"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "修改",
+					"name": "O-3-3 修改 商品",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -887,7 +888,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"productName\":\"QQ3\",\n        \"photo\":\"QWER\",\n        \"price\":123,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 50,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"644b43507109d75ecc4f2866\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"productName\":\"QQ32\",\n        \"photo\":\"QWER\",\n        \"price\":123,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 50,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"644b43507109d75ecc4f2866\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -895,13 +896,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/3",
+							"raw": "{{base_url}}/v1/products/admin/3",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"products",
+								"admin",
 								"3"
 							]
 						}
@@ -909,7 +911,7 @@
 					"response": []
 				},
 				{
-					"name": "軟刪",
+					"name": "O-3-4 刪除 商品",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -929,21 +931,22 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/3",
+							"raw": "{{base_url}}/v1/products/admin/2",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"products",
-								"3"
+								"admin",
+								"2"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "取得 產品分類",
+					"name": "O-3-5 取得 商品代碼分類",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -966,13 +969,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/product-type",
+							"raw": "{{base_url}}/v1/products/admin/product-type",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"products",
+								"admin",
 								"product-type"
 							]
 						}
@@ -980,7 +984,7 @@
 					"response": []
 				},
 				{
-					"name": "新增 產品分類",
+					"name": "O-3-6 新增 商品分類",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -992,7 +996,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"productsTypeName\" : \"無料\"\n}",
+							"raw": "{\n    \"productsTypeName\" : \"甜點\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1000,13 +1004,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/product-type",
+							"raw": "{{base_url}}/v1/products/admin/product-type",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"products",
+								"admin",
 								"product-type"
 							]
 						}
@@ -1014,7 +1019,7 @@
 					"response": []
 				},
 				{
-					"name": "刪除 產品分類",
+					"name": "O-3-7 刪除 商品分類",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -1034,13 +1039,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/product-type/1",
+							"raw": "{{base_url}}/v1/products/admin/product-type/1",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"products",
+								"admin",
 								"product-type",
 								"1"
 							]
