@@ -1,13 +1,13 @@
 import couponsController from "../controller/couponsController";
 import express from "express";
-import { isAuth } from "../middleware/auth";
+import { isOwnerAuth } from "../middleware/auth";
 const router = express.Router();
 
 // 管理端
-router.get("/admin/coupons", isAuth, couponsController.getCoupons);
-router.post("/admin/coupons", isAuth, couponsController.createCoupons);
-router.patch("/admin/coupons/:couponNo", isAuth, couponsController.patchCoupons);
-router.delete("/admin/coupons/:couponNo", isAuth, couponsController.softDeleteCoupons);
+router.get("/admin", isOwnerAuth, couponsController.getCoupons);
+router.post("/admin", isOwnerAuth, couponsController.createCoupons);
+router.patch("/admin/:couponNo", isOwnerAuth, couponsController.patchCoupons);
+router.delete("/admin/:couponNo", isOwnerAuth, couponsController.softDeleteCoupons);
 
 // 前台 - 
 
