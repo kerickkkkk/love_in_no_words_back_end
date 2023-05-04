@@ -4,15 +4,15 @@ import express from "express";
 import { isOwnerAuth } from "../middleware/auth";
 const router = express.Router();
 
-router.get("/", isOwnerAuth, seatsController.getSeats);
-router.post("/", isOwnerAuth, seatsController.createSeat);
-router.patch("/:tableNo", isOwnerAuth, seatsController.patchSeat);
-router.delete("/:tableNo", isOwnerAuth, seatsController.softDeleteSeat);
+router.get("/admin", isOwnerAuth, seatsController.getSeats);
+router.post("/admin", isOwnerAuth, seatsController.createSeat);
+router.patch("/admin/:tableNo", isOwnerAuth, seatsController.patchSeat);
+router.delete("/admin/:tableNo", isOwnerAuth, seatsController.softDeleteSeat);
 // 保留座位功能 改成直接寫入 seats 座位人數上限
-// router.get("/table-code", isAuth, seatsController.getTableCode);
-// router.post("/table-code", isAuth, seatsController.createTableCode);
+// router.get("/admin/table-code", isAuth, seatsController.getTableCode);
+// router.post("/admin/table-code", isAuth, seatsController.createTableCode);
 // router.delete(
-//   "/table-code/:seatsType",
+//   "/admin/table-code/:seatsType",
 //   isAuth,
 //   seatsController.deleteTableCode
 // );
