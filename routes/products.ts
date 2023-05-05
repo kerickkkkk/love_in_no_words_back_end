@@ -16,6 +16,7 @@ router.post(
 router.post("/admin", isOwnerAuth, productsController.createProduct);
 // O-3-4 修改商品API
 router.patch("/admin/:productNo", isOwnerAuth, productsController.patchProduct);
+// O-3-5 刪除商品API
 router.delete(
   "/admin/:productNo",
   isOwnerAuth,

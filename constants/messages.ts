@@ -20,7 +20,10 @@ export enum Message {
   NEED_POSITIVE_SAFE_STOCKAMOUNT = "安全庫存量請以正整數輸入",
   NEED_POSITIVE_PRODUCT_TYPE = "商品分類編號請以正整數輸入",
   NEED_POSITIVE_PRODUCT_TIME = "製作時間請以正整數輸入",
-
+  NEED_INT_PRICE_LOWERLIMIT = "價格區間下限請以正整數或0輸入",
+  NEED_INT_PRICE_UPPERLIMIT = "價格區間上限請以正整數輸入",
+  NEED_PRICE_UPPERLIMIT_LARGER_LOWERLIMIT = "價格區間上限不可小於價格區間下限",
+  NEED_CORRECT_STATUS = "請輸入正確狀態",
   // API返回內容錯誤訊息
   PAGE_NEED_IN_NUMBER = "頁碼請以數字輸入",
   PAGE_NOT_FOUND = "查無此頁碼",
@@ -46,6 +49,8 @@ export enum Message {
   PRODUCT_TYPE_ADD_SUCCESS = "商品分類設定成功",
   PRODUCT_ADD_SUCCESS = "商品新增成功",
   PRODUCT_REVISE_SUCCESS = "商品修改成功",
+  PRODUCT_DELETE_SUCCESS = "商品刪除成功",
+
   // Token錯誤訊息
   NO_TOKEN = "請輸入token",
   USER_NOT_FOUND = "非有效使用者token",
