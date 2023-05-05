@@ -1,10 +1,8 @@
 import { Schema, Document, model } from "mongoose";
-interface ProductType extends Document {
+export interface ProductType extends Document {
   productsType: number;
   productsTypeName: string;
   createdAt: Date;
-  isDisabled: boolean;
-  revisedAt?: Date;
   isDeleted: boolean;
   deletedAt?: Date;
 }
@@ -23,16 +21,6 @@ const productTypeSchema = new Schema(
       type: Date,
       default: Date.now,
     },
-    isDisabled: {
-      type: Boolean,
-      required: [true, "狀態請以布林值形式輸入"],
-      default: false,
-    },
-    revisedAt: {
-      type: Date,
-      default: null,
-      select: false,
-    },
     isDeleted: {
       type: Boolean,
       default: false,
@@ -45,7 +33,7 @@ const productTypeSchema = new Schema(
   },
   {
     versionKey: false,
-    collection: "productType"
+    collection: "productType",
   }
 );
 
