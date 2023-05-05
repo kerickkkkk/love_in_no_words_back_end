@@ -1218,7 +1218,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableName\": 3,\n  \"time\": \"上午\",\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 5,\n\t\t    \"qty\" : 10,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A000000001\"\n}",
+							"raw": "{\n  \"tableName\": 5,\n  \"time\": \"上午\",\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 1,\n\t\t    \"qty\" : 1,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A000000001\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1253,7 +1253,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableName\": 3,\n\"time\": \"上午\",\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 5,\n\t\t    \"qty\" : 10,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A000000001\"\n}",
+							"raw": "{\n  \"tableName\": 5,\n\"time\": \"上午\",\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 1,\n\t\t    \"qty\" : 1,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A000000001\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"

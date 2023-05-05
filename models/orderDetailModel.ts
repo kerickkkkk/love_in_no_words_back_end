@@ -1,8 +1,9 @@
 import { Schema, Document, model } from "mongoose";
 interface OrderDetail extends Document {
-  // orderNo: number;
-  // tableNo: string;
-  orderList: any[]
+  orderNo: string;
+  tableNo: number;
+  tableName: number;
+  orderList: any[];
   totalTime: number;
   discount: number;
   totalPrice: number;
@@ -16,16 +17,19 @@ interface OrderDetail extends Document {
 }
 const orderDetailSchema = new Schema(
   {
-    // 等待討論呈現方式
-    // orderNo: {
-    //   type: Number,
-    //   required: [true, "請設定訂單編號"],
-    // },
-    // tableNo: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "tableManagementModel",
-    //   required: [true, "請輸入桌號"],
-    // },
+    // 訂單編號(時間戳  年月日時分秒 2023 01 01 01 01 01 )
+    orderNo: {
+      type: Number,
+      required: [true, "請設定訂單編號"],
+    },
+    tableNo: {
+      type: Number,
+      required: [true, "請設定系統桌號"],
+    },
+    tableName: {
+      type: Number,
+      required: [true, "請設定座位名稱"],
+    },
     orderList: {
       type: Array,
     },

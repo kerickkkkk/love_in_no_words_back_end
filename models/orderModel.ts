@@ -1,9 +1,10 @@
 import { Schema, Document, model } from "mongoose";
 interface Order extends Document {
-  orderNo: number;
+  orderNo: string;
   orderStatus: string;
   time: string;
-  tableNo: string;
+  tableNo: number;
+  tableName: number;
   createdAt: Date;
   isDisabled: boolean;
   revisedAt?: Date;
@@ -13,8 +14,9 @@ interface Order extends Document {
 
 const orderSchema = new Schema(
   {
+    // 訂單編號(時間戳  年月日時分秒 2023 01 01 01 01 01 )
     orderNo: {
-      type: Number,
+      type: String,
       required: [true, "請設定訂單編號"],
     },
     orderStatus: {
@@ -27,10 +29,20 @@ const orderSchema = new Schema(
       required: [true, "請選擇時段"]
     },
     tableNo: {
-      type: Schema.Types.ObjectId,
-      ref: "TableManagement",
-      required: [true, "請輸入桌號"],
+      type: Number,
+      required: [true, "請設定系統桌號"],
     },
+    tableName: {
+      type: Number,
+      required: [true, "請設定座位名稱"],
+    },
+    // 經討論直接寫入就不用去撈取
+    // tableNo: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "TableManagement",
+    //   required: [true, "請輸入桌號"],
+    // },
+
     orderDetail: {
       type: Schema.Types.ObjectId,
       ref: "OrderDetail",
