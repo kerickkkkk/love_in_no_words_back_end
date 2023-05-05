@@ -850,7 +850,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"productName\":\"飲料33\",\n        \"photo\":\"productName\",\n        \"price\":100,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 200,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"644fa4619e4019674ba5f03d\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"productName\":\"甜點33\",\n        \"photo\":\"productName\",\n        \"price\":100,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 200,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"6455023c2d3bd6f8e2cdb668\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -992,7 +992,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"productsTypeName\" : \"甜點\"\n}",
+							"raw": "{\n    \"productsTypeName\" : \"甜點2\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1201,6 +1201,44 @@
 		{
 			"name": "orders",
 			"item": [
+				{
+					"name": "S-2-1 查詢類別 商品",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/products/?productsType=4",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"products",
+								""
+							],
+							"query": [
+								{
+									"key": "productsType",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "S-2-2 金額試算",
 					"request": {
