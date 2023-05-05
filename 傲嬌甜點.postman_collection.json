@@ -1270,7 +1270,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableName\": 5,\n  \"products\":[\n\n        {\n            \"productNo\": 1,\n\t\t    \"qty\" :10 \n\n\t\t}\n\n  ],\n\t\"couponNo\" : \"A000000001\"\n}",
+							"raw": "{\n  \"tableName\": 5,\n  \"products\":[\n\n        {\n            \"productNo\": 11,\n\t\t    \"qty\" :10 \n\n\t\t}\n  ],\n\t\"couponNo\" : \"A000000001\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
