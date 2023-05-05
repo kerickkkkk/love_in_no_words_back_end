@@ -20,14 +20,12 @@ export const products = {
   // O-3-1 條件搜尋商品API
   getProducts: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
-      const productsTypeQuery =
-        req.query.productsType !== undefined
-          ? {
-              productsTypeName: new RegExp(req.query.productsType),
-            }
-          : {};
-      const productTypeObj = await ProductTypeModel.find(productsTypeQuery);
-      const productsTypeAry = productTypeObj.map((item) => item._id);
+      // 如果要中文可以改 new RegExp(req.query.productsType) 
+      const productsTypeQuery = req.query.productsType !== undefined ? {
+        "productsType": Number(req.query.productsType)
+      } : {}
+      const productTypeObj = await ProductTypeModel.find(productsTypeQuery)
+      const productsTypeAry = productTypeObj.map(item => item._id)
       const query = {
         productsType: productsTypeAry,
         isDeleted: false,
