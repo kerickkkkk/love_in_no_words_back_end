@@ -35,10 +35,13 @@ export const orders = {
         if (next.productNo === undefined) {
           prev.noProductNo += 1
         }
-        if (next.productNo !== undefined && inputProducts.indexOf(next) !== i) {
-          prev.repeatProductNo.push(next.productNo)
+
+        prev.repeatProductNo.push(next.productNo)
+        if (i === inputProducts.length - 1) {
+          prev.repeatProductNo = prev.repeatProductNo.filter((id: number, index: number, arr: any) => {
+            return arr.indexOf(id) !== index
+          })
         }
-        console.log(next.productNo !== undefined && next.qty <= 0);
 
         if (next.productNo !== undefined && next.qty <= 0) {
           prev.qtyLessZero.push(next.productNo)
