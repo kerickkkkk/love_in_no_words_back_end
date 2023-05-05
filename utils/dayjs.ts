@@ -21,4 +21,7 @@ export const slashDate = (date: Date): string =>
 export const period = (): string =>
   (dayjs().utcOffset(8).format("A") === "上午" ? "上午" : "下午")
 
+export const combinedDateTimeString = (): string =>
+  dayjs().utcOffset(8).format("YYYYMMDDHHmmss");
+
 export default dayjs;
