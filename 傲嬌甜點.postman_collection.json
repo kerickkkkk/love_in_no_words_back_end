@@ -1226,14 +1226,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/orders/admin/calculate/total-price",
+							"raw": "{{base_url}}/v1/orders/calculate/total-price",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"orders",
-								"admin",
 								"calculate",
 								"total-price"
 							]
@@ -1262,14 +1261,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/orders/admin",
+							"raw": "{{base_url}}/v1/orders",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
-								"orders",
-								"admin"
+								"orders"
 							]
 						}
 					},
