@@ -87,7 +87,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "\n    {\n        \"phone\": \"0912345679\",\n        \"password\": \"12345678\"   \n    }\n",
+							"raw": "\n    {\n        \"phone\": \"0912345678\",\n        \"password\": \"12345678\"   \n    }\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -272,7 +272,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\r\n    \"name\": \"註冊店員\",\r\n    \"phone\": \"0975026595\",\r\n    \"titleNo\": \"2\",\r\n    \"isDisabled\" : false,\r\n    \"password\": \"12345678\"\r\n\r\n}",
+							"raw": "{\r\n\r\n    \"name\": \"註冊店員\",\r\n    \"phone\": \"0975026599\",\r\n    \"titleNo\": \"2\",\r\n    \"isDisabled\" : false,\r\n    \"password\": \"12345678\"\r\n\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -306,7 +306,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"祥\",\n    \"phone\": \"0975026590\",\n    \"titleNo\": 3,\n    \"isDisabled\":false,\n    \"password\":\"123456789\"\n}",
+							"raw": "{\n    \"name\": \"註冊店員\",\n    \"phone\": \"0975026599\",\n    \"titleNo\": \"2\",\n    \"isDisabled\" : false,\n    \"password\": \"12345678\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -421,7 +421,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/members/?phone=0912345674",
+							"raw": "{{base_url}}/v1/members/",
 							"host": [
 								"{{base_url}}"
 							],
@@ -443,7 +443,8 @@
 								},
 								{
 									"key": "phone",
-									"value": "0912345674"
+									"value": "0912345674",
+									"disabled": true
 								}
 							]
 						}
@@ -812,13 +813,8 @@
 							}
 						],
 						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							"mode": "urlencoded",
+							"urlencoded": []
 						},
 						"url": {
 							"raw": "{{base_url}}/v1/products/admin",
@@ -1218,7 +1214,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableName\": 5,\n  \"time\": \"上午\",\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 1,\n\t\t    \"qty\" : 1,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A000000001\"\n}",
+							"raw": "{\n  \"tableName\": 5,\n  \"products\":[\n\n        {\n            \"productNo\": 1,\n\t\t    \"qty\" :10 \n\n\t\t}\n\n  ],\n\t\"couponNo\" : \"A000000001\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1253,7 +1249,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableName\": 5,\n\"time\": \"上午\",\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 1,\n\t\t    \"qty\" : 1,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A000000001\"\n}",
+							"raw": "{\n  \"tableName\": 5,\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 1,\n\t\t    \"qty\" : 3,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A000000001\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"

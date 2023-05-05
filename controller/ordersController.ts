@@ -7,8 +7,7 @@ import ProductManagementModel from '../models/productManagementModel';
 import Order from "../models/orderModel";
 import CouponModel from "../models/couponModel"
 import OrderDetail from "../models/orderDetailModel";
-import { autoIncrementNumber } from "../utils/modelsExtensions";
-import { combinedDateTimeString } from "../utils/dayjs"
+import { combinedDateTimeString, period } from "../utils/dayjs"
 export const orders = {
   handleOrder: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
@@ -20,7 +19,7 @@ export const orders = {
       } = req.body
 
       if (inputProducts.length <= 0) {
-        return next(appError(400, "購物車內無產品，請選購", next));
+        return next(appError(400, "購物車內無商品，請選購", next));
       }
 
       const arrayPutKeyToObj = (array: any[], columnName: string) => {
@@ -30,15 +29,52 @@ export const orders = {
         }, {})
         return result
       }
-      // 確認購物車內產品編號是否有誤
+
+      // 沒有商品編號 商品編號重複 商品數量要大於零
+      const checkInputProduct = inputProducts.reduce((prev: any, next: any, i: number) => {
+        if (next.productNo === undefined) {
+          prev.noProductNo += 1
+        }
+        if (next.productNo !== undefined && inputProducts.indexOf(next) !== i) {
+          prev.repeatProductNo.push(next.productNo)
+        }
+        console.log(next.productNo !== undefined && next.qty <= 0);
+
+        if (next.productNo !== undefined && next.qty <= 0) {
+          prev.qtyLessZero.push(next.productNo)
+        }
+        return prev
+      }, {
+        noProductNo: 0,
+        repeatProductNo: [],
+        qtyLessZero: []
+      })
+
+      if (checkInputProduct.noProductNo > 0 || checkInputProduct.repeatProductNo.length > 0 || checkInputProduct.qtyLessZero.length > 0) {
+        let errMsg = ''
+        if (checkInputProduct.noProductNo > 0) {
+          errMsg += `有 ${checkInputProduct.noProductNo} 商品編號有誤。;`
+        }
+        if (checkInputProduct.repeatProductNo.length > 0) {
+          errMsg += `商品編號： ${[...new Set(checkInputProduct.repeatProductNo)].join()} 重複;`
+        }
+        if (checkInputProduct.qtyLessZero > 0) {
+          errMsg += `商品編號： ${[...new Set(checkInputProduct.qtyLessZero)].join()} 數量不得小於零;`
+        }
+        return next(appError(400, errMsg, next));
+      }
+
+
+      // 確認購物車內商品編號是否有誤
       const inputProductsObj = arrayPutKeyToObj(inputProducts, 'productNo')
-      // 取得 產品編號
+      // 取得 商品編號
       const productNoList = inputProducts.map((item: {
         productNo: number;
         qty: number;
         description?: string;
       }) => item.productNo)
 
+      // 撈取合法的商品
       const tempProducts = await ProductManagementModel.find({
         productNo: {
           $in: productNoList
@@ -91,10 +127,10 @@ export const orders = {
         return next(appError(400, `庫存量不足: ${dangerAmount}`, next));
       }
 
-      // 計算產品 總價
+      // 計算商品 總價
       let totalTime = 0
       let totalPrice = 0
-      // 產品內優惠活動 (未計算)
+      // 商品內優惠活動 (未計算)
 
       // 訂單優惠碼
       const products = tempProducts.reduce((prev: any[], next, index) => {
@@ -153,7 +189,7 @@ export const orders = {
         const newOrder = await Order.create({
           orderNo,
           orderStatus: "未啟用",
-          time,
+          time: period(),
           tableNo: tableObj?.tableNo,
           tableName: tableObj?.tableName,
           orderDetail: newOrderDetail._id
@@ -177,7 +213,7 @@ export const orders = {
         const { io } = req.app.settings;
         io.emit("chef", order);
 
-        // 更新產品庫存與庫存狀態
+        // 更新商品庫存與庫存狀態
         const updateObjs = products.reduce((prev: any[], next: any) => {
 
           const obj = {
