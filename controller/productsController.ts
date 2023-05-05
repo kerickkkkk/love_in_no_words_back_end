@@ -20,23 +20,107 @@ export const products = {
   // O-3-1 條件搜尋商品API
   getProducts: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
-      // 如果要中文可以改 new RegExp(req.query.productsType) 
-      const productsTypeQuery = req.query.productsType !== undefined ? {
-        "productsType": Number(req.query.productsType)
-      } : {}
-      const productTypeObj = await ProductTypeModel.find(productsTypeQuery)
-      const productsTypeAry = productTypeObj.map(item => item._id)
-      const query = {
-        productsType: productsTypeAry,
+      const { productsType, priceLowerLimit, priceUpperLimit, amountStatus } =
+        req.query;
+      const errorMsgArray: string[] = [];
+      // productsType驗證是否為數字且能在productsType collection中搜尋到
+      let productTypeObj: ProductType | null = null;
+      // 若有商品類型則驗證
+      if (!(productsType === undefined)) {
+        if (Number.isNaN(Number(productsType))) {
+          errorMsgArray.push(Message.NEED_POSITIVE_PRODUCT_TYPE);
+        } else {
+          productTypeObj = await ProductTypeModel.findOne({
+            productsType,
+            isDeleted: false,
+          });
+          if (productTypeObj === null) {
+            errorMsgArray.push(Message.PRODUCT_TYPE_NOT_FOUND);
+          }
+        }
+      }
+
+      const productsTypeId = productTypeObj?._id;
+      // 若有價格區間下限驗證價格區間下限為正整數或0
+      if (priceLowerLimit !== undefined) {
+        if (!validator.isInt(priceLowerLimit.toString(), { min: 0 })) {
+          errorMsgArray.push(Message.NEED_INT_PRICE_LOWERLIMIT);
+        }
+      }
+      // 若有價格區間上限則驗證價格區間上限為正整數
+      if (priceUpperLimit !== undefined) {
+        if (!validator.isInt(priceUpperLimit.toString(), { gt: 0 })) {
+          errorMsgArray.push(Message.NEED_INT_PRICE_UPPERLIMIT);
+        }
+      }
+      // 驗證價格區間上限不可小於價格區間下限
+      if (
+        priceUpperLimit !== undefined &&
+        priceLowerLimit !== undefined &&
+        validator.isInt(priceLowerLimit.toString()) &&
+        validator.isInt(priceUpperLimit.toString())
+      ) {
+        if (Number(priceLowerLimit) > Number(priceUpperLimit)) {
+          errorMsgArray.push(Message.NEED_PRICE_UPPERLIMIT_LARGER_LOWERLIMIT);
+        }
+      }
+      // 若有狀態則驗證
+      if (amountStatus !== undefined) {
+        if (
+          !(
+            amountStatus == "safe" ||
+            amountStatus == "danger" ||
+            amountStatus == "zero"
+          )
+        ) {
+          errorMsgArray.push(Message.NEED_CORRECT_STATUS);
+        }
+      }
+
+      // 如果有錯誤訊息有返回400
+      if (errorMsgArray.length > 0) {
+        return next(appError(400, errorMsgArray.join(";"), next));
+      }
+      // 搜尋條件
+      let query: any = {
         isDeleted: false,
       };
-      const products = await ProductManagementModel.find(query)
-        .populate({
-          path: "productsType",
-          select: "productsType productsTypeName",
-        })
-        .sort({ productNo: 1 });
-      handleSuccess(res, "成功", products);
+      // 若有ref的productsTypeId就加入搜尋條件
+      if (productsTypeId !== undefined) {
+        query.productsType = productsTypeId;
+      }
+      let priceRange: any = {};
+      // 若有價格區間下限就加入搜尋條件
+      if (priceLowerLimit !== undefined) {
+        priceRange.$gte = Number(priceLowerLimit);
+      }
+      // 若有價格區間上限就加入搜尋條件
+      if (priceUpperLimit !== undefined) {
+        priceRange.$lte = Number(priceUpperLimit);
+      }
+      query.price = priceRange;
+      // 若有狀態就加入搜尋條件
+      if (amountStatus !== undefined) {
+        query.amountStatus = amountStatus;
+      }
+
+      const products = await ProductManagementModel.find(query).sort({
+        productNo: 1,
+      });
+      const responseData = products.map((product) => ({
+        productNo: product?.productNo,
+        productName: product?.productName,
+        photoUrl: product?.photoUrl,
+        price: product?.price,
+        inStockAmount: product?.inStockAmount,
+        amountStatus: product?.amountStatus,
+        productsType: product?.productsType.productsType,
+        productsTypeName: product?.productsType.productsTypeName,
+        productionTime: product?.productionTime,
+        isDisabled: product?.isDisabled,
+        description: product?.description,
+      }));
+      handleSuccess(res, Message.RESULT_SUCCESS, responseData);
     }
   ),
   // O-3-2 上傳商品圖片API
@@ -318,38 +402,38 @@ export const products = {
       return handleSuccess(res, Message.PRODUCT_REVISE_SUCCESS, null);
     }
   ),
+  // O-3-5 刪除商品API
   deleteProduct: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
       const { productNo } = req.params;
-
-      const errorMsgArray: string[] = [];
-
-      if (!productNo) {
-        errorMsgArray.push("產品編號為空");
+      // 驗證商品編號須為正整數
+      if (!validator.isInt(productNo, { gt: 0 })) {
+        return next(appError(400, Message.PRODUCTNO_NOT_FOUND, next));
+      } else {
+        const findProduct = await ProductManagementModel.findOne({
+          productNo,
+          isDeleted: false,
+        });
+        if (findProduct === null) {
+          return next(appError(400, Message.PRODUCTNO_NOT_FOUND, next));
+        }
       }
 
-      // 如果有錯誤訊息有返回400
-      if (errorMsgArray.length > 0) {
-        return next(appError(400, errorMsgArray.join(";"), next));
-      }
-
-      const productObj = await ProductManagementModel.findOneAndUpdate(
+      await ProductManagementModel.findOneAndUpdate(
         {
           productNo,
           isDeleted: false,
         },
         {
           isDeleted: true,
+          deletedAt: isoDate(),
         },
         {
           returnDocument: "after",
         }
       );
-      if (productObj === null) {
-        return next(appError(400, "查無產品", next));
-      }
 
-      return handleSuccess(res, "刪除成功", null);
+      return handleSuccess(res, Message.PRODUCT_DELETE_SUCCESS, null);
     }
   ),
   // O-3-6 取得商品代碼分類API

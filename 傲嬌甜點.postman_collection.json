@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "0dade0c9-6099-427e-bb23-756549d1ab01",
+		"_postman_id": "c4d45af5-7670-48e3-865a-4a803b45e753",
 		"name": "傲嬌甜點",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -812,11 +812,16 @@
 							}
 						],
 						"body": {
-							"mode": "urlencoded",
-							"urlencoded": []
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/admin",
+							"raw": "{{base_url}}/v1/products/admin?productsType=2&priceLowerLimit=100&priceUpperLimit=300&amountStatus=safe",
 							"host": [
 								"{{base_url}}"
 							],
@@ -828,8 +833,19 @@
 							"query": [
 								{
 									"key": "productsType",
-									"value": "飲",
-									"disabled": true
+									"value": "2"
+								},
+								{
+									"key": "priceLowerLimit",
+									"value": "100"
+								},
+								{
+									"key": "priceUpperLimit",
+									"value": "300"
+								},
+								{
+									"key": "amountStatus",
+									"value": "safe"
 								}
 							]
 						}
@@ -907,7 +923,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"productName\":\"甜點33\",\n        \"photo\":\"productName\",\n        \"price\":100,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 200,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"6455023c2d3bd6f8e2cdb668\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"productName\":\"明星氣泡千層\",\n        \"photoUrl\":\"{{photoUrl}}\",\n        \"price\":200,\n        \"inStockAmount\":500,\n        \"safeStockAmount\": 200,\n        \"productsType\": 2,\n        \"productionTime\": 10,\n        \"description\": \"明星喝過還不點起來\",\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -984,7 +1000,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/admin/2",
+							"raw": "{{base_url}}/v1/products/admin/1",
 							"host": [
 								"{{base_url}}"
 							],
@@ -992,7 +1008,7 @@
 								"v1",
 								"products",
 								"admin",
-								"2"
+								"1"
 							]
 						}
 					},
@@ -1048,7 +1064,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"productsTypeName\" : \"甜點2\"\n}",
+							"raw": "{\n    \"productsTypeName\" : \"乳酪\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
