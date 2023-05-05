@@ -32,7 +32,7 @@ export const users = {
       // 店家人員中取出需要的資訊
       const clerksList = users.map(
         ({ _id, number, name, phone, title, createdAt, isDisabled }) => {
-          let transferDate = slashDate(createdAt);
+          const transferDate = slashDate(createdAt);
           return {
             _id,
             number,
@@ -47,7 +47,7 @@ export const users = {
       // 會員人員中取出需要的資訊
       const membersList = members.map(
         ({ _id, number, name, phone, title, createdAt, isDisabled }) => {
-          let transferDate = slashDate(createdAt);
+          const transferDate = slashDate(createdAt);
           return {
             _id,
             number,
@@ -107,7 +107,7 @@ export const users = {
       // title
       const titleMap: string[] = ["", "店長", "店員", "廚師", "會員"];
 
-      let errorMsgArray = [];
+      const errorMsgArray = [];
       // 驗證
       if (!name) {
         errorMsgArray.push(Message.NEED_INPUT_NAME);
@@ -198,7 +198,7 @@ export const users = {
       // title
       const titleMap: string[] = ["", "店長", "店員", "廚師", "會員"];
 
-      let errorMsgArray = [];
+      const errorMsgArray = [];
       // 驗證
       if (!name) {
         errorMsgArray.push(Message.NEED_INPUT_NAME);
@@ -392,9 +392,12 @@ export const users = {
         return next(appError(400, "密碼長度需大於 8 碼", next));
       }
 
-      const user: any = await User.findOne({ phone }).select("+password");
-      const checkPassword = await bcrypt.compare(password, user.password);
-      if (!checkPassword) {
+      const user: any = await User.findOne({ phone })?.select("+password");
+      let checkPassword = null
+      if (user) {
+        checkPassword = await bcrypt.compare(password, user.password);
+      }
+      if (!checkPassword || user === null) {
         return next(appError(400, "電話或密碼錯誤", next));
       } else {
         generateJWT(user, res);

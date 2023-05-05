@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "344a9283-b468-40a2-a1e5-e2c1a80e9735",
+		"_postman_id": "6ae531d6-e328-41bf-ac83-103a918760e0",
 		"name": "傲嬌甜點",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6878038"
 	},
 	"item": [
 		{
@@ -543,7 +544,7 @@
 			"name": "seats",
 			"item": [
 				{
-					"name": "O-2-1 座位狀態顯示",
+					"name": "O-2-1 查詢座位",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -566,46 +567,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/seats",
+							"raw": "{{base_url}}/v1/seats/admin",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
-								"seats"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "O-2-4 新增桌號",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{token}}",
-								"type": "default"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n        \"tableName\" : 3,\n        \"seats\" : 20\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/v1/seats",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"v1",
-								"seats"
+								"seats",
+								"admin"
 							]
 						}
 					},
@@ -632,13 +601,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/seats/1",
+							"raw": "{{base_url}}/v1/seats/admin/1",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"seats",
+								"admin",
 								"1"
 							]
 						}
@@ -646,7 +616,41 @@
 					"response": []
 				},
 				{
-					"name": "軟刪 座位",
+					"name": "O-2-4 新增座位",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"tableName\" : 7,\n        \"seats\" : 20\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/seats/admin",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"seats",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "O-2-5 刪除 座位",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -666,21 +670,22 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/seats/1",
+							"raw": "{{base_url}}/v1/seats/admin/2",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"seats",
-								"1"
+								"admin",
+								"2"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "[保留]取得 座位上限",
+					"name": "[保留] O-2-3 取得 座位上限",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -703,13 +708,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/seats/table-code",
+							"raw": "{{base_url}}/v1/seats/admin/table-code",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"seats",
+								"admin",
 								"table-code"
 							]
 						}
@@ -717,7 +723,7 @@
 					"response": []
 				},
 				{
-					"name": "[保留]新增 座位上限",
+					"name": "[保留] O-2-6 新增 座位上限",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -737,21 +743,21 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/seats/",
+							"raw": "{{base_url}}/v1/seats/admin",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"seats",
-								""
+								"admin"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "[保留]刪除 座位上限",
+					"name": "[保留] O-2-7 刪除 座位上限",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -771,13 +777,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/seats/table-code/2",
+							"raw": "{{base_url}}/v1/seats/admin/table-code/2",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"seats",
+								"admin",
 								"table-code",
 								"2"
 							]
@@ -791,7 +798,7 @@
 			"name": "products",
 			"item": [
 				{
-					"name": "取得 產品",
+					"name": "O-3-1 條件搜尋 商品",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -814,14 +821,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/",
+							"raw": "{{base_url}}/v1/products/admin",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"products",
-								""
+								"admin"
 							],
 							"query": [
 								{
@@ -835,7 +842,7 @@
 					"response": []
 				},
 				{
-					"name": "新增",
+					"name": "O-3-2 新增 商品",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -847,7 +854,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"productName\":\"飲料\",\n        \"photo\":\"productName\",\n        \"price\":100,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 200,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"644fa4619e4019674ba5f03d\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"productName\":\"飲料33\",\n        \"photo\":\"productName\",\n        \"price\":100,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 200,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"644fa4619e4019674ba5f03d\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -855,20 +862,21 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products",
+							"raw": "{{base_url}}/v1/products/admin",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
-								"products"
+								"products",
+								"admin"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "修改",
+					"name": "O-3-3 修改 商品",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -880,7 +888,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"productName\":\"QQ3\",\n        \"photo\":\"QWER\",\n        \"price\":123,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 50,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"644b43507109d75ecc4f2866\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"productName\":\"QQ32\",\n        \"photo\":\"QWER\",\n        \"price\":123,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 50,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"644b43507109d75ecc4f2866\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -888,13 +896,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/3",
+							"raw": "{{base_url}}/v1/products/admin/3",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"products",
+								"admin",
 								"3"
 							]
 						}
@@ -902,7 +911,7 @@
 					"response": []
 				},
 				{
-					"name": "軟刪",
+					"name": "O-3-4 刪除 商品",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -922,21 +931,22 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/3",
+							"raw": "{{base_url}}/v1/products/admin/2",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"products",
-								"3"
+								"admin",
+								"2"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "取得 產品分類",
+					"name": "O-3-5 取得 商品代碼分類",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -959,13 +969,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/product-type",
+							"raw": "{{base_url}}/v1/products/admin/product-type",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"products",
+								"admin",
 								"product-type"
 							]
 						}
@@ -973,7 +984,7 @@
 					"response": []
 				},
 				{
-					"name": "新增 產品分類",
+					"name": "O-3-6 新增 商品分類",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -985,7 +996,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"productsTypeName\" : \"無料\"\n}",
+							"raw": "{\n    \"productsTypeName\" : \"甜點\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -993,13 +1004,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/product-type",
+							"raw": "{{base_url}}/v1/products/admin/product-type",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"products",
+								"admin",
 								"product-type"
 							]
 						}
@@ -1007,7 +1019,7 @@
 					"response": []
 				},
 				{
-					"name": "刪除 產品分類",
+					"name": "O-3-7 刪除 商品分類",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -1027,13 +1039,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/product-type/1",
+							"raw": "{{base_url}}/v1/products/admin/product-type/1",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"products",
+								"admin",
 								"product-type",
 								"1"
 							]
@@ -1044,10 +1057,10 @@
 			]
 		},
 		{
-			"name": "[admin] coupons",
+			"name": "coupons",
 			"item": [
 				{
-					"name": "取得所有",
+					"name": "O-4-2 店長獲取 優惠活動列表",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -1070,21 +1083,21 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/admin/coupons",
+							"raw": "{{base_url}}/v1/coupons/admin",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
-								"admin",
-								"coupons"
+								"coupons",
+								"admin"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "新增",
+					"name": "O-4-3 新增 優惠活動",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1104,21 +1117,21 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/admin/coupons",
+							"raw": "{{base_url}}/v1/coupons/admin",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
-								"admin",
-								"coupons"
+								"coupons",
+								"admin"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "修改",
+					"name": "O-4-4 修改 優惠活動",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -1138,14 +1151,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/admin/coupons/A000000001",
+							"raw": "{{base_url}}/v1/coupons/admin/A000000001",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
-								"admin",
 								"coupons",
+								"admin",
 								"A000000001"
 							]
 						}
@@ -1153,7 +1166,7 @@
 					"response": []
 				},
 				{
-					"name": "刪除",
+					"name": "O-4-5 刪除 優惠活動",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -1173,15 +1186,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/admin/coupons/2",
+							"raw": "{{base_url}}/v1/coupons/admin/A000000001",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
-								"admin",
 								"coupons",
-								"2"
+								"admin",
+								"A000000001"
 							]
 						}
 					},
@@ -1193,7 +1206,7 @@
 			"name": "orders",
 			"item": [
 				{
-					"name": "訂單試算",
+					"name": "S-2-2 金額試算",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1228,7 +1241,7 @@
 					"response": []
 				},
 				{
-					"name": "訂單送出",
+					"name": "S-2-3 新增訂單",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1248,14 +1261,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/orders/",
+							"raw": "{{base_url}}/v1/orders",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
-								"orders",
-								""
+								"orders"
 							]
 						}
 					},

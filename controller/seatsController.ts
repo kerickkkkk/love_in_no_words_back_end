@@ -33,11 +33,6 @@ export const seats = {
         return next(appError(400, '重複座位編號', next));
       }
 
-
-      if (tableManagementObj !== null) {
-        return next(appError(400, '重複座位編號', next));
-      }
-
       // 空直要篩掉不然驗證會出錯
       if (!tableName || !seats) {
         return next(appError(400, '請填桌子名稱，或者人數上限', next));
@@ -96,7 +91,7 @@ export const seats = {
       // }
 
       if (typeof isDisabled !== 'boolean') {
-        errorMsgArray.push('啟用狀態有誤');
+        errorMsgArray.push('是否靠窗請以布林值輸入');
       }
 
       // 如果有錯誤訊息有返回400
@@ -121,7 +116,7 @@ export const seats = {
         }
       );
       if (updatedSeat === null) {
-        errorMsgArray.push('查無桌號');
+        errorMsgArray.push('請輸入店家命名桌號');
       }
       // 如果有錯誤訊息有返回400
       if (errorMsgArray.length > 0) {
@@ -138,7 +133,7 @@ export const seats = {
       const errorMsgArray: string[] = []
 
       if (!tableNo) {
-        errorMsgArray.push('桌號資訊為空');
+        errorMsgArray.push('無該桌號資料');
       }
 
       // 如果有錯誤訊息有返回400
@@ -159,7 +154,7 @@ export const seats = {
         }
       );
       if (updatedSeat === null) {
-        errorMsgArray.push('查無桌號');
+        errorMsgArray.push('請輸入店家命名桌號');
       }
       // 如果有錯誤訊息有返回400
       if (errorMsgArray.length > 0) {

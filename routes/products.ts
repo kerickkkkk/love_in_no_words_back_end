@@ -1,15 +1,15 @@
 import productsController from "../controller/productsController"
 import express from "express";
-import { isAuth } from "../middleware/auth";
+import { isOwnerAuth } from "../middleware/auth";
 const router = express.Router();
 
-router.get("/", isAuth, productsController.getProducts);
-router.post("/", isAuth, productsController.createProduct);
-router.patch("/:productNo", isAuth, productsController.patchProduct);
-router.delete("/:productNo", isAuth, productsController.deleteProduct);
+router.get("/admin", isOwnerAuth, productsController.getProducts);
+router.post("/admin", isOwnerAuth, productsController.createProduct);
+router.patch("/admin/:productNo", isOwnerAuth, productsController.patchProduct);
+router.delete("/admin/:productNo", isOwnerAuth, productsController.deleteProduct);
 
-router.get("/product-type", isAuth, productsController.getProductType);
-router.post("/product-type", isAuth, productsController.createProductType);
-router.delete("/product-type/:productsType", isAuth, productsController.deleteProductType);
+router.get("/admin/product-type", isOwnerAuth, productsController.getProductType);
+router.post("/admin/product-type", isOwnerAuth, productsController.createProductType);
+router.delete("/admin/product-type/:productsType", isOwnerAuth, productsController.deleteProductType);
 
 export default router;
