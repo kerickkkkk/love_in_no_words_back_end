@@ -8,7 +8,7 @@ import Order from "../models/orderModel";
 import CouponModel from "../models/couponModel"
 import OrderDetail from "../models/orderDetailModel";
 import { autoIncrementNumber } from "../utils/modelsExtensions";
-
+import { combinedDateTimeString } from "../utils/dayjs"
 export const orders = {
   handleOrder: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
@@ -125,21 +125,23 @@ export const orders = {
         result.discount = originalPrice - totalPrice
         result.totalPrice = totalPrice
       }
-
+      // 訂單試算
       if (req.path === "/calculate/total-price") {
-        console.log("試算訂單");
         return handleSuccess(res, "成功", result);
-
+        // 建立訂單
       } else if (req.path === "/") {
-        console.log('新增訂單，非試算')
         // 判斷 是否訂單內有 數量不足
 
         // 寫入資料庫
         // 確定方法後再去整個文件改
-        const orderNo = await autoIncrementNumber(Order)
+        // const orderNo = await autoIncrementNumber(Order)
+        const orderNo = combinedDateTimeString()
 
         const newOrderDetail = await OrderDetail.create({
+          orderNo,
           orderList: products,
+          tableNo: tableObj?.tableNo,
+          tableName: tableObj?.tableName,
           totalTime,
           status: "未出餐",
           couponNo: result.couponNo,
@@ -152,7 +154,8 @@ export const orders = {
           orderNo,
           orderStatus: "未啟用",
           time,
-          tableNo: tableObj?._id,
+          tableNo: tableObj?.tableNo,
+          tableName: tableObj?.tableName,
           orderDetail: newOrderDetail._id
         })
 
@@ -165,9 +168,6 @@ export const orders = {
         const order = await Order.findOne({
           orderNo,
           isDeleted: false
-        }).populate({
-          path: "tableNo",
-          select: "tableNo tableName"
         }).populate({
           path: "orderDetail",
           select: "orderList totalTime discount totalPrice status couponNo couponName"
