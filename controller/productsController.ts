@@ -11,8 +11,9 @@ import { Message } from "../constants/messages";
 export const products = {
   getProducts: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
+      // 如果要中文可以改 new RegExp(req.query.productsType) 
       const productsTypeQuery = req.query.productsType !== undefined ? {
-        "productsTypeName": new RegExp(req.query.productsType)
+        "productsType": Number(req.query.productsType)
       } : {}
       const productTypeObj = await ProductTypeModel.find(productsTypeQuery)
       const productsTypeAry = productTypeObj.map(item => item._id)
