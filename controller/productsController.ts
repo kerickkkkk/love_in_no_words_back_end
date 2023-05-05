@@ -7,7 +7,6 @@ import ProductManagementModel from "../models/productManagementModel";
 import ProductTypeModel from "../models/productTypeModel";
 import { isoDate } from "../utils/dayjs";
 import { Message } from "../constants/messages";
-import { ImgurClient } from "imgur";
 import { v4 as uuidv4 } from "uuid";
 import firebaseAdmin from "../service/firebase";
 import { GetSignedUrlConfig } from "@google-cloud/storage";
