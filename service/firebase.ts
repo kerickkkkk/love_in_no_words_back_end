@@ -1,10 +1,11 @@
 import dotenv from "dotenv";
 import admin from "firebase-admin";
 dotenv.config();
-// "@types/firebase": "^3.2.1",
+
 if (process.env.FIREBASE_PRIVATE_KEY === undefined) {
   throw new Error("沒有定義環境變數FIREBASE_PRIVATE_KEY");
 }
+// 從環境變數中製作firebase的config
 const config = {
   type: process.env.FIREBASE_TYPE,
   project_id: process.env.FIREBASE_PROJECT_ID,
@@ -17,7 +18,8 @@ const config = {
   auth_provider_x509_cert_url: process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
   client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
 };
-// import * as serviceAccount from "../dbData/firebaseKey.json";
+
+// 連線firebase
 admin.initializeApp({
   credential: admin.credential.cert(config as admin.ServiceAccount),
   storageBucket: `${process.env.FIREBASE_PROJECT_ID}.appspot.com`,

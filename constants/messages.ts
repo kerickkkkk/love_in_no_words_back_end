@@ -13,6 +13,14 @@ export enum Message {
   NEED_INPUT_TABLENO = "請輸入正確桌號",
   NEED_CORRECT_RESERVATION_DATE = "請輸入正確訂位日期格式",
   NEED_CORRECT_RESERVATION_TIME = "請輸入正確訂位時段",
+  NEED_PRODUCT_TYPE = "請輸入商品分類名稱",
+  NEED_PRODUCT_NAME = "請輸入產品名稱",
+  NEED_POSITIVE_PRICE = "商品定價請以正整數輸入",
+  NEED_POSITIVE_STOCKAMOUNT = "商品庫存數量請以正整數輸入",
+  NEED_POSITIVE_SAFE_STOCKAMOUNT = "安全庫存量請以正整數輸入",
+  NEED_POSITIVE_PRODUCT_TYPE = "商品分類編號請以正整數輸入",
+  NEED_POSITIVE_PRODUCT_TIME = "製作時間請以正整數輸入",
+
   // API返回內容錯誤訊息
   PAGE_NEED_IN_NUMBER = "頁碼請以數字輸入",
   PAGE_NOT_FOUND = "查無此頁碼",
@@ -21,14 +29,23 @@ export enum Message {
   HAD_RESERVARTION = "相同時段該坐位已被預約",
   RESERVATIONDATE_NEED_NEWER_THAN_TODAY = "預定日必須等於或大於當日",
   SET_SEATS_ONLY_TODAY = "帶位僅限當日",
-
+  PHOTO_TYPE_ERROR = "檔案格式錯誤，僅限上傳 jpg、jpeg 與 png 格式",
+  PHOTO_NONE_UPLOAD = "尚未上傳圖片檔案",
+  PHOTP_UPLOAD_FAIL = "圖片上傳失敗",
+  SAME_PRODUCT_TYPE = "產品分類名稱重複",
+  PRODUCT_TYPE_NOT_FOUND = "無該商品分類編號",
+  SAME_PRODUCT_NAME = "有相同產品名稱",
+  PHOTOURL_SOURCE_ERROR = "圖片來源網址錯誤",
+  PRODUCTNO_NOT_FOUND = "無該商品編號",
   // API結果
   RESULT_SUCCESS = "成功",
   CREATE_SUCCESS = "新增成功",
   REVISE_SUCCESS = "修改成功",
   DELETE_SUCCESS = "刪除成功",
   RESERVATION_CANCEL_SUCCESS = "預約取消成功",
-
+  PRODUCT_TYPE_ADD_SUCCESS = "商品分類設定成功",
+  PRODUCT_ADD_SUCCESS = "商品新增成功",
+  PRODUCT_REVISE_SUCCESS = "商品修改成功",
   // Token錯誤訊息
   NO_TOKEN = "請輸入token",
   USER_NOT_FOUND = "非有效使用者token",
