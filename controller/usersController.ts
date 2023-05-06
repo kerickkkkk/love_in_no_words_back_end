@@ -31,13 +31,23 @@ export const users = {
 
       // 店家人員中取出需要的資訊
       const clerksList = users.map(
-        ({ _id, number, name, phone, title, createdAt, isDisabled }) => {
+        ({
+          _id,
+          number,
+          name,
+          phone,
+          titleNo,
+          title,
+          createdAt,
+          isDisabled,
+        }) => {
           const transferDate = slashDate(createdAt);
           return {
             _id,
             number,
             name,
             phone,
+            titleNo,
             title,
             createdAt: transferDate,
             isDisabled,
@@ -46,13 +56,23 @@ export const users = {
       );
       // 會員人員中取出需要的資訊
       const membersList = members.map(
-        ({ _id, number, name, phone, title, createdAt, isDisabled }) => {
+        ({
+          _id,
+          number,
+          name,
+          phone,
+          titleNo,
+          title,
+          createdAt,
+          isDisabled,
+        }) => {
           const transferDate = slashDate(createdAt);
           return {
             _id,
             number,
             name,
             phone,
+            titleNo,
             title,
             createdAt: transferDate,
             isDisabled,
@@ -393,7 +413,7 @@ export const users = {
       }
 
       const user: any = await User.findOne({ phone })?.select("+password");
-      let checkPassword = null
+      let checkPassword = null;
       if (user) {
         checkPassword = await bcrypt.compare(password, user.password);
       }

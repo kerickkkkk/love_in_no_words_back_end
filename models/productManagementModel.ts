@@ -1,13 +1,15 @@
 import { Schema, Document, model } from "mongoose";
+import { ProductType } from "../models/productTypeModel";
 interface ProductManagement extends Document {
   productNo: number;
   productName: string;
-  photo: string;
+  photoUrl: string;
   price: number;
   inStockAmount: number;
   safeStockAmount: number;
   amountStatus?: string;
-  productsType: string;
+  // productsType包含productsType以及productsTypeName
+  productsType: ProductType;
   productionTime: number;
   description: string;
   createdAt: Date;
@@ -27,9 +29,9 @@ const productManagementSchema = new Schema(
       type: String,
       required: [true, "請輸入產品名稱"],
     },
-    photo: {
+    photoUrl: {
       type: String,
-      required: [true, "請輸入圖片位子"],
+      required: [true, "請輸入圖片網址"],
     },
     price: {
       type: Number,
@@ -46,7 +48,7 @@ const productManagementSchema = new Schema(
     amountStatus: {
       type: String,
       enum: ["safe", "danger", "zero"],
-      default: "safe"
+      default: "safe",
     },
     productsType: {
       type: Schema.Types.ObjectId,
@@ -84,8 +86,17 @@ const productManagementSchema = new Schema(
   },
   {
     versionKey: false,
-    collection: "productManagement"
+    collection: "productManagement",
   }
 );
-
-export default model<ProductManagement>("ProductManagement", productManagementSchema);
+productManagementSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "productsType",
+    select: "productsType productsTypeName",
+  });
+  next();
+});
+export default model<ProductManagement>(
+  "ProductManagement",
+  productManagementSchema
+);

@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "6ae531d6-e328-41bf-ac83-103a918760e0",
+		"_postman_id": "c4d45af5-7670-48e3-865a-4a803b45e753",
 		"name": "傲嬌甜點",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "6878038"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -813,11 +812,16 @@
 							}
 						],
 						"body": {
-							"mode": "urlencoded",
-							"urlencoded": []
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/admin",
+							"raw": "{{base_url}}/v1/products/admin?productsType=2&priceLowerLimit=100&priceUpperLimit=300&amountStatus=safe",
 							"host": [
 								"{{base_url}}"
 							],
@@ -829,8 +833,19 @@
 							"query": [
 								{
 									"key": "productsType",
-									"value": "飲",
-									"disabled": true
+									"value": "2"
+								},
+								{
+									"key": "priceLowerLimit",
+									"value": "100"
+								},
+								{
+									"key": "priceUpperLimit",
+									"value": "300"
+								},
+								{
+									"key": "amountStatus",
+									"value": "safe"
 								}
 							]
 						}
@@ -838,7 +853,65 @@
 					"response": []
 				},
 				{
-					"name": "O-3-2 新增 商品",
+					"name": "O-3-2 新增 上傳商品圖片",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Renew photoUrl',function(){\r",
+									"  if(pm.response.to.have.status(200))  {\r",
+									"   pm.collectionVariables.set('photoUrl',pm.response.json().data.photoUrl)\r",
+									"  }\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/USER/OneDrive/桌面/駝背矯正帶.jpg"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/products/admin/uploadPhotos",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"products",
+								"admin",
+								"uploadPhotos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "O-3-3 新增 商品",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -850,7 +923,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"productName\":\"甜點33\",\n        \"photo\":\"productName\",\n        \"price\":100,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 200,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"6455023c2d3bd6f8e2cdb668\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"productName\":\"明星氣泡千層\",\n        \"photoUrl\":\"{{photoUrl}}\",\n        \"price\":200,\n        \"inStockAmount\":500,\n        \"safeStockAmount\": 200,\n        \"productsType\": 2,\n        \"productionTime\": 10,\n        \"description\": \"明星喝過還不點起來\",\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -872,7 +945,7 @@
 					"response": []
 				},
 				{
-					"name": "O-3-3 修改 商品",
+					"name": "O-3-4 修改 商品",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -884,7 +957,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"productName\":\"QQ32\",\n        \"photo\":\"QWER\",\n        \"price\":123,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 50,\n        \"amountStatus\": \"danger\",\n        \"productsType\": \"644b43507109d75ecc4f2866\",\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"productName\":\"QQ32\",\n        \"photoUrl\":\"{{photoUrl}}\",\n        \"price\":123,\n        \"inStockAmount\":100,\n        \"safeStockAmount\": 50,\n        \"productsType\": 2,\n        \"productionTime\": 100,\n        \"description\": \"description\",\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -907,7 +980,7 @@
 					"response": []
 				},
 				{
-					"name": "O-3-4 刪除 商品",
+					"name": "O-3-5 刪除 商品",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -927,7 +1000,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/admin/2",
+							"raw": "{{base_url}}/v1/products/admin/1",
 							"host": [
 								"{{base_url}}"
 							],
@@ -935,14 +1008,14 @@
 								"v1",
 								"products",
 								"admin",
-								"2"
+								"1"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "O-3-5 取得 商品代碼分類",
+					"name": "O-3-6 取得 商品代碼分類",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -965,22 +1038,21 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/admin/product-type",
+							"raw": "{{base_url}}/v1/products/dessertcodes",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"products",
-								"admin",
-								"product-type"
+								"dessertcodes"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "O-3-6 新增 商品分類",
+					"name": "O-3-7 新增 商品分類",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -992,7 +1064,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"productsTypeName\" : \"甜點2\"\n}",
+							"raw": "{\n    \"productsTypeName\" : \"乳酪\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1000,7 +1072,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/admin/product-type",
+							"raw": "{{base_url}}/v1/products/admin/dessertcodes",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1008,14 +1080,14 @@
 								"v1",
 								"products",
 								"admin",
-								"product-type"
+								"dessertcodes"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "O-3-7 刪除 商品分類",
+					"name": "O-3-8 刪除 商品分類",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -1035,7 +1107,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/admin/product-type/1",
+							"raw": "{{base_url}}/v1/products/admin/dessertcodes/1",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1043,7 +1115,7 @@
 								"v1",
 								"products",
 								"admin",
-								"product-type",
+								"dessertcodes",
 								"1"
 							]
 						}
@@ -1540,6 +1612,11 @@
 			"key": "token",
 			"value": "Bearer \n eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0M2ZjMjBjNTVkNDFmOWEwYmI3MTdlYiIsImlhdCI6MTY4MTkwMDA5NywiZXhwIjoxNjgyNTA0ODk3fQ.IT1dZlKwuxN8D6fUqCL01ZamFhvwIPScLJujK7f_1A8",
 			"type": "string"
+		},
+		{
+			"key": "photoUrl",
+			"value": "https://storage.googleapis.com/love-in-no-words-back-end.appspot.com/images/25d9035c-8fb6-4bab-9bf3-dd5a3183d760.jpg?GoogleAccessId=firebase-adminsdk-vpr58%40love-in-no-words-back-end.iam.gserviceaccount.com&Expires=16756642800&Signature=Ro%2F61um0g2c9NZNiCb5EAnj1bfTd4rQX2sjH3duRE2vGsIy%2BT0i%2F8iU4Zoh2daul2uMIHv3nCl4mv3EBmF%2B758K1nqzXEFQvReE9W0q6RLg7Lw1knJffwiMfRimOKyVxRB%2FSkJzey%2FXFh3mvJsj5DNvgL2OMYm%2FJnR1o6eDa1w2s7RgfI4rG%2F0NT4clVBIRBVN%2BKhuyFAdE1nfmSiKru0x8fkZdXTKiSHZptnpB2dFOcILmS9J1Ax1YD%2BifXnpdWptKOKh1a0UTJV5p%2Fn2v07k2kVNrI26E7%2FcPCysxJAToWjplBu1D1%2FIFcAwWofRb%2Fl2KbTiCCBHCJXn8Z7H4q5g%3D%3D",
+			"type": "default"
 		}
 	]
 }
