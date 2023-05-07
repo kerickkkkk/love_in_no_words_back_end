@@ -141,10 +141,10 @@ export const users = {
           errorMsgArray.push(Message.NEED_INPUT_PASSWORD);
         }
       }
-      if (titleNo !== undefined) {
-        if (!validator.isInt(titleNo.toString(), { min: 1, max: 4 })) {
-          errorMsgArray.push(Message.NEED_INPUT_TITLENO);
-        }
+      if (titleNo === undefined) {
+        errorMsgArray.push(Message.NEED_INPUT_TITLENO);
+      } else if (!validator.isInt(titleNo.toString(), { min: 1, max: 4 })) {
+        errorMsgArray.push(Message.NEED_INPUT_TITLENO);
       }
 
       let hasSamePhone = null;
