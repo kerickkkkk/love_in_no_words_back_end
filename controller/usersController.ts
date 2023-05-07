@@ -206,16 +206,22 @@ export const users = {
   // O-1-3 修改使用者API
   updateUser: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
+      // 姓名 電話 職位 密碼
+      const { name, phone, titleNo, isDisabled, password } = req.body;
+
       const userId: string = req.params.id;
-      const hasRightUser = await User.findById(userId)
-        .where("isDeleted")
-        .ne(true);
+      let hasRightUser = null;
+      if (titleNo != 4) {
+        hasRightUser = await User.findById(userId).where("isDeleted").ne(true);
+      } else {
+        hasRightUser = await Member.findById(userId)
+          .where("isDeleted")
+          .ne(true);
+      }
 
       if (hasRightUser === null) {
         return next(appError(400, Message.ID_NOT_FOUND, next));
       }
-      // 姓名 電話 職位 密碼
-      const { name, phone, titleNo, isDisabled, password } = req.body;
       // title
       const titleMap: string[] = ["", "店長", "店員", "廚師", "會員"];
 
