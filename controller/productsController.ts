@@ -14,8 +14,6 @@ import https from "https";
 import validator from "validator";
 import { ProductType } from "../models/productTypeModel";
 
-const bucket = firebaseAdmin.storage().bucket();
-
 export const products = {
   // O-3-1 條件搜尋商品API
   getProducts: handleErrorAsync(
@@ -98,7 +96,10 @@ export const products = {
       if (priceUpperLimit !== undefined) {
         priceRange.$lte = Number(priceUpperLimit);
       }
-      query.price = priceRange;
+      if (Object.keys(priceRange).length !== 0) {
+        query.price = priceRange;
+      }
+
       // 若有狀態就加入搜尋條件
       if (amountStatus !== undefined) {
         query.amountStatus = amountStatus;
@@ -132,6 +133,7 @@ export const products = {
       }
       // 取第一筆檔案
       const file = req.files[0];
+      const bucket = firebaseAdmin.storage().bucket();
       // 將檔案名稱以uuid重新命名檔名
       const blob = bucket.file(
         `images/${uuidv4()}.${file.originalname.split(".").pop()}`
