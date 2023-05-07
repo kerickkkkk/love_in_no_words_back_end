@@ -191,7 +191,7 @@ export const orders = {
 
         const newOrder = await Order.create({
           orderNo,
-          orderStatus: "未啟用",
+          orderStatus: "已結帳",
           time: period(),
           tableNo: tableObj?.tableNo,
           tableName: tableObj?.tableName,

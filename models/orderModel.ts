@@ -22,6 +22,7 @@ const orderSchema = new Schema(
     orderStatus: {
       type: String,
       required: [true, "請輸入訂單狀態"],
+      enum: ["未結帳", "已結帳"]
     },
     time: {
       type: String,
