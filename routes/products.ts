@@ -37,4 +37,7 @@ router.delete(
   productsController.deleteProductType
 );
 
+// S-2-1 查詢類別商品
+router.get("/", isAuth, productsController.getProductsByproductsType);
+
 export default router;

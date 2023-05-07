@@ -80,14 +80,14 @@ export const products = {
         return next(appError(400, errorMsgArray.join(";"), next));
       }
       // 搜尋條件
-      let query: any = {
+      const query: any = {
         isDeleted: false,
       };
       // 若有ref的productsTypeId就加入搜尋條件
       if (productsTypeId !== undefined) {
         query.productsType = productsTypeId;
       }
-      let priceRange: any = {};
+      const priceRange: any = {};
       // 若有價格區間下限就加入搜尋條件
       if (priceLowerLimit !== undefined) {
         priceRange.$gte = Number(priceLowerLimit);
@@ -242,7 +242,7 @@ export const products = {
       if (errorMsgArray.length > 0) {
         return next(appError(400, errorMsgArray.join(";"), next));
       }
-      let amountStatus: string = "";
+      let amountStatus = "";
       if (inStockAmount == 0) {
         amountStatus = "zero";
       } else if (inStockAmount < safeStockAmount) {
@@ -367,7 +367,7 @@ export const products = {
       if (errorMsgArray.length > 0) {
         return next(appError(400, errorMsgArray.join(";"), next));
       }
-      let amountStatus: string = "";
+      let amountStatus = "";
       if (inStockAmount == 0) {
         amountStatus = "zero";
       } else if (inStockAmount < safeStockAmount) {
@@ -512,6 +512,27 @@ export const products = {
         return next(appError(400, Message.PRODUCT_TYPE_NOT_FOUND, next));
       }
       handleSuccess(res, Message.DELETE_SUCCESS, null);
+    }
+  ),
+  // S-2-1 查詢類別商品API
+  getProductsByproductsType: handleErrorAsync(
+    async (req: any, res: Response, next: NextFunction) => {
+      console.log(req.query.productsType)
+      // 如果要中文可以改 new RegExp(req.query.productsType) 
+      const productsTypeQuery = req.query.productsType !== undefined ? {
+        "productsType": Number(req.query.productsType)
+      } : {}
+      const productTypeObj = await ProductTypeModel.find(productsTypeQuery)
+      const productsTypeAry = productTypeObj.map(item => item._id)
+      const query = {
+        productsType: productsTypeAry,
+        isDeleted: false
+      }
+      const products = await ProductManagementModel.find(query).populate({
+        path: 'productsType',
+        select: "productsType productsTypeName"
+      }).sort({ productNo: 1 });
+      handleSuccess(res, "成功", products);
     }
   ),
 };
