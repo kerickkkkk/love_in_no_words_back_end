@@ -27,7 +27,7 @@ export const members = {
       if (hasSamePhone !== null) {
         return next(appError(400, "電話重複", next));
       }
-      let revisedAt: null | string = null;
+      const revisedAt: null | string = null;
       // 加密
       const autoIncrementIndex = await autoIncrement(Member, "B");
 
@@ -46,14 +46,23 @@ export const members = {
   //S-4-2 查詢會員
   searchMember: handleErrorAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-      const { phone, page } = req.query;
-      const perPage = 10; // 每頁回傳的筆數
-      if (!phone) {
-        return next(appError(400, "電話長度需大於 8 碼", next));
+      interface Query {
+        isDeleted: boolean;
+        phone?: string;
       }
+      const { phone, page } = req.query as { phone?: string, page?: string };
+      const perPage = 10; // 每頁回傳的筆數
+      const query: Query = { isDeleted: false };
+      if (phone !== undefined && phone !== '') {
+        query.phone = phone;
+      }
+      const currentPage = parseInt(page ?? '1'); // 解析頁碼參數，預設為 1
+      const skipCount = (currentPage - 1) * perPage; // 要跳過的筆數
+
       try {
-        const totalNum = await Member.countDocuments({ phone }); // 搜尋符合該電話的會員總數
-        const members = await Member.find({ phone }).limit(perPage); // 搜尋符合該電話的會員資料，並使用分頁的方式回傳結果
+        const totalNum = await Member.countDocuments(query);
+        const members = await Member.find(query).skip(skipCount).limit(perPage);
+
         const membersList = members.map((member) => {
           const { _id, number, name, phone, createdAt, isDisabled } = member;
           const transferDate = slashDate(createdAt);
@@ -66,17 +75,31 @@ export const members = {
             isDisabled,
           };
         });
+
         const totalPages = Math.ceil(totalNum / perPage); // 總頁數
+        const meta: Meta = {
+          pagination: {
+            total: membersList.length,
+            perPage: perPage,
+            currentPage: currentPage,
+            lastPage: totalPages,
+            nextPage: currentPage < totalPages ? currentPage + 1 : null,
+            prevPage: currentPage > 1 ? currentPage - 1 : null,
+            from: skipCount + 1,
+            to: skipCount + membersList.length,
+          },
+        };
         return handleSuccess(res, Message.RESULT_SUCCESS, {
           membersList,
-          totalNum,
-          totalPages,
+          meta,
         });
+
       } catch (err) {
         return next(appError(400, "查詢會員失敗", next));
       }
     }
   ),
+
   //S-4-3 刪除會員
   softDeleteMember: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
@@ -101,52 +124,65 @@ export const members = {
   //S-4-4 修改會員
   updateMember: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
-      const memberUId: string = req.params.id;
-      const hasRightUser = await Member.findById(memberUId)
-        .where("isDeleted")
-        .ne(true);
-      if (hasRightUser === null) {
-        return next(appError(400, Message.ID_NOT_FOUND, next));
-      }
-      // 姓名 電話 職位 密碼
-      const { name, phone } = req.body;
-      let errorMsgArray = [];
-      // 驗證
-      if (!name) {
-        errorMsgArray.push(Message.NEED_INPUT_NAME);
-      }
-      if (!phone || !validator.isMobilePhone(phone, "zh-TW")) {
-        errorMsgArray.push(Message.NEED_INPUT_PHONE);
-      }
-      // 如果電話號碼與原本不同
-      if (phone != hasRightUser.phone) {
-        let hasSamePhone = null;
-        // 依照職位代號去相對應的collection搜尋是否已有相同電話號碼
-        if (hasRightUser.titleNo != 4) {
-          hasSamePhone = await Member.findOne({ phone });
-        }
-        if (hasSamePhone != null) {
-          errorMsgArray.push(Message.SAME_PHONE_REGISTERED);
-        }
-      }
+      try {
+        const memberId = req.params.id;
+        const updatedFields = req.body;
 
-      // 如果有錯誤訊息有返回400
-      if (errorMsgArray.length > 0) {
-        return next(appError(400, errorMsgArray.join(";"), next));
-      }
+        // Ensure that the member exists and is not deleted
+        const existingMember = await Member.findOne({
+          _id: memberId,
+          isDeleted: false,
+        });
 
-      interface MemberParam {
-        name: string;
-        phone: string;
+        if (!existingMember) {
+          return next(appError(404, Message.USER_NOT_FOUND, next));
+        }
+
+        // Validate input fields
+        const { name, phone } = updatedFields;
+        const errorMsgArray = [];
+
+        if (!name) {
+          errorMsgArray.push(Message.NEED_INPUT_NAME);
+        }
+
+        if (!phone || !validator.isMobilePhone(phone, "zh-TW")) {
+          errorMsgArray.push(Message.NEED_INPUT_PHONE);
+        }
+
+        if (errorMsgArray.length > 0) {
+          return next(appError(400, errorMsgArray.join(";"), next));
+        }
+
+        // Check if the phone number already exists for other members
+        if (phone !== existingMember.phone) {
+          const existingMemberWithSamePhone = await Member.findOne({
+            phone: phone,
+            isDeleted: false,
+            titleNo: existingMember.titleNo,
+            _id: { $ne: existingMember._id },
+          });
+
+          if (existingMemberWithSamePhone) {
+            errorMsgArray.push(Message.SAME_PHONE_REGISTERED);
+            return next(appError(400, errorMsgArray.join(";"), next));
+          }
+        }
+
+        // Update the member
+        const updatedMember = await Member.findByIdAndUpdate(
+          memberId,
+          { ...updatedFields, updatedAt: new Date() },
+          { new: true }
+        );
+
+        handleSuccess(res, Message.REVISE_SUCCESS, updatedMember);
+      } catch (err) {
+        return next(appError(500, "修改會員失敗", next));
       }
-      const params: MemberParam = {
-        name,
-        phone,
-      };
-      await Member.findByIdAndUpdate(memberUId, params);
-      handleSuccess(res, Message.REVISE_SUCCESS, null);
     }
-  ),
+  )
+
 };
 
 export default members;
