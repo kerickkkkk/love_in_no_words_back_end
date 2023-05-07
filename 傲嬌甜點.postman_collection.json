@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "c4d45af5-7670-48e3-865a-4a803b45e753",
+		"_postman_id": "4bb6b7ae-f2a2-46df-a749-920d505faa8d",
 		"name": "傲嬌甜點",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -41,7 +41,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\n    \"name\": \"我是店長\",\n    \"phone\": \"0912345679\",\n    \"password\": \"12345678\",\n    \"confirmPassword\": \"12345678\",\n    \"isDisabled\" : false,\n    \"titleNo\": 1\n}",
+							"raw": "{\n\n    \"name\": \"我是店長\",\n    \"phone\": \"0912876543\",\n    \"password\": \"12345678\",\n    \"confirmPassword\": \"12345678\",\n    \"isDisabled\" : false,\n    \"titleNo\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -86,7 +86,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "\n    {\n        \"phone\": \"0912345678\",\n        \"password\": \"12345678\"   \n    }\n",
+							"raw": "\n    {\n        \"phone\": \"0912876543\",\n        \"password\": \"12345678\"   \n    }\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -131,14 +131,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/users/6441159e5d22d0ac85ee1fdb",
+							"raw": "{{base_url}}/v1/users/644e8d87b5fd478b1335aee0",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"users",
-								"6441159e5d22d0ac85ee1fdb"
+								"644e8d87b5fd478b1335aee0"
 							]
 						}
 					},
@@ -821,7 +821,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/admin?productsType=2&priceLowerLimit=100&priceUpperLimit=300&amountStatus=safe",
+							"raw": "{{base_url}}/v1/products/admin?productsType=5&priceLowerLimit=0&priceUpperLimit=100&amountStatus=danger",
 							"host": [
 								"{{base_url}}"
 							],
@@ -833,19 +833,19 @@
 							"query": [
 								{
 									"key": "productsType",
-									"value": "2"
+									"value": "5"
 								},
 								{
 									"key": "priceLowerLimit",
-									"value": "100"
+									"value": "0"
 								},
 								{
 									"key": "priceUpperLimit",
-									"value": "300"
+									"value": "100"
 								},
 								{
 									"key": "amountStatus",
-									"value": "safe"
+									"value": "danger"
 								}
 							]
 						}
@@ -923,7 +923,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"productName\":\"明星氣泡千層\",\n        \"photoUrl\":\"{{photoUrl}}\",\n        \"price\":200,\n        \"inStockAmount\":500,\n        \"safeStockAmount\": 200,\n        \"productsType\": 2,\n        \"productionTime\": 10,\n        \"description\": \"明星喝過還不點起來\",\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"productName\":\"忘情水\",\n        \"photoUrl\":\"{{photoUrl}}\",\n        \"price\":100,\n        \"inStockAmount\":60,\n        \"safeStockAmount\": 50,\n        \"productsType\": 5,\n        \"productionTime\": 1,\n        \"description\": \"忘情水\",\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1064,7 +1064,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"productsTypeName\" : \"乳酪\"\n}",
+							"raw": "{\n    \"productsTypeName\" : \"酒精飲料\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1600,13 +1600,13 @@
 		{
 			"key": "base_url",
 			"value": "http://localhost:3000",
-			"type": "default"
+			"type": "default",
+			"disabled": true
 		},
 		{
 			"key": "base_url",
 			"value": "http://localhost:3000",
-			"type": "string",
-			"disabled": true
+			"type": "string"
 		},
 		{
 			"key": "token",
