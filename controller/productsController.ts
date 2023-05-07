@@ -517,7 +517,6 @@ export const products = {
   // S-2-1 查詢類別商品API
   getProductsByproductsType: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
-      console.log(req.query.productsType)
       // 如果要中文可以改 new RegExp(req.query.productsType) 
       const productsTypeQuery = req.query.productsType !== undefined ? {
         "productsType": Number(req.query.productsType)
