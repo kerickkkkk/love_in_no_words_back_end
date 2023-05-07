@@ -48,11 +48,12 @@ export const members = {
     async (req: Request, res: Response, next: NextFunction) => {
       interface Query {
         isDeleted: boolean;
+        isDisabled: boolean;
         phone?: string;
       }
       const { phone, page } = req.query as { phone?: string, page?: string };
       const perPage = 10; // 每頁回傳的筆數
-      const query: Query = { isDeleted: false };
+      const query: Query = { isDeleted: false, isDisabled: false };
       if (phone !== undefined && phone !== '') {
         query.phone = phone;
       }
