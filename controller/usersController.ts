@@ -141,9 +141,10 @@ export const users = {
           errorMsgArray.push(Message.NEED_INPUT_PASSWORD);
         }
       }
-
-      if (!validator.isInt(titleNo.toString(), { min: 1, max: 4 })) {
-        errorMsgArray.push(Message.NEED_INPUT_TITLENO);
+      if (titleNo !== undefined) {
+        if (!validator.isInt(titleNo.toString(), { min: 1, max: 4 })) {
+          errorMsgArray.push(Message.NEED_INPUT_TITLENO);
+        }
       }
 
       let hasSamePhone = null;
@@ -412,7 +413,9 @@ export const users = {
         return next(appError(400, "密碼長度需大於 8 碼", next));
       }
 
-      const user: any = await User.findOne({ phone, isDeleted: false })?.select("+password");
+      const user: any = await User.findOne({ phone, isDeleted: false })?.select(
+        "+password"
+      );
       let checkPassword = null;
       if (user) {
         checkPassword = await bcrypt.compare(password, user.password);
