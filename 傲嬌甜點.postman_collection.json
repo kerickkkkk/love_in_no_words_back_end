@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "4bb6b7ae-f2a2-46df-a749-920d505faa8d",
+		"_postman_id": "117f60c8-c747-4eb5-ab21-59b6a976080c",
 		"name": "傲嬌甜點",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6878038"
 	},
 	"item": [
 		{
@@ -86,7 +87,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "\n    {\n        \"phone\": \"0912876543\",\n        \"password\": \"12345678\"   \n    }\n",
+							"raw": "\n    {\n        \"phone\": \"0912345678\",\n        \"password\": \"12345678\"   \n    }\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -821,7 +822,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/admin?productsType=5&priceLowerLimit=0&priceUpperLimit=100&amountStatus=danger",
+							"raw": "{{base_url}}/v1/products/admin?productsType=2",
 							"host": [
 								"{{base_url}}"
 							],
@@ -833,19 +834,22 @@
 							"query": [
 								{
 									"key": "productsType",
-									"value": "5"
+									"value": "2"
 								},
 								{
 									"key": "priceLowerLimit",
-									"value": "0"
+									"value": "0",
+									"disabled": true
 								},
 								{
 									"key": "priceUpperLimit",
-									"value": "100"
+									"value": "100",
+									"disabled": true
 								},
 								{
 									"key": "amountStatus",
-									"value": "danger"
+									"value": "danger",
+									"disabled": true
 								}
 							]
 						}
@@ -886,14 +890,9 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/C:/Users/USER/OneDrive/桌面/駝背矯正帶.jpg"
+									"src": "/Users/ericmax/Desktop/SWZvy8K.jpeg"
 								}
-							],
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
+							]
 						},
 						"url": {
 							"raw": "{{base_url}}/v1/products/admin/uploadPhotos",
@@ -923,7 +922,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"productName\":\"忘情水\",\n        \"photoUrl\":\"{{photoUrl}}\",\n        \"price\":100,\n        \"inStockAmount\":60,\n        \"safeStockAmount\": 50,\n        \"productsType\": 5,\n        \"productionTime\": 1,\n        \"description\": \"忘情水\",\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"productName\":\"Vite\",\n        \"photoUrl\":\"{{photoUrl}}\",\n        \"price\":100,\n        \"inStockAmount\":60,\n        \"safeStockAmount\": 50,\n        \"productsType\": 2,\n        \"productionTime\": 1,\n        \"description\": \"忘情水\",\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1292,7 +1291,7 @@
 							"urlencoded": []
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/?productsType=4",
+							"raw": "{{base_url}}/v1/products/?productsType=2",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1304,7 +1303,7 @@
 							"query": [
 								{
 									"key": "productsType",
-									"value": "4"
+									"value": "2"
 								}
 							]
 						}
@@ -1359,7 +1358,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableName\": 5,\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 1,\n\t\t    \"qty\" : 3,\n\t\t\t\"description\" : \"這個是附註\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A000000001\"\n}",
+							"raw": "{\n  \"tableName\": 5,\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 8,\n\t\t    \"qty\" : 15,\n\t\t\t\"description\" : \"vite is fast\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A000000001\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1568,6 +1567,152 @@
 								"seats",
 								"reservation",
 								"64532e22c74f276c9c9fdd9b"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "report",
+			"item": [
+				{
+					"name": "O-5-1  獲取營收資料",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/send/email/admin/revenue/report",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"send",
+								"email",
+								"admin",
+								"revenue",
+								"report"
+							],
+							"query": [
+								{
+									"key": "year",
+									"value": "2022",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "O-5-2 獲取賣出數量資料",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/send/email/admin/sell-quantity/report",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"send",
+								"email",
+								"admin",
+								"sell-quantity",
+								"report"
+							],
+							"query": [
+								{
+									"key": "year",
+									"value": "2022",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "O-5-2 獲取賣出數量資料 Copy",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/send/email/admin/orders-quantity/report",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"send",
+								"email",
+								"admin",
+								"orders-quantity",
+								"report"
+							],
+							"query": [
+								{
+									"key": "year",
+									"value": "2022",
+									"disabled": true
+								}
 							]
 						}
 					},
