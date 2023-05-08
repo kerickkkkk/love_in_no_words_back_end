@@ -1,0 +1,113 @@
+[{
+  "_id": {
+    "$oid": "6457329bcafd507a03cb57a8"
+  },
+  "tableNo": 1,
+  "tableName": 1,
+  "seats": 2,
+  "isWindowSeat": false,
+  "isDisabled": false,
+  "revisedAt": null,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T05:09:47.879Z"
+  }
+},{
+  "_id": {
+    "$oid": "6457329fcafd507a03cb57ae"
+  },
+  "tableNo": 2,
+  "tableName": 2,
+  "seats": 2,
+  "isWindowSeat": false,
+  "isDisabled": false,
+  "revisedAt": null,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T05:09:51.816Z"
+  }
+},{
+  "_id": {
+    "$oid": "645732a6cafd507a03cb57b4"
+  },
+  "tableNo": 3,
+  "tableName": 3,
+  "seats": 4,
+  "isWindowSeat": false,
+  "isDisabled": false,
+  "revisedAt": null,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T05:09:58.039Z"
+  }
+},{
+  "_id": {
+    "$oid": "645732aacafd507a03cb57ba"
+  },
+  "tableNo": 4,
+  "tableName": 4,
+  "seats": 4,
+  "isWindowSeat": false,
+  "isDisabled": false,
+  "revisedAt": null,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T05:10:02.070Z"
+  }
+},{
+  "_id": {
+    "$oid": "645732afcafd507a03cb57c0"
+  },
+  "tableNo": 5,
+  "tableName": 5,
+  "seats": 6,
+  "isWindowSeat": false,
+  "isDisabled": false,
+  "revisedAt": null,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T05:10:07.793Z"
+  }
+},{
+  "_id": {
+    "$oid": "645732b5cafd507a03cb57c6"
+  },
+  "tableNo": 6,
+  "tableName": 6,
+  "seats": 1,
+  "isWindowSeat": false,
+  "isDisabled": false,
+  "revisedAt": null,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T05:10:13.385Z"
+  }
+},{
+  "_id": {
+    "$oid": "645732b8cafd507a03cb57cc"
+  },
+  "tableNo": 7,
+  "tableName": 7,
+  "seats": 1,
+  "isWindowSeat": false,
+  "isDisabled": false,
+  "revisedAt": null,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T05:10:16.167Z"
+  }
+},{
+  "_id": {
+    "$oid": "645732bbcafd507a03cb57d2"
+  },
+  "tableNo": 8,
+  "tableName": 8,
+  "seats": 1,
+  "isWindowSeat": false,
+  "isDisabled": false,
+  "revisedAt": null,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T05:10:19.112Z"
+  }
+}]
