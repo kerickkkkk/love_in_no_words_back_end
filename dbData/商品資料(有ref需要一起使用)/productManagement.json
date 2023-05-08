@@ -1,0 +1,316 @@
+[{
+  "_id": {
+    "$oid": "64570e8c5887056f829b71d8"
+  },
+  "productNo": 1,
+  "productName": "草莓千層",
+  "photoUrl": "https://storage.googleapis.com/love-in-no-words-back-end.appspot.com/images/efa4b9bf-6be6-447e-b766-cd51be618662.jpg?GoogleAccessId=firebase-adminsdk-vpr58%40love-in-no-words-back-end.iam.gserviceaccount.com&Expires=16756675200&Signature=se3VaHTvRprIDki8Qlz4Tju3StJNOTJQxm1aNcDZplxk9UMw9uYolmLIX%2BYpsNgpKig36zVUqet%2F%2BX2p9b4bWfDk7SQdxnGZLoXN2ukh6jNB1sbO8gPagqhhsvLFLaSA7hqOyfCXOq1B9BIQ%2BVf%2BCQjlbEvmkdWbiEo57mvqulqCr9mT6F54rgkElfgR8Bt2o7tn7lfEOHDiOPBk%2FYDKlgCZ5Uu48HBuE8je6l38OMoeYCkOgC%2FD6mwMaSrhYcelkgszwvBjPyrs%2F43HETCw%2FJbLr934jdRZOcxDuESDMpnJ9KRG4SuBpV8RSpCqol3qm8LEgfxv7zIZ6D7oBXtSwg%3D%3D",
+  "price": 200,
+  "inStockAmount": 50,
+  "safeStockAmount": 10,
+  "amountStatus": "safe",
+  "productsType": {
+    "$oid": "64570d665887056f829b71bf"
+  },
+  "productionTime": 10,
+  "description": "草莓千層",
+  "isDisabled": false,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T02:35:56.547Z"
+  }
+},{
+  "_id": {
+    "$oid": "64570ea55887056f829b71de"
+  },
+  "productNo": 2,
+  "productName": "巧克力千層",
+  "photoUrl": "https://storage.googleapis.com/love-in-no-words-back-end.appspot.com/images/efa4b9bf-6be6-447e-b766-cd51be618662.jpg?GoogleAccessId=firebase-adminsdk-vpr58%40love-in-no-words-back-end.iam.gserviceaccount.com&Expires=16756675200&Signature=se3VaHTvRprIDki8Qlz4Tju3StJNOTJQxm1aNcDZplxk9UMw9uYolmLIX%2BYpsNgpKig36zVUqet%2F%2BX2p9b4bWfDk7SQdxnGZLoXN2ukh6jNB1sbO8gPagqhhsvLFLaSA7hqOyfCXOq1B9BIQ%2BVf%2BCQjlbEvmkdWbiEo57mvqulqCr9mT6F54rgkElfgR8Bt2o7tn7lfEOHDiOPBk%2FYDKlgCZ5Uu48HBuE8je6l38OMoeYCkOgC%2FD6mwMaSrhYcelkgszwvBjPyrs%2F43HETCw%2FJbLr934jdRZOcxDuESDMpnJ9KRG4SuBpV8RSpCqol3qm8LEgfxv7zIZ6D7oBXtSwg%3D%3D",
+  "price": 200,
+  "inStockAmount": 20,
+  "safeStockAmount": 30,
+  "amountStatus": "danger",
+  "productsType": {
+    "$oid": "64570d665887056f829b71bf"
+  },
+  "productionTime": 15,
+  "description": "巧克力千層",
+  "isDisabled": false,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T02:36:21.631Z"
+  }
+},{
+  "_id": {
+    "$oid": "64570ec75887056f829b71e8"
+  },
+  "productNo": 3,
+  "productName": "起司千層",
+  "photoUrl": "https://storage.googleapis.com/love-in-no-words-back-end.appspot.com/images/efa4b9bf-6be6-447e-b766-cd51be618662.jpg?GoogleAccessId=firebase-adminsdk-vpr58%40love-in-no-words-back-end.iam.gserviceaccount.com&Expires=16756675200&Signature=se3VaHTvRprIDki8Qlz4Tju3StJNOTJQxm1aNcDZplxk9UMw9uYolmLIX%2BYpsNgpKig36zVUqet%2F%2BX2p9b4bWfDk7SQdxnGZLoXN2ukh6jNB1sbO8gPagqhhsvLFLaSA7hqOyfCXOq1B9BIQ%2BVf%2BCQjlbEvmkdWbiEo57mvqulqCr9mT6F54rgkElfgR8Bt2o7tn7lfEOHDiOPBk%2FYDKlgCZ5Uu48HBuE8je6l38OMoeYCkOgC%2FD6mwMaSrhYcelkgszwvBjPyrs%2F43HETCw%2FJbLr934jdRZOcxDuESDMpnJ9KRG4SuBpV8RSpCqol3qm8LEgfxv7zIZ6D7oBXtSwg%3D%3D",
+  "price": 200,
+  "inStockAmount": 0,
+  "safeStockAmount": 30,
+  "amountStatus": "zero",
+  "productsType": {
+    "$oid": "64570d665887056f829b71bf"
+  },
+  "productionTime": 15,
+  "description": "起司千層",
+  "isDisabled": false,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T02:36:55.600Z"
+  }
+},{
+  "_id": {
+    "$oid": "64570f035887056f829b71ee"
+  },
+  "productNo": 4,
+  "productName": "彈珠汽水",
+  "photoUrl": "https://storage.googleapis.com/love-in-no-words-back-end.appspot.com/images/efa4b9bf-6be6-447e-b766-cd51be618662.jpg?GoogleAccessId=firebase-adminsdk-vpr58%40love-in-no-words-back-end.iam.gserviceaccount.com&Expires=16756675200&Signature=se3VaHTvRprIDki8Qlz4Tju3StJNOTJQxm1aNcDZplxk9UMw9uYolmLIX%2BYpsNgpKig36zVUqet%2F%2BX2p9b4bWfDk7SQdxnGZLoXN2ukh6jNB1sbO8gPagqhhsvLFLaSA7hqOyfCXOq1B9BIQ%2BVf%2BCQjlbEvmkdWbiEo57mvqulqCr9mT6F54rgkElfgR8Bt2o7tn7lfEOHDiOPBk%2FYDKlgCZ5Uu48HBuE8je6l38OMoeYCkOgC%2FD6mwMaSrhYcelkgszwvBjPyrs%2F43HETCw%2FJbLr934jdRZOcxDuESDMpnJ9KRG4SuBpV8RSpCqol3qm8LEgfxv7zIZ6D7oBXtSwg%3D%3D",
+  "price": 30,
+  "inStockAmount": 100,
+  "safeStockAmount": 30,
+  "amountStatus": "safe",
+  "productsType": {
+    "$oid": "64570d815887056f829b71cb"
+  },
+  "productionTime": 15,
+  "description": "彈珠汽水",
+  "isDisabled": false,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T02:37:55.582Z"
+  }
+},{
+  "_id": {
+    "$oid": "64570f1e5887056f829b71f4"
+  },
+  "productNo": 5,
+  "productName": "烏梅汁",
+  "photoUrl": "https://storage.googleapis.com/love-in-no-words-back-end.appspot.com/images/efa4b9bf-6be6-447e-b766-cd51be618662.jpg?GoogleAccessId=firebase-adminsdk-vpr58%40love-in-no-words-back-end.iam.gserviceaccount.com&Expires=16756675200&Signature=se3VaHTvRprIDki8Qlz4Tju3StJNOTJQxm1aNcDZplxk9UMw9uYolmLIX%2BYpsNgpKig36zVUqet%2F%2BX2p9b4bWfDk7SQdxnGZLoXN2ukh6jNB1sbO8gPagqhhsvLFLaSA7hqOyfCXOq1B9BIQ%2BVf%2BCQjlbEvmkdWbiEo57mvqulqCr9mT6F54rgkElfgR8Bt2o7tn7lfEOHDiOPBk%2FYDKlgCZ5Uu48HBuE8je6l38OMoeYCkOgC%2FD6mwMaSrhYcelkgszwvBjPyrs%2F43HETCw%2FJbLr934jdRZOcxDuESDMpnJ9KRG4SuBpV8RSpCqol3qm8LEgfxv7zIZ6D7oBXtSwg%3D%3D",
+  "price": 60,
+  "inStockAmount": 10,
+  "safeStockAmount": 20,
+  "amountStatus": "danger",
+  "productsType": {
+    "$oid": "64570d815887056f829b71cb"
+  },
+  "productionTime": 1,
+  "description": "烏梅汁",
+  "isDisabled": false,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T02:38:22.474Z"
+  }
+},{
+  "_id": {
+    "$oid": "64570f435887056f829b71fa"
+  },
+  "productNo": 6,
+  "productName": "忘情水",
+  "photoUrl": "https://storage.googleapis.com/love-in-no-words-back-end.appspot.com/images/efa4b9bf-6be6-447e-b766-cd51be618662.jpg?GoogleAccessId=firebase-adminsdk-vpr58%40love-in-no-words-back-end.iam.gserviceaccount.com&Expires=16756675200&Signature=se3VaHTvRprIDki8Qlz4Tju3StJNOTJQxm1aNcDZplxk9UMw9uYolmLIX%2BYpsNgpKig36zVUqet%2F%2BX2p9b4bWfDk7SQdxnGZLoXN2ukh6jNB1sbO8gPagqhhsvLFLaSA7hqOyfCXOq1B9BIQ%2BVf%2BCQjlbEvmkdWbiEo57mvqulqCr9mT6F54rgkElfgR8Bt2o7tn7lfEOHDiOPBk%2FYDKlgCZ5Uu48HBuE8je6l38OMoeYCkOgC%2FD6mwMaSrhYcelkgszwvBjPyrs%2F43HETCw%2FJbLr934jdRZOcxDuESDMpnJ9KRG4SuBpV8RSpCqol3qm8LEgfxv7zIZ6D7oBXtSwg%3D%3D",
+  "price": 100,
+  "inStockAmount": 60,
+  "safeStockAmount": 50,
+  "amountStatus": "safe",
+  "productsType": {
+    "$oid": "64570d815887056f829b71cb"
+  },
+  "productionTime": 1,
+  "description": "忘情水",
+  "isDisabled": false,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T02:38:59.291Z"
+  }
+},{
+  "_id": {
+    "$oid": "645729f29ec1f56776fc71ea"
+  },
+  "productNo": 7,
+  "productName": "起司乳酪6吋",
+  "photoUrl": "https://storage.googleapis.com/love-in-no-words-back-end.appspot.com/images/efa4b9bf-6be6-447e-b766-cd51be618662.jpg?GoogleAccessId=firebase-adminsdk-vpr58%40love-in-no-words-back-end.iam.gserviceaccount.com&Expires=16756675200&Signature=se3VaHTvRprIDki8Qlz4Tju3StJNOTJQxm1aNcDZplxk9UMw9uYolmLIX%2BYpsNgpKig36zVUqet%2F%2BX2p9b4bWfDk7SQdxnGZLoXN2ukh6jNB1sbO8gPagqhhsvLFLaSA7hqOyfCXOq1B9BIQ%2BVf%2BCQjlbEvmkdWbiEo57mvqulqCr9mT6F54rgkElfgR8Bt2o7tn7lfEOHDiOPBk%2FYDKlgCZ5Uu48HBuE8je6l38OMoeYCkOgC%2FD6mwMaSrhYcelkgszwvBjPyrs%2F43HETCw%2FJbLr934jdRZOcxDuESDMpnJ9KRG4SuBpV8RSpCqol3qm8LEgfxv7zIZ6D7oBXtSwg%3D%3D",
+  "price": 150,
+  "inStockAmount": 10,
+  "safeStockAmount": 3,
+  "amountStatus": "safe",
+  "productsType": {
+    "$oid": "64570d585887056f829b71b5"
+  },
+  "productionTime": 180,
+  "description": "起司乳酪6吋",
+  "isDisabled": false,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T04:32:50.113Z"
+  }
+},{
+  "_id": {
+    "$oid": "64572a469ec1f56776fc71f5"
+  },
+  "productNo": 8,
+  "productName": "東京香蕉乳酪8吋",
+  "photoUrl": "https://storage.googleapis.com/love-in-no-words-back-end.appspot.com/images/efa4b9bf-6be6-447e-b766-cd51be618662.jpg?GoogleAccessId=firebase-adminsdk-vpr58%40love-in-no-words-back-end.iam.gserviceaccount.com&Expires=16756675200&Signature=se3VaHTvRprIDki8Qlz4Tju3StJNOTJQxm1aNcDZplxk9UMw9uYolmLIX%2BYpsNgpKig36zVUqet%2F%2BX2p9b4bWfDk7SQdxnGZLoXN2ukh6jNB1sbO8gPagqhhsvLFLaSA7hqOyfCXOq1B9BIQ%2BVf%2BCQjlbEvmkdWbiEo57mvqulqCr9mT6F54rgkElfgR8Bt2o7tn7lfEOHDiOPBk%2FYDKlgCZ5Uu48HBuE8je6l38OMoeYCkOgC%2FD6mwMaSrhYcelkgszwvBjPyrs%2F43HETCw%2FJbLr934jdRZOcxDuESDMpnJ9KRG4SuBpV8RSpCqol3qm8LEgfxv7zIZ6D7oBXtSwg%3D%3D",
+  "price": 700,
+  "inStockAmount": 3,
+  "safeStockAmount": 10,
+  "amountStatus": "danger",
+  "productsType": {
+    "$oid": "64570d585887056f829b71b5"
+  },
+  "productionTime": 180,
+  "description": "東京香蕉乳酪8吋",
+  "isDisabled": false,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T04:34:14.111Z"
+  }
+},{
+  "_id": {
+    "$oid": "64572b549ec1f56776fc71fe"
+  },
+  "productNo": 9,
+  "productName": "不含乳酪乳酪8吋",
+  "photoUrl": "https://storage.googleapis.com/love-in-no-words-back-end.appspot.com/images/efa4b9bf-6be6-447e-b766-cd51be618662.jpg?GoogleAccessId=firebase-adminsdk-vpr58%40love-in-no-words-back-end.iam.gserviceaccount.com&Expires=16756675200&Signature=se3VaHTvRprIDki8Qlz4Tju3StJNOTJQxm1aNcDZplxk9UMw9uYolmLIX%2BYpsNgpKig36zVUqet%2F%2BX2p9b4bWfDk7SQdxnGZLoXN2ukh6jNB1sbO8gPagqhhsvLFLaSA7hqOyfCXOq1B9BIQ%2BVf%2BCQjlbEvmkdWbiEo57mvqulqCr9mT6F54rgkElfgR8Bt2o7tn7lfEOHDiOPBk%2FYDKlgCZ5Uu48HBuE8je6l38OMoeYCkOgC%2FD6mwMaSrhYcelkgszwvBjPyrs%2F43HETCw%2FJbLr934jdRZOcxDuESDMpnJ9KRG4SuBpV8RSpCqol3qm8LEgfxv7zIZ6D7oBXtSwg%3D%3D",
+  "price": 10,
+  "inStockAmount": 20,
+  "safeStockAmount": 1,
+  "amountStatus": "safe",
+  "productsType": {
+    "$oid": "64570d585887056f829b71b5"
+  },
+  "productionTime": 180,
+  "description": "不含乳酪乳酪8吋",
+  "isDisabled": false,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T04:38:44.613Z"
+  }
+},{
+  "_id": {
+    "$oid": "64572b749ec1f56776fc7204"
+  },
+  "productNo": 10,
+  "productName": "香蕉",
+  "photoUrl": "https://storage.googleapis.com/love-in-no-words-back-end.appspot.com/images/efa4b9bf-6be6-447e-b766-cd51be618662.jpg?GoogleAccessId=firebase-adminsdk-vpr58%40love-in-no-words-back-end.iam.gserviceaccount.com&Expires=16756675200&Signature=se3VaHTvRprIDki8Qlz4Tju3StJNOTJQxm1aNcDZplxk9UMw9uYolmLIX%2BYpsNgpKig36zVUqet%2F%2BX2p9b4bWfDk7SQdxnGZLoXN2ukh6jNB1sbO8gPagqhhsvLFLaSA7hqOyfCXOq1B9BIQ%2BVf%2BCQjlbEvmkdWbiEo57mvqulqCr9mT6F54rgkElfgR8Bt2o7tn7lfEOHDiOPBk%2FYDKlgCZ5Uu48HBuE8je6l38OMoeYCkOgC%2FD6mwMaSrhYcelkgszwvBjPyrs%2F43HETCw%2FJbLr934jdRZOcxDuESDMpnJ9KRG4SuBpV8RSpCqol3qm8LEgfxv7zIZ6D7oBXtSwg%3D%3D",
+  "price": 10,
+  "inStockAmount": 30,
+  "safeStockAmount": 10,
+  "amountStatus": "safe",
+  "productsType": {
+    "$oid": "64570d5f5887056f829b71ba"
+  },
+  "productionTime": 10,
+  "description": "香蕉",
+  "isDisabled": false,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T04:39:16.158Z"
+  }
+},{
+  "_id": {
+    "$oid": "64572bc89ec1f56776fc720a"
+  },
+  "productNo": 11,
+  "productName": "葡萄",
+  "photoUrl": "https://storage.googleapis.com/love-in-no-words-back-end.appspot.com/images/efa4b9bf-6be6-447e-b766-cd51be618662.jpg?GoogleAccessId=firebase-adminsdk-vpr58%40love-in-no-words-back-end.iam.gserviceaccount.com&Expires=16756675200&Signature=se3VaHTvRprIDki8Qlz4Tju3StJNOTJQxm1aNcDZplxk9UMw9uYolmLIX%2BYpsNgpKig36zVUqet%2F%2BX2p9b4bWfDk7SQdxnGZLoXN2ukh6jNB1sbO8gPagqhhsvLFLaSA7hqOyfCXOq1B9BIQ%2BVf%2BCQjlbEvmkdWbiEo57mvqulqCr9mT6F54rgkElfgR8Bt2o7tn7lfEOHDiOPBk%2FYDKlgCZ5Uu48HBuE8je6l38OMoeYCkOgC%2FD6mwMaSrhYcelkgszwvBjPyrs%2F43HETCw%2FJbLr934jdRZOcxDuESDMpnJ9KRG4SuBpV8RSpCqol3qm8LEgfxv7zIZ6D7oBXtSwg%3D%3D",
+  "price": 80,
+  "inStockAmount": 30,
+  "safeStockAmount": 60,
+  "amountStatus": "danger",
+  "productsType": {
+    "$oid": "64570d5f5887056f829b71ba"
+  },
+  "productionTime": 10,
+  "description": "葡萄",
+  "isDisabled": false,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T04:40:40.869Z"
+  }
+},{
+  "_id": {
+    "$oid": "64572bec9ec1f56776fc7215"
+  },
+  "productNo": 12,
+  "productName": "水蜜桃",
+  "photoUrl": "https://storage.googleapis.com/love-in-no-words-back-end.appspot.com/images/efa4b9bf-6be6-447e-b766-cd51be618662.jpg?GoogleAccessId=firebase-adminsdk-vpr58%40love-in-no-words-back-end.iam.gserviceaccount.com&Expires=16756675200&Signature=se3VaHTvRprIDki8Qlz4Tju3StJNOTJQxm1aNcDZplxk9UMw9uYolmLIX%2BYpsNgpKig36zVUqet%2F%2BX2p9b4bWfDk7SQdxnGZLoXN2ukh6jNB1sbO8gPagqhhsvLFLaSA7hqOyfCXOq1B9BIQ%2BVf%2BCQjlbEvmkdWbiEo57mvqulqCr9mT6F54rgkElfgR8Bt2o7tn7lfEOHDiOPBk%2FYDKlgCZ5Uu48HBuE8je6l38OMoeYCkOgC%2FD6mwMaSrhYcelkgszwvBjPyrs%2F43HETCw%2FJbLr934jdRZOcxDuESDMpnJ9KRG4SuBpV8RSpCqol3qm8LEgfxv7zIZ6D7oBXtSwg%3D%3D",
+  "price": 200,
+  "inStockAmount": 30,
+  "safeStockAmount": 20,
+  "amountStatus": "safe",
+  "productsType": {
+    "$oid": "64570d5f5887056f829b71ba"
+  },
+  "productionTime": 10,
+  "description": "水蜜桃",
+  "isDisabled": false,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T04:41:16.975Z"
+  }
+},{
+  "_id": {
+    "$oid": "64572ce89ec1f56776fc721b"
+  },
+  "productNo": 13,
+  "productName": "草莓卡士達",
+  "photoUrl": "https://storage.googleapis.com/love-in-no-words-back-end.appspot.com/images/efa4b9bf-6be6-447e-b766-cd51be618662.jpg?GoogleAccessId=firebase-adminsdk-vpr58%40love-in-no-words-back-end.iam.gserviceaccount.com&Expires=16756675200&Signature=se3VaHTvRprIDki8Qlz4Tju3StJNOTJQxm1aNcDZplxk9UMw9uYolmLIX%2BYpsNgpKig36zVUqet%2F%2BX2p9b4bWfDk7SQdxnGZLoXN2ukh6jNB1sbO8gPagqhhsvLFLaSA7hqOyfCXOq1B9BIQ%2BVf%2BCQjlbEvmkdWbiEo57mvqulqCr9mT6F54rgkElfgR8Bt2o7tn7lfEOHDiOPBk%2FYDKlgCZ5Uu48HBuE8je6l38OMoeYCkOgC%2FD6mwMaSrhYcelkgszwvBjPyrs%2F43HETCw%2FJbLr934jdRZOcxDuESDMpnJ9KRG4SuBpV8RSpCqol3qm8LEgfxv7zIZ6D7oBXtSwg%3D%3D",
+  "price": 200,
+  "inStockAmount": 30,
+  "safeStockAmount": 20,
+  "amountStatus": "safe",
+  "productsType": {
+    "$oid": "64570d725887056f829b71c4"
+  },
+  "productionTime": 10,
+  "description": "草莓卡士達",
+  "isDisabled": false,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T04:45:28.302Z"
+  }
+},{
+  "_id": {
+    "$oid": "64572d099ec1f56776fc7221"
+  },
+  "productNo": 14,
+  "productName": "香蕉卡士達",
+  "photoUrl": "https://storage.googleapis.com/love-in-no-words-back-end.appspot.com/images/efa4b9bf-6be6-447e-b766-cd51be618662.jpg?GoogleAccessId=firebase-adminsdk-vpr58%40love-in-no-words-back-end.iam.gserviceaccount.com&Expires=16756675200&Signature=se3VaHTvRprIDki8Qlz4Tju3StJNOTJQxm1aNcDZplxk9UMw9uYolmLIX%2BYpsNgpKig36zVUqet%2F%2BX2p9b4bWfDk7SQdxnGZLoXN2ukh6jNB1sbO8gPagqhhsvLFLaSA7hqOyfCXOq1B9BIQ%2BVf%2BCQjlbEvmkdWbiEo57mvqulqCr9mT6F54rgkElfgR8Bt2o7tn7lfEOHDiOPBk%2FYDKlgCZ5Uu48HBuE8je6l38OMoeYCkOgC%2FD6mwMaSrhYcelkgszwvBjPyrs%2F43HETCw%2FJbLr934jdRZOcxDuESDMpnJ9KRG4SuBpV8RSpCqol3qm8LEgfxv7zIZ6D7oBXtSwg%3D%3D",
+  "price": 150,
+  "inStockAmount": 20,
+  "safeStockAmount": 10,
+  "amountStatus": "safe",
+  "productsType": {
+    "$oid": "64570d725887056f829b71c4"
+  },
+  "productionTime": 50,
+  "description": "香蕉卡士達",
+  "isDisabled": false,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T04:46:01.436Z"
+  }
+},{
+  "_id": {
+    "$oid": "64572d2d9ec1f56776fc7227"
+  },
+  "productNo": 15,
+  "productName": "巧克力卡士達",
+  "photoUrl": "https://storage.googleapis.com/love-in-no-words-back-end.appspot.com/images/efa4b9bf-6be6-447e-b766-cd51be618662.jpg?GoogleAccessId=firebase-adminsdk-vpr58%40love-in-no-words-back-end.iam.gserviceaccount.com&Expires=16756675200&Signature=se3VaHTvRprIDki8Qlz4Tju3StJNOTJQxm1aNcDZplxk9UMw9uYolmLIX%2BYpsNgpKig36zVUqet%2F%2BX2p9b4bWfDk7SQdxnGZLoXN2ukh6jNB1sbO8gPagqhhsvLFLaSA7hqOyfCXOq1B9BIQ%2BVf%2BCQjlbEvmkdWbiEo57mvqulqCr9mT6F54rgkElfgR8Bt2o7tn7lfEOHDiOPBk%2FYDKlgCZ5Uu48HBuE8je6l38OMoeYCkOgC%2FD6mwMaSrhYcelkgszwvBjPyrs%2F43HETCw%2FJbLr934jdRZOcxDuESDMpnJ9KRG4SuBpV8RSpCqol3qm8LEgfxv7zIZ6D7oBXtSwg%3D%3D",
+  "price": 80,
+  "inStockAmount": 20,
+  "safeStockAmount": 5,
+  "amountStatus": "safe",
+  "productsType": {
+    "$oid": "64570d725887056f829b71c4"
+  },
+  "productionTime": 40,
+  "description": "",
+  "isDisabled": false,
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T04:46:37.322Z"
+  }
+}]

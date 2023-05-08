@@ -1,6 +1,6 @@
 import { Schema, Document, model } from "mongoose";
 import { ProductType } from "../models/productTypeModel";
-interface ProductManagement extends Document {
+export interface ProductManagement extends Document {
   productNo: number;
   productName: string;
   photoUrl: string;
