@@ -11,6 +11,7 @@ import ordersRouter from "./routes/orders";
 import productsRouter from "./routes/products";
 import couponsRouter from "./routes/coupons";
 import membersRouter from "./routes/members";
+import reportsRouter from "./routes/reports";
 import handleAllError from "./service/handleAllError";
 import notFound from "./service/notFound";
 
@@ -41,6 +42,7 @@ app.use("/v1/seats", seatsRouter);
 app.use("/v1/orders", ordersRouter);
 app.use("/v1/products", productsRouter);
 app.use("/v1/coupons", couponsRouter);
+app.use("/v1", reportsRouter);
 // socket 方式 暫時寫在 indexRouter之後要拿掉
 app.use("/v1/", indexRouter);
 // 404 錯誤
