@@ -1,0 +1,61 @@
+[{
+  "_id": {
+    "$oid": "64570d585887056f829b71b5"
+  },
+  "productsType": 1,
+  "productsTypeName": "乳酪",
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T02:30:48.492Z"
+  }
+},{
+  "_id": {
+    "$oid": "64570d5f5887056f829b71ba"
+  },
+  "productsType": 2,
+  "productsTypeName": "水果",
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T02:30:55.187Z"
+  }
+},{
+  "_id": {
+    "$oid": "64570d665887056f829b71bf"
+  },
+  "productsType": 3,
+  "productsTypeName": "千層蛋糕",
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T02:31:02.529Z"
+  }
+},{
+  "_id": {
+    "$oid": "64570d725887056f829b71c4"
+  },
+  "productsType": 4,
+  "productsTypeName": "卡士達",
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T02:31:14.685Z"
+  }
+},{
+  "_id": {
+    "$oid": "64570d815887056f829b71cb"
+  },
+  "productsType": 5,
+  "productsTypeName": "飲料",
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T02:31:29.198Z"
+  }
+},{
+  "_id": {
+    "$oid": "64570d885887056f829b71d0"
+  },
+  "productsType": 6,
+  "productsTypeName": "酒精飲料",
+  "isDeleted": false,
+  "createdAt": {
+    "$date": "2023-05-07T02:31:36.300Z"
+  }
+}]

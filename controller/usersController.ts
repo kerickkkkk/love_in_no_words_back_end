@@ -11,6 +11,8 @@ import { isoDate, slashDate } from "../utils/dayjs";
 import { autoIncrement } from "../utils/modelsExtensions";
 import { Message } from "../constants/messages";
 import { Meta } from "../types/Pagination";
+import mongoose from "mongoose";
+import { isEffectVal } from "../utils/common";
 export const users = {
   // O-1-1  獲取使用者列表API
   getUsers: handleErrorAsync(
@@ -129,10 +131,10 @@ export const users = {
 
       const errorMsgArray = [];
       // 驗證
-      if (!name) {
+      if (!isEffectVal(name)) {
         errorMsgArray.push(Message.NEED_INPUT_NAME);
       }
-      if (!phone || !validator.isMobilePhone(phone, "zh-TW")) {
+      if (!isEffectVal(phone) || !validator.isMobilePhone(phone, "zh-TW")) {
         errorMsgArray.push(Message.NEED_INPUT_PHONE);
       }
       // 如果不是會員的職位代號的話需要驗證密碼
@@ -141,7 +143,8 @@ export const users = {
           errorMsgArray.push(Message.NEED_INPUT_PASSWORD);
         }
       }
-      if (titleNo === undefined) {
+      if (!isEffectVal(titleNo)) {
+        console.log("OK");
         errorMsgArray.push(Message.NEED_INPUT_TITLENO);
       } else if (!validator.isInt(titleNo.toString(), { min: 1, max: 4 })) {
         errorMsgArray.push(Message.NEED_INPUT_TITLENO);
@@ -211,52 +214,68 @@ export const users = {
 
       const userId: string = req.params.id;
       let hasRightUser = null;
-      if (titleNo != 4) {
-        hasRightUser = await User.findById(userId).where("isDeleted").ne(true);
-      } else {
-        hasRightUser = await Member.findById(userId)
-          .where("isDeleted")
-          .ne(true);
-      }
+      try {
+        if (titleNo != 4) {
+          hasRightUser = await User.findById(userId)
+            .where("isDeleted")
+            .ne(true);
+        } else {
+          hasRightUser = await Member.findById(userId)
+            .where("isDeleted")
+            .ne(true);
+        }
 
-      if (hasRightUser === null) {
-        return next(appError(400, Message.ID_NOT_FOUND, next));
+        if (hasRightUser === null) {
+          return next(appError(400, Message.ID_NOT_FOUND, next));
+        }
+      } catch (err) {
+        // 當request有傳userId，但是位數不夠或過長，mongoose不能轉換成有效id時
+        if (err instanceof mongoose.Error.CastError) {
+          return next(appError(400, Message.ID_NOT_FOUND, next));
+        }
       }
       // title
       const titleMap: string[] = ["", "店長", "店員", "廚師", "會員"];
 
       const errorMsgArray = [];
       // 驗證
-      if (!name) {
+      if (!isEffectVal(name)) {
         errorMsgArray.push(Message.NEED_INPUT_NAME);
       }
-      if (!phone || !validator.isMobilePhone(phone, "zh-TW")) {
+      if (!isEffectVal(phone) || !validator.isMobilePhone(phone, "zh-TW")) {
         errorMsgArray.push(Message.NEED_INPUT_PHONE);
       }
       // 如果不是會員的職位代號的話需要驗證密碼
       if (titleNo != 4) {
-        if (!password || !validator.isLength(password, { min: 8 })) {
+        if (
+          !isEffectVal(password) ||
+          !validator.isLength(password, { min: 8 })
+        ) {
           errorMsgArray.push(Message.NEED_INPUT_PASSWORD);
         }
       }
 
-      if (!validator.isInt(titleNo.toString(), { min: 1, max: 4 })) {
+      if (
+        !isEffectVal(titleNo) ||
+        !validator.isInt(titleNo.toString(), { min: 1, max: 4 })
+      ) {
         errorMsgArray.push(Message.NEED_INPUT_TITLENO);
       }
 
-      // 會員與店家人員不可直接透過職位代號轉換()
+      // 會員與店家人員不可直接透過職位代號轉換
+
       if (
-        (hasRightUser.titleNo != 4 && titleNo == 4) ||
-        (hasRightUser.titleNo == 4 && titleNo != 4)
+        (hasRightUser?.titleNo != 4 && titleNo == 4) ||
+        (hasRightUser?.titleNo == 4 && titleNo != 4)
       ) {
         errorMsgArray.push(Message.TITLENO_TRANSFER_ERROR);
       }
 
       // 如果電話號碼與原本不同
-      if (phone != hasRightUser.phone) {
+      if (phone != hasRightUser?.phone) {
         let hasSamePhone = null;
         // 依照職位代號去相對應的collection搜尋是否已有相同電話號碼
-        if (hasRightUser.titleNo != 4) {
+        if (hasRightUser?.titleNo != 4) {
           hasSamePhone = await User.findOne({ phone });
         } else {
           hasSamePhone = await Member.findOne({ phone });
@@ -267,7 +286,7 @@ export const users = {
         }
       }
 
-      if (!(isDisabled === true || isDisabled === false)) {
+      if (typeof isDisabled !== "boolean") {
         errorMsgArray.push(Message.NEED_INPUT_STATUS);
       }
 
@@ -317,19 +336,35 @@ export const users = {
     async (req: any, res: Response, next: NextFunction) => {
       const userId = req.params.id;
       const titleNo = req.params.titleNo;
-      // 排除已經被軟廚的人員
-      let hasRightUser = {} || null;
 
-      if (titleNo != 4) {
-        hasRightUser = await User.findById(userId).where("isDeleted").ne(true);
-      } else {
-        hasRightUser = await Member.findById(userId)
-          .where("isDeleted")
-          .ne(true);
+      if (
+        !isEffectVal(titleNo) ||
+        !validator.isInt(titleNo.toString(), { min: 1, max: 4 })
+      ) {
+        return next(appError(400, Message.NEED_INPUT_TITLENO, next));
       }
 
-      if (hasRightUser === null) {
-        return next(appError(400, Message.ID_NOT_FOUND, next));
+      // 排除已經被軟刪除的人員
+      let hasRightUser = {} || null;
+      try {
+        if (titleNo != 4) {
+          hasRightUser = await User.findById(userId)
+            .where("isDeleted")
+            .ne(true);
+        } else {
+          hasRightUser = await Member.findById(userId)
+            .where("isDeleted")
+            .ne(true);
+        }
+
+        if (hasRightUser === null) {
+          return next(appError(400, Message.ID_NOT_FOUND, next));
+        }
+      } catch (err) {
+        // 當request有傳userId，但是位數不夠或過長，mongoose不能轉換成有效id時
+        if (err instanceof mongoose.Error.CastError) {
+          return next(appError(400, Message.ID_NOT_FOUND, next));
+        }
       }
 
       const deleteItem = {
@@ -338,8 +373,6 @@ export const users = {
       };
       if (titleNo != 4) {
         await User.findByIdAndUpdate(userId, deleteItem);
-        // 有需要可用returnDocument返回更新的data
-        // { returnDocument: "after", }
       } else {
         await Member.findByIdAndUpdate(userId, deleteItem);
       }
