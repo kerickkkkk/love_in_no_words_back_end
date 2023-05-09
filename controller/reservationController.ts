@@ -14,6 +14,7 @@ import TableCodeModel from "../models/tableCodeModel";
 import tableManagementModel, {
   TableManagement,
 } from "../models/tableManagementModel";
+import { isEffectVal } from "../utils/common";
 dayjs.extend(customParseFormat);
 export const reservation = {
   // S-1-1 帶位API
@@ -101,7 +102,7 @@ export const reservation = {
       }
 
       let isStatusInput = false;
-      if (status != undefined) {
+      if (isEffectVal(status) && status?.length !== 0) {
         if (status === "使用中" || status === "已預約") {
           isStatusInput = true;
           // 未使用不能放入預約collection查詢，因為未使用沒建資料在預約collection會查不到
