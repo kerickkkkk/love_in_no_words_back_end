@@ -12,4 +12,7 @@ router.get("/send/email/admin/sell-quantity/report", isOwnerAuth, reportsControl
 // O-5-3 獲取訂單數量資料
 router.get("/send/email/admin/orders-quantity/report", isOwnerAuth, reportsController.getOrderQuantity);
 
+// O-5-5 條件搜尋訂單資訊
+router.get("/reports/admin/orders", isOwnerAuth, reportsController.getOrderInformation);
+
 export default router;

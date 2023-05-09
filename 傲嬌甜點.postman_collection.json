@@ -1601,7 +1601,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/send/email/admin/revenue/report",
+							"raw": "{{base_url}}/v1/send/email/admin/revenue/report/?year=2022",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1611,13 +1611,13 @@
 								"email",
 								"admin",
 								"revenue",
-								"report"
+								"report",
+								""
 							],
 							"query": [
 								{
 									"key": "year",
-									"value": "2022",
-									"disabled": true
+									"value": "2022"
 								}
 							]
 						}
@@ -1672,7 +1672,7 @@
 					"response": []
 				},
 				{
-					"name": "O-5-2 獲取賣出數量資料 Copy",
+					"name": "O-5-2 獲取賣出數量資料",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -1712,6 +1712,66 @@
 									"key": "year",
 									"value": "2022",
 									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "O-5-5 條件搜尋訂單資訊",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/reports/admin/orders?month=3&number=5&year=2023&page=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"reports",
+								"admin",
+								"orders"
+							],
+							"query": [
+								{
+									"key": "month",
+									"value": "3",
+									"description": "月份"
+								},
+								{
+									"key": "number",
+									"value": "5",
+									"description": "單頁筆數"
+								},
+								{
+									"key": "year",
+									"value": "2023",
+									"description": "年度"
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"description": "當前頁面"
 								}
 							]
 						}
