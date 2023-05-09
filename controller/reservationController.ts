@@ -135,6 +135,7 @@ export const reservation = {
         status?: string;
         reservation?: {
           reservationId: string;
+          reservationDate: Date;
           reservationTime: string;
           name: string | null;
           phone: string | null;
@@ -162,6 +163,7 @@ export const reservation = {
                   status: reservationData[reserNo].status,
                   reservation: {
                     reservationId: reservationData[reserNo]._id,
+                    reservationDate: reservationData[reserNo].reservationDate,
                     reservationTime: reservationData[reserNo].reservationTime,
                     name: reservationData[reserNo]?.name,
                     phone: reservationData[reserNo]?.phone,
@@ -237,6 +239,7 @@ export const reservation = {
                 status: reservationData[reserNo].status,
                 reservation: {
                   reservationId: reservationData[reserNo]._id,
+                  reservationDate: reservationData[reserNo].reservationDate,
                   reservationTime: reservationData[reserNo].reservationTime,
                   name: reservationData[reserNo]?.name,
                   phone: reservationData[reserNo]?.phone,
