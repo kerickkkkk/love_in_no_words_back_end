@@ -114,7 +114,10 @@ export const reservation = {
         return next(appError(400, errorMsgArray.join(";"), next));
       }
       // 先獲取全部桌號
-      const allTables = await tableManagementModel.find();
+      const allTables = await tableManagementModel.find({
+        isDisabled: false,
+        isDeleted: false,
+      });
 
       // 確認坐位是否被預約
       const reservationData = await ReservationModel.find({
@@ -147,10 +150,9 @@ export const reservation = {
       if (isStatusInput) {
         // 使用中或已預約狀態查詢
         if (status === "使用中" || status === "已預約") {
+          let dataNo = 0;
           for (let tableNo = 0; tableNo < allTables.length; tableNo++) {
             for (let reserNo = 0; reserNo < reservationData.length; reserNo++) {
-              let dataNo = 0;
-
               if (
                 reservationData[reserNo].tableInofo.tableNo ===
                 allTables[tableNo].tableNo
@@ -275,6 +277,8 @@ export const reservation = {
       }
       const tableNoInfo = await TableManagementModel.findOne({
         tableNo,
+        isDisabled: false,
+        isDeleted: false,
       });
       if (tableNoInfo == null) {
         errorMsgArray.push(Message.NEED_INPUT_TABLENO);
