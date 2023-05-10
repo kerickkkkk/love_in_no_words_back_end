@@ -629,7 +629,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"tableName\" : 7,\n        \"seats\" : 20\n}",
+							"raw": "{\n        \"tableName\" : 3,\n        \"seats\" : 20\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1601,7 +1601,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/send/email/admin/revenue/report/?year=2022",
+							"raw": "{{base_url}}/v1/send/email/admin/revenue/report/?year=2023",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1617,7 +1617,7 @@
 							"query": [
 								{
 									"key": "year",
-									"value": "2022"
+									"value": "2023"
 								}
 							]
 						}
@@ -1648,7 +1648,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/send/email/admin/sell-quantity/report",
+							"raw": "{{base_url}}/v1/send/email/admin/sell-quantity/report?year=2023",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1663,8 +1663,7 @@
 							"query": [
 								{
 									"key": "year",
-									"value": "2022",
-									"disabled": true
+									"value": "2023"
 								}
 							]
 						}
@@ -1672,7 +1671,7 @@
 					"response": []
 				},
 				{
-					"name": "O-5-2 獲取賣出數量資料",
+					"name": "O-5-3 獲取訂單數量資料",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -1719,6 +1718,66 @@
 					"response": []
 				},
 				{
+					"name": "O-5-4 寄送報表",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/send/email/admin/report/:reportType",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"send",
+								"email",
+								"admin",
+								"report",
+								":reportType"
+							],
+							"query": [
+								{
+									"key": "year",
+									"value": "2022",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "test@.test.com",
+									"description": "請傳入信箱",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "reportType",
+									"value": "1",
+									"description": "1(營收報表),2(賣出數量報表),3(訂單數量報表)"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "O-5-5 條件搜尋訂單資訊",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -1742,7 +1801,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/reports/admin/orders?month=3&number=5&year=2023&page=1",
+							"raw": "{{base_url}}/v1/reports/admin/orders?month=3&number=5",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1766,12 +1825,14 @@
 								{
 									"key": "year",
 									"value": "2023",
-									"description": "年度"
+									"description": "年度",
+									"disabled": true
 								},
 								{
 									"key": "page",
 									"value": "1",
-									"description": "當前頁面"
+									"description": "當前頁面",
+									"disabled": true
 								}
 							]
 						}
