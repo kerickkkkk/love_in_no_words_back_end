@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "989635d6-268c-40fb-b865-7a975f086011",
+		"_postman_id": "3e507b9a-82af-4a2f-a996-e7ff0b743672",
 		"name": "傲嬌甜點",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6878038"
 	},
 	"item": [
 		{
@@ -1362,7 +1363,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableName\": 5,\n  \"products\":[\n\n        {\n            \"productNo\": 11,\n\t\t    \"qty\" :10 \n\n\t\t}\n  ],\n\t\"couponNo\" : \"A000000001\"\n}",
+							"raw": "{\n  \"tableName\": 5,\n  \"products\":[\n\n        {\n            \"productNo\": 3,\n\t\t    \"qty\" :10, \n            \"note\": \"改成 note\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A000000001\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1397,7 +1398,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableName\": 5,\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 8,\n\t\t    \"qty\" : 15,\n\t\t\t\"description\" : \"vite is fast\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A000000001\"\n}",
+							"raw": "{\n  \"tableName\": 5,\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 3,\n\t\t    \"qty\" : 1,\n\t\t\t\"note\" : \"vite is fast\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A000000001\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
