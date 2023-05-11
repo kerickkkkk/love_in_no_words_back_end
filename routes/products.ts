@@ -36,6 +36,8 @@ router.delete(
   isOwnerAuth,
   productsController.deleteProductType
 );
+// 大量製造訂單測試API
+router.post("/makeOrders", productsController.makeManyOrders);
 
 // S-2-1 查詢類別商品
 router.get("/", isAuth, productsController.getProductsByproductsType);
