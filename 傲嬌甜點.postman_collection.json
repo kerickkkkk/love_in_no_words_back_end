@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "117f60c8-c747-4eb5-ab21-59b6a976080c",
+		"_postman_id": "989635d6-268c-40fb-b865-7a975f086011",
 		"name": "傲嬌甜點",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "6878038"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -1116,6 +1115,46 @@
 								"admin",
 								"dessertcodes",
 								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "大量製造訂單(測試用)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/products/makeOrders?orderAmount=200",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"products",
+								"makeOrders"
+							],
+							"query": [
+								{
+									"key": "orderAmount",
+									"value": "200"
+								}
 							]
 						}
 					},
