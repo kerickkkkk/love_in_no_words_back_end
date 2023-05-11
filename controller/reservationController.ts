@@ -354,9 +354,13 @@ export const reservation = {
 
       let reservationInfo: Reservation | null = null;
       try {
-        reservationInfo = await ReservationModel.findById(reservationId)
+        reservationInfo = await ReservationModel.findOne({
+          _id: reservationId,
+          status: "已預約",
+        })
           .where("isCanceled")
           .ne(true);
+
         // 如果找不到資料
         if (reservationInfo == null) {
           return next(appError(400, Message.RESERVATION_ID_NOT_FOUND, next));

@@ -13,6 +13,13 @@ import { GetSignedUrlConfig } from "@google-cloud/storage";
 import https from "https";
 import validator from "validator";
 import { ProductType } from "../models/productTypeModel";
+import { isEffectVal } from "../utils/common";
+// 大量製造訂單測試用
+import TableManagementModel from "../models/tableManagementModel";
+import OrderDetail from "../models/orderDetailModel";
+import { combinedDateTimeString, period } from "../utils/dayjs";
+import Order from "../models/orderModel";
+import { ProductManagement } from "../models/productManagementModel";
 
 export const products = {
   // O-3-1 條件搜尋商品API
@@ -114,6 +121,7 @@ export const products = {
         photoUrl: product?.photoUrl,
         price: product?.price,
         inStockAmount: product?.inStockAmount,
+        safeStockAmount: product?.safeStockAmount,
         amountStatus: product?.amountStatus,
         productsType: product?.productsType.productsType,
         productsTypeName: product?.productsType.productsTypeName,
@@ -197,7 +205,9 @@ export const products = {
       }
 
       // 驗證圖片url是專案firebase的url且能否正常開啟
-      if (
+      if (!photoUrl) {
+        errorMsgArray.push(Message.NEED_PHOTO_URL);
+      } else if (
         !photoUrl.includes(
           "https://storage.googleapis.com/love-in-no-words-back-end.appspot.com/images"
         ) ||
@@ -205,21 +215,31 @@ export const products = {
       ) {
         errorMsgArray.push(Message.PHOTOURL_SOURCE_ERROR);
       }
+
       // 驗證商品價錢為正整數
-      if (!validator.isInt(price.toString(), { gt: 0 })) {
+      if (
+        !isEffectVal(price) ||
+        !validator.isInt(price?.toString(), { gt: 0 })
+      ) {
         errorMsgArray.push(Message.NEED_POSITIVE_PRICE);
       }
       // 驗證商品庫存數量為正整數或0
-      if (!validator.isInt(inStockAmount.toString(), { min: 0 })) {
+      if (
+        !isEffectVal(inStockAmount) ||
+        !validator.isInt(inStockAmount?.toString(), { min: 0 })
+      ) {
         errorMsgArray.push(Message.NEED_POSITIVE_STOCKAMOUNT);
       }
       // 驗證安全庫存量為正整數
-      if (!validator.isInt(safeStockAmount.toString(), { gt: 0 })) {
+      if (
+        !isEffectVal(safeStockAmount) ||
+        !validator.isInt(safeStockAmount?.toString(), { gt: 0 })
+      ) {
         errorMsgArray.push(Message.NEED_POSITIVE_SAFE_STOCKAMOUNT);
       }
       // productsType驗證是否為數字且能在productsType collection中搜尋到
       let productTypeObj: ProductType | null = null;
-      if (Number.isNaN(Number(productsType))) {
+      if (!isEffectVal(productsType) || Number.isNaN(Number(productsType))) {
         errorMsgArray.push(Message.NEED_POSITIVE_PRODUCT_TYPE);
       } else {
         productTypeObj = await ProductTypeModel.findOne({
@@ -231,7 +251,10 @@ export const products = {
         }
       }
       // 驗證製作時間為正整數
-      if (!validator.isInt(productionTime.toString(), { gt: 0 })) {
+      if (
+        !isEffectVal(productionTime) ||
+        !validator.isInt(productionTime?.toString(), { gt: 0 })
+      ) {
         errorMsgArray.push(Message.NEED_POSITIVE_PRODUCT_TIME);
       }
       // 驗證啟用、停用為布林值
@@ -308,16 +331,18 @@ export const products = {
           productName,
           isDeleted: false,
         });
+
         // 找到相同商品名稱資料的商品編號與現在欲修改的商品編號不同返回錯誤，表示更改後的商品名稱與其他商品名稱衝突
-        if (hasSameName?.productNo != Number(productNo)) {
+        if (
+          isEffectVal(hasSameName) &&
+          hasSameName?.productNo != Number(productNo)
+        ) {
           errorMsgArray.push(Message.SAME_PRODUCT_NAME);
         }
       }
 
       // 如果圖片網址不是null、undefined或是空字串時才驗證圖片網址
-      if (
-        !(photoUrl === null || photoUrl === undefined || photoUrl.length === 0)
-      ) {
+      if (isEffectVal(photoUrl) && photoUrl?.length !== 0) {
         // 驗證圖片url是專案firebase的url且能否正常開啟
         if (
           !photoUrl.includes(
@@ -330,15 +355,24 @@ export const products = {
       }
 
       // 驗證商品價錢為正整數
-      if (!validator.isInt(price.toString(), { gt: 0 })) {
+      if (
+        !isEffectVal(price) ||
+        !validator.isInt(price.toString(), { gt: 0 })
+      ) {
         errorMsgArray.push(Message.NEED_POSITIVE_PRICE);
       }
       // 驗證商品庫存數量為正整數或0
-      if (!validator.isInt(inStockAmount.toString(), { min: 0 })) {
+      if (
+        !isEffectVal(inStockAmount) ||
+        !validator.isInt(inStockAmount.toString(), { min: 0 })
+      ) {
         errorMsgArray.push(Message.NEED_POSITIVE_STOCKAMOUNT);
       }
       // 驗證安全庫存量為正整數
-      if (!validator.isInt(safeStockAmount.toString(), { gt: 0 })) {
+      if (
+        !isEffectVal(safeStockAmount) ||
+        !validator.isInt(safeStockAmount.toString(), { gt: 0 })
+      ) {
         errorMsgArray.push(Message.NEED_POSITIVE_SAFE_STOCKAMOUNT);
       }
       // productsType驗證是否為數字且能在productsType collection中搜尋到
@@ -356,7 +390,10 @@ export const products = {
         }
       }
       // 驗證製作時間為正整數
-      if (!validator.isInt(productionTime.toString(), { gt: 0 })) {
+      if (
+        !isEffectVal(productionTime) ||
+        !validator.isInt(productionTime.toString(), { gt: 0 })
+      ) {
         errorMsgArray.push(Message.NEED_POSITIVE_PRODUCT_TIME);
       }
       // 驗證啟用、停用為布林值
@@ -514,23 +551,119 @@ export const products = {
       handleSuccess(res, Message.DELETE_SUCCESS, null);
     }
   ),
+  // 大量製造訂單測試API
+  makeManyOrders: handleErrorAsync(
+    async (req: any, res: Response, next: NextFunction) => {
+      const { orderAmount } = req.query;
+      if (Number.isNaN(Number(orderAmount))) {
+        return next(appError(400, "請送正常參數，別亂玩測試API", next));
+      }
+
+      // 獲取全部桌子數
+      const totalTableAmount = await TableManagementModel.countDocuments();
+      // 獲取全部商品數
+      const totalProductsAmount = await ProductManagementModel.countDocuments();
+
+      // 製作每份訂單直到完成query指定訂單數
+      for (let orderNo = 0; orderNo < orderAmount; orderNo++) {
+        const orderNo = combinedDateTimeString();
+        // 隨機指定桌號
+        const tableNo = Math.floor(Math.random() * totalTableAmount) + 1;
+        const tableObj = await TableManagementModel.findOne({
+          tableNo,
+        });
+        // 隨機指定要點幾種餐點
+        const orderProductsTypeNo =
+          Math.floor(Math.random() * totalProductsAmount) + 1;
+        const products: any = [];
+        // 計算商品 總價
+        let totalTime = 0;
+        let totalPrice = 0;
+        let productType: number[] = [];
+        // 隨機點各個餐點直到滿足隨機指定的餐點種類數
+        const generateProductNo = (array: number[]) => {
+          let randomNumber =
+            Math.floor(Math.random() * totalProductsAmount) + 1;
+          while (array.includes(randomNumber)) {
+            // 如果隨機數已經存在於給定的數組中，就重新生成
+            randomNumber = Math.floor(Math.random() * totalProductsAmount) + 1;
+          }
+          productType.push(randomNumber);
+          return randomNumber;
+        };
+        // 製作訂單明細
+        for (
+          let productOrder = 0;
+          productOrder < orderProductsTypeNo;
+          productOrder++
+        ) {
+          // 最大一次只給點到單品項10個
+          const qty = Math.floor(Math.random() * 10) + 1;
+
+          let productDbInfo: ProductManagement | null;
+          productDbInfo = await ProductManagementModel.findOne({
+            productNo: generateProductNo(productType),
+          }).lean();
+
+          if (productDbInfo?.price === undefined) return;
+          const product = {
+            ...productDbInfo,
+            qty,
+            subTotal: productDbInfo.price * qty,
+          };
+
+          products.push(product);
+          //  orderDetail完成
+          totalTime += productDbInfo.productionTime * qty;
+          totalPrice += productDbInfo.price * qty;
+        }
+
+        const newOrderDetail = await OrderDetail.create({
+          orderNo,
+          orderList: products,
+          tableNo: tableObj?.tableNo,
+          tableName: tableObj?.tableName,
+          totalTime,
+          status: "已出餐",
+          discount: 0,
+          totalPrice: totalPrice,
+        });
+
+        await Order.create({
+          orderNo,
+          orderStatus: "已結帳",
+          time: period(),
+          tableNo: tableObj?.tableNo,
+          tableName: tableObj?.tableName,
+          orderDetail: newOrderDetail._id,
+        });
+      }
+
+      handleSuccess(res, Message.RESULT_SUCCESS, null);
+    }
+  ),
   // S-2-1 查詢類別商品API
   getProductsByproductsType: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
-      // 如果要中文可以改 new RegExp(req.query.productsType) 
-      const productsTypeQuery = req.query.productsType !== undefined ? {
-        "productsType": Number(req.query.productsType)
-      } : {}
-      const productTypeObj = await ProductTypeModel.find(productsTypeQuery)
-      const productsTypeAry = productTypeObj.map(item => item._id)
+      // 如果要中文可以改 new RegExp(req.query.productsType)
+      const productsTypeQuery =
+        req.query.productsType !== undefined
+          ? {
+              productsType: Number(req.query.productsType),
+            }
+          : {};
+      const productTypeObj = await ProductTypeModel.find(productsTypeQuery);
+      const productsTypeAry = productTypeObj.map((item) => item._id);
       const query = {
         productsType: productsTypeAry,
-        isDeleted: false
-      }
-      const products = await ProductManagementModel.find(query).populate({
-        path: 'productsType',
-        select: "productsType productsTypeName"
-      }).sort({ productNo: 1 });
+        isDeleted: false,
+      };
+      const products = await ProductManagementModel.find(query)
+        .populate({
+          path: "productsType",
+          select: "productsType productsTypeName",
+        })
+        .sort({ productNo: 1 });
       handleSuccess(res, "成功", products);
     }
   ),
@@ -553,4 +686,5 @@ async function checkPhotoUrl(url: string) {
       });
   });
 }
+
 export default products;
