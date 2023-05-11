@@ -331,7 +331,7 @@ export const products = {
           productName,
           isDeleted: false,
         });
-        console.log("hasSameName", hasSameName);
+
         // 找到相同商品名稱資料的商品編號與現在欲修改的商品編號不同返回錯誤，表示更改後的商品名稱與其他商品名稱衝突
         if (
           isEffectVal(hasSameName) &&
@@ -555,17 +555,24 @@ export const products = {
   makeManyOrders: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
       const { orderAmount } = req.query;
+      if (Number.isNaN(Number(orderAmount))) {
+        return next(appError(400, "請送正常參數，別亂玩測試API", next));
+      }
 
+      // 獲取全部桌子數
       const totalTableAmount = await TableManagementModel.countDocuments();
+      // 獲取全部商品數
       const totalProductsAmount = await ProductManagementModel.countDocuments();
 
+      // 製作每份訂單直到完成query指定訂單數
       for (let orderNo = 0; orderNo < orderAmount; orderNo++) {
         const orderNo = combinedDateTimeString();
+        // 隨機指定桌號
         const tableNo = Math.floor(Math.random() * totalTableAmount) + 1;
         const tableObj = await TableManagementModel.findOne({
           tableNo,
         });
-
+        // 隨機指定要點幾種餐點
         const orderProductsTypeNo =
           Math.floor(Math.random() * totalProductsAmount) + 1;
         const products: any = [];
@@ -573,6 +580,7 @@ export const products = {
         let totalTime = 0;
         let totalPrice = 0;
         let productType: number[] = [];
+        // 隨機點各個餐點直到滿足隨機指定的餐點種類數
         const generateProductNo = (array: number[]) => {
           let randomNumber =
             Math.floor(Math.random() * totalProductsAmount) + 1;
@@ -583,14 +591,16 @@ export const products = {
           productType.push(randomNumber);
           return randomNumber;
         };
+        // 製作訂單明細
         for (
           let productOrder = 0;
           productOrder < orderProductsTypeNo;
           productOrder++
         ) {
+          // 最大一次只給點到單品項10個
           const qty = Math.floor(Math.random() * 10) + 1;
-          // console.log("數字", generateProductNo(productType));
-          let productDbInfo: ProductManagement | null = null;
+
+          let productDbInfo: ProductManagement | null;
           productDbInfo = await ProductManagementModel.findOne({
             productNo: generateProductNo(productType),
           }).lean();
@@ -601,12 +611,13 @@ export const products = {
             qty,
             subTotal: productDbInfo.price * qty,
           };
-          console.log("product", product);
+
           products.push(product);
           //  orderDetail完成
           totalTime += productDbInfo.productionTime * qty;
           totalPrice += productDbInfo.price * qty;
         }
+
         const newOrderDetail = await OrderDetail.create({
           orderNo,
           orderList: products,
@@ -618,7 +629,7 @@ export const products = {
           totalPrice: totalPrice,
         });
 
-        const newOrder = await Order.create({
+        await Order.create({
           orderNo,
           orderStatus: "已結帳",
           time: period(),
