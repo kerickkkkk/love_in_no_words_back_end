@@ -74,7 +74,7 @@ export const orders = {
       const productNoList = inputProducts.map((item: {
         productNo: number;
         qty: number;
-        description?: string;
+        note?: string;
       }) => item.productNo)
 
       // 撈取合法的商品
@@ -137,11 +137,11 @@ export const orders = {
 
       // 訂單優惠碼
       const products = tempProducts.reduce((prev: any[], next, index) => {
-        const { qty, description } = inputProducts[index]
+        const { qty, note } = inputProducts[index]
         const product = {
           ...next,
           qty,
-          description,
+          note,
           subTotal: next.price * qty
         }
         totalTime += next.productionTime * qty
