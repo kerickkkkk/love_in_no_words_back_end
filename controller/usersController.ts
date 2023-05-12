@@ -173,7 +173,6 @@ export const users = {
         }
       }
       if (!isEffectVal(titleNo)) {
-        console.log("OK");
         errorMsgArray.push(Message.NEED_INPUT_TITLENO);
       } else if (!validator.isInt(titleNo.toString(), { min: 1, max: 4 })) {
         errorMsgArray.push(Message.NEED_INPUT_TITLENO);
