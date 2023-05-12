@@ -22,14 +22,46 @@ export const users = {
       if (Number.isNaN(Number(page))) {
         return next(appError(400, Message.PAGE_NEED_IN_NUMBER, next));
       }
-
+      const pageNum = Number(page);
       // 進入User跟Member Collection獲取沒被刪除的資料，並由舊到新排列
-      const users = await User.find({ isDeleted: false }).sort({
-        createdAt: "asc",
-      });
-      const members = await Member.find({ isDeleted: false }).sort({
-        createdAt: "asc",
-      });
+      let users: any[] = [];
+      let members: any[] = [];
+      const queryIsDeleted = { isDeleted: false };
+      const usersTotal = await User.countDocuments(queryIsDeleted);
+      const membersTotal = await Member.countDocuments(queryIsDeleted);
+      const totalAmount = usersTotal + membersTotal;
+      const perPage = 10;
+      const skipCount = (pageNum - 1) * perPage;
+      if (skipCount < usersTotal && pageNum * perPage < usersTotal) {
+        users = await User.find(queryIsDeleted)
+          .skip(skipCount)
+          .limit(perPage)
+          .sort({
+            createdAt: "asc",
+          });
+      }
+      if (skipCount < usersTotal && pageNum * perPage > usersTotal) {
+        users = await User.find(queryIsDeleted)
+          .skip(skipCount)
+          .limit(perPage)
+          .sort({
+            createdAt: "asc",
+          });
+        members = await Member.find(queryIsDeleted)
+          .limit(perPage - (usersTotal % perPage))
+          .sort({
+            createdAt: "asc",
+          });
+      }
+
+      if (skipCount > usersTotal) {
+        members = await Member.find(queryIsDeleted)
+          .skip(skipCount - usersTotal)
+          .limit(perPage)
+          .sort({
+            createdAt: "asc",
+          });
+      }
 
       // 店家人員中取出需要的資訊
       const clerksList = users.map(
@@ -85,32 +117,29 @@ export const users = {
       const usersList = [...clerksList, ...membersList];
 
       // 迴圈確認是否有符合輸入的頁碼資料
-      for (let p = 0; p <= Math.ceil(usersList.length / 10); p++) {
-        const lastPage = Math.ceil(usersList.length / 10);
-        const currentPage = Number(page);
-        if (p == Number(page)) {
+      for (let p = 0; p <= Math.ceil(totalAmount / perPage); p++) {
+        const lastPage = Math.ceil(totalAmount / perPage);
+        const currentPage = pageNum;
+        if (p == pageNum) {
           const meta: Meta = {
             pagination: {
-              total: usersList.length,
+              total: totalAmount,
               perPage: 10,
               currentPage: currentPage,
               lastPage: lastPage,
               nextPage: currentPage == lastPage ? null : currentPage + 1,
               prevPage: currentPage == 1 ? null : currentPage - 1,
-              from: (currentPage - 1) * 10 + 1,
+              from: (currentPage - 1) * perPage + 1,
               to:
-                currentPage * 10 > usersList.length
-                  ? usersList.length
-                  : currentPage * 10,
+                currentPage * perPage > totalAmount
+                  ? totalAmount
+                  : currentPage * perPage,
             },
           };
 
           // 返回成功相對應資訊
           return handleSuccess(res, Message.RESULT_SUCCESS, {
-            usersList: usersList.slice(
-              (currentPage - 1) * 10,
-              currentPage * 10
-            ),
+            usersList,
             meta,
           });
         }
