@@ -33,11 +33,21 @@ export const randomDateTimeString = (month: number): string => {
 
   // 生成介於1和最大日期之間的隨機整數
   const randomDate = Math.floor(Math.random() * maxDate) + 1;
+  // 隨機生成0到23之間的小時
+  const randomHour = Math.floor(Math.random() * 24);
 
+  // 隨機生成0到59之間的分鐘
+  const randomMinute = Math.floor(Math.random() * 60);
+
+  // 隨機生成0到59之間的秒
+  const randomSecond = Math.floor(Math.random() * 60);
   // 設置日期物件的月份和日期
   const dateObject = dayjs()
     .set("month", month - 1)
-    .set("date", randomDate);
+    .set("date", randomDate)
+    .set("hour", randomHour)
+    .set("minute", randomMinute)
+    .set("second", randomSecond);
   const timeStamp = dateObject.utcOffset(8).format("YYYYMMDDHHmmss");
 
   return timeStamp;
