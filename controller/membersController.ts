@@ -24,13 +24,14 @@ export const members = {
         return next(appError(400, "電話長度需大於 8 碼", next));
       }
       const hasSamePhone = await Member.findOne({ phone });
-      if (hasSamePhone !== null) {
+      if (await Member.findOne({ phone, isDeleted: true })) {
+        return next(appError(400, "電話已被刪除，請聯絡管理員！", next));
+      } else if (hasSamePhone !== null) {
         return next(appError(400, "電話重複", next));
       }
       const revisedAt: null | string = null;
       // 加密
       const autoIncrementIndex = await autoIncrement(Member, "B");
-
       const newMember = await Member.create({
         name,
         phone,
@@ -40,7 +41,7 @@ export const members = {
       });
       // generateJWT(newMember, res);
       //
-      handleSuccess(res, Message.REVISE_SUCCESS, newMember);
+      handleSuccess(res, Message.CREATE_SUCCESS, newMember);
     }
   ),
   //S-4-2 查詢會員
