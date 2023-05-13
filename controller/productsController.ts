@@ -17,7 +17,7 @@ import { isEffectVal } from "../utils/common";
 // 大量製造訂單測試用
 import TableManagementModel from "../models/tableManagementModel";
 import OrderDetail from "../models/orderDetailModel";
-import { combinedDateTimeString, period } from "../utils/dayjs";
+import dayjs, { randomDateTimeString, period } from "../utils/dayjs";
 import Order from "../models/orderModel";
 import { ProductManagement } from "../models/productManagementModel";
 
@@ -554,8 +554,8 @@ export const products = {
   // 大量製造訂單測試API
   makeManyOrders: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
-      const { orderAmount } = req.query;
-      if (Number.isNaN(Number(orderAmount))) {
+      const { orderAmount, month } = req.query;
+      if (Number.isNaN(Number(orderAmount)) || Number.isNaN(Number(month))) {
         return next(appError(400, "請送正常參數，別亂玩測試API", next));
       }
 
@@ -566,7 +566,7 @@ export const products = {
 
       // 製作每份訂單直到完成query指定訂單數
       for (let orderNo = 0; orderNo < orderAmount; orderNo++) {
-        const orderNo = combinedDateTimeString();
+        const orderNo = randomDateTimeString(Number(month));
         // 隨機指定桌號
         const tableNo = Math.floor(Math.random() * totalTableAmount) + 1;
         const tableObj = await TableManagementModel.findOne({
@@ -627,6 +627,7 @@ export const products = {
           status: "已出餐",
           discount: 0,
           totalPrice: totalPrice,
+          createdAt: dayjs(orderNo, "YYYYMMDDHHmmss").toISOString(),
         });
 
         await Order.create({
@@ -636,6 +637,7 @@ export const products = {
           tableNo: tableObj?.tableNo,
           tableName: tableObj?.tableName,
           orderDetail: newOrderDetail._id,
+          createdAt: dayjs(orderNo, "YYYYMMDDHHmmss").toISOString(),
         });
       }
 
