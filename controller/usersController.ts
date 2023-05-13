@@ -182,9 +182,9 @@ export const users = {
 
       // 依照職位代號去相對應的collection搜尋是否已有相同電話號碼
       if (titleNo != 4) {
-        hasSamePhone = await User.findOne({ phone });
+        hasSamePhone = await User.findOne({ phone, isDeleted: false });
       } else {
-        hasSamePhone = await Member.findOne({ phone });
+        hasSamePhone = await Member.findOne({ phone, isDeleted: false });
       }
 
       if (hasSamePhone != null) {
@@ -242,6 +242,7 @@ export const users = {
 
       const userId: string = req.params.id;
       let hasRightUser = null;
+      // 排除已經軟刪除的人員
       try {
         if (titleNo != 4) {
           hasRightUser = await User.findById(userId)
@@ -304,9 +305,9 @@ export const users = {
         let hasSamePhone = null;
         // 依照職位代號去相對應的collection搜尋是否已有相同電話號碼
         if (hasRightUser?.titleNo != 4) {
-          hasSamePhone = await User.findOne({ phone });
+          hasSamePhone = await User.findOne({ phone, isDeleted: false });
         } else {
-          hasSamePhone = await Member.findOne({ phone });
+          hasSamePhone = await Member.findOne({ phone, isDeleted: false });
         }
 
         if (hasSamePhone != null) {
