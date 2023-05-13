@@ -23,11 +23,26 @@ export const members = {
       if (!validator.isMobilePhone(phone, "zh-TW")) {
         return next(appError(400, "電話長度需大於 8 碼", next));
       }
+      //MongoServerError: E11000 duplicate key error 
+      // const hasSamePhone = await Member.findOne({ phone, isDeleted: false });
+      // if (hasSamePhone !== null) {
+      //   return next(appError(400, "該電話號碼已被註冊", next));
+      // }
       const hasSamePhone = await Member.findOne({ phone });
-      if (await Member.findOne({ phone, isDeleted: true })) {
-        return next(appError(400, "電話已被刪除，請聯絡管理員！", next));
-      } else if (hasSamePhone !== null) {
-        return next(appError(400, "電話重複", next));
+      if (hasSamePhone !== null) {
+        if (hasSamePhone.isDeleted === false) {
+          // 更新名字
+          hasSamePhone.name = name;
+          await hasSamePhone.save();
+          handleSuccess(res, Message.CREATE_SUCCESS, hasSamePhone);
+          return;
+        }
+        // 修改資料
+        hasSamePhone.isDeleted = false;
+        hasSamePhone.name = name;
+        await hasSamePhone.save();
+        handleSuccess(res, Message.CREATE_SUCCESS, hasSamePhone);
+        return;
       }
       const revisedAt: null | string = null;
       // 加密
