@@ -17,8 +17,7 @@ import { isEffectVal } from "../utils/common";
 // 大量製造訂單測試用
 import TableManagementModel from "../models/tableManagementModel";
 import OrderDetail from "../models/orderDetailModel";
-import { randomDateTimeString, period } from "../utils/dayjs";
-import dayjs from "dayjs";
+import dayjs, { randomDateTimeString, period } from "../utils/dayjs";
 import Order from "../models/orderModel";
 import { ProductManagement } from "../models/productManagementModel";
 
