@@ -23,27 +23,19 @@ export const members = {
       if (!validator.isMobilePhone(phone, "zh-TW")) {
         return next(appError(400, "電話長度需大於 8 碼", next));
       }
-      //MongoServerError: E11000 duplicate key error 
       // const hasSamePhone = await Member.findOne({ phone, isDeleted: false });
-      // if (hasSamePhone !== null) {
+      // if (hasSamePhone !== null && !hasSamePhone.isDeleted) {
       //   return next(appError(400, "該電話號碼已被註冊", next));
       // }
-      const hasSamePhone = await Member.findOne({ phone });
-      if (hasSamePhone !== null) {
-        if (hasSamePhone.isDeleted === false) {
-          // 更新名字
-          hasSamePhone.name = name;
-          await hasSamePhone.save();
-          handleSuccess(res, Message.CREATE_SUCCESS, hasSamePhone);
-          return;
-        }
-        // 修改資料
-        hasSamePhone.isDeleted = false;
-        hasSamePhone.name = name;
-        await hasSamePhone.save();
-        handleSuccess(res, Message.CREATE_SUCCESS, hasSamePhone);
+      const existingMember = await Member.findOne({ phone, isDeleted: false });
+      if (existingMember && existingMember.isDeleted === false) {
+        // If a member with this phone number exists and is not deleted, update the name and return success response
+        existingMember.name = name;
+        await existingMember.save();
+        handleSuccess(res, Message.CREATE_SUCCESS, existingMember);
         return;
       }
+      // Create new member
       const revisedAt: null | string = null;
       // 加密
       const autoIncrementIndex = await autoIncrement(Member, "B");
@@ -58,6 +50,22 @@ export const members = {
       //
       handleSuccess(res, Message.CREATE_SUCCESS, newMember);
     }
+    // const hasSamePhone = await Member.findOne({ phone });
+    // if (hasSamePhone !== null) {
+    //   if (hasSamePhone.isDeleted === false) {
+    //     // 更新名字
+    //     hasSamePhone.name = name;
+    //     await hasSamePhone.save();
+    //     handleSuccess(res, Message.CREATE_SUCCESS, hasSamePhone);
+    //     return;
+    //   }
+    //   // 修改資料
+    //   hasSamePhone.isDeleted = false;
+    //   hasSamePhone.name = name;
+    //   await hasSamePhone.save();
+    //   handleSuccess(res, Message.CREATE_SUCCESS, hasSamePhone);
+    //   return;
+    // }
   ),
   //S-4-2 查詢會員
   searchMember: handleErrorAsync(
