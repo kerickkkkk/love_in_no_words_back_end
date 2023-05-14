@@ -25,7 +25,7 @@ const memberSchema = new Schema(
     phone: {
       type: String,
       required: [true, Message.NEED_INPUT_PHONE],
-      unique: true,
+
     },
     titleNo: {
       type: Number,
