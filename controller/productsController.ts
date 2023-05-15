@@ -28,40 +28,39 @@ export const products = {
       const { productsType, priceLowerLimit, priceUpperLimit, amountStatus } =
         req.query;
       const errorMsgArray: string[] = [];
+
       // productsType驗證是否為數字且能在productsType collection中搜尋到
       let productTypeObj: ProductType | null = null;
       // 若有商品類型則驗證
-      if (!(productsType === undefined)) {
-        if (Number.isNaN(Number(productsType))) {
+      if (isEffectVal(productsType)) {
+        if (productsType !== "" && Number.isNaN(Number(productsType))) {
           errorMsgArray.push(Message.NEED_POSITIVE_PRODUCT_TYPE);
         } else {
           productTypeObj = await ProductTypeModel.findOne({
             productsType,
             isDeleted: false,
           });
-          if (productTypeObj === null) {
-            errorMsgArray.push(Message.PRODUCT_TYPE_NOT_FOUND);
-          }
         }
       }
-
       const productsTypeId = productTypeObj?._id;
       // 若有價格區間下限驗證價格區間下限為正整數或0
-      if (priceLowerLimit !== undefined) {
+      if (isEffectVal(priceLowerLimit) && priceLowerLimit !== "") {
         if (!validator.isInt(priceLowerLimit.toString(), { min: 0 })) {
           errorMsgArray.push(Message.NEED_INT_PRICE_LOWERLIMIT);
         }
       }
       // 若有價格區間上限則驗證價格區間上限為正整數
-      if (priceUpperLimit !== undefined) {
+      if (isEffectVal(priceUpperLimit) && priceUpperLimit !== "") {
         if (!validator.isInt(priceUpperLimit.toString(), { gt: 0 })) {
           errorMsgArray.push(Message.NEED_INT_PRICE_UPPERLIMIT);
         }
       }
       // 驗證價格區間上限不可小於價格區間下限
       if (
-        priceUpperLimit !== undefined &&
-        priceLowerLimit !== undefined &&
+        isEffectVal(priceLowerLimit) &&
+        priceLowerLimit !== "" &&
+        isEffectVal(priceUpperLimit) &&
+        priceUpperLimit !== "" &&
         validator.isInt(priceLowerLimit.toString()) &&
         validator.isInt(priceUpperLimit.toString())
       ) {
@@ -70,7 +69,7 @@ export const products = {
         }
       }
       // 若有狀態則驗證
-      if (amountStatus !== undefined) {
+      if (isEffectVal(amountStatus) && amountStatus !== "") {
         if (
           !(
             amountStatus == "safe" ||
@@ -90,25 +89,26 @@ export const products = {
       const query: any = {
         isDeleted: false,
       };
+      const priceRange: any = {};
       // 若有ref的productsTypeId就加入搜尋條件
       if (productsTypeId !== undefined) {
         query.productsType = productsTypeId;
       }
-      const priceRange: any = {};
       // 若有價格區間下限就加入搜尋條件
-      if (priceLowerLimit !== undefined) {
+      if (isEffectVal(priceLowerLimit) && priceLowerLimit !== "") {
         priceRange.$gte = Number(priceLowerLimit);
       }
       // 若有價格區間上限就加入搜尋條件
-      if (priceUpperLimit !== undefined) {
+      if (isEffectVal(priceUpperLimit) && priceUpperLimit !== "") {
         priceRange.$lte = Number(priceUpperLimit);
       }
+      // 確認不可把空物件作為價格區間傳入搜尋
       if (Object.keys(priceRange).length !== 0) {
         query.price = priceRange;
       }
 
       // 若有狀態就加入搜尋條件
-      if (amountStatus !== undefined) {
+      if (isEffectVal(amountStatus) && amountStatus !== "") {
         query.amountStatus = amountStatus;
       }
 
