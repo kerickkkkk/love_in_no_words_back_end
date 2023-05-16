@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "989635d6-268c-40fb-b865-7a975f086011",
+		"_postman_id": "69b7453f-b1fc-46d7-b17b-ca4b897453bf",
 		"name": "傲嬌甜點",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6878038"
 	},
 	"item": [
 		{
@@ -41,7 +42,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\n    \"name\": \"我是店長\",\n    \"phone\": \"0975026596\",\n    \"password\": \"12345678\",\n    \"confirmPassword\": \"12345678\",\n    \"isDisabled\" : false,\n    \"titleNo\": 1\n}",
+							"raw": "{\n\n    \"name\": \"我是店長\",\n    \"phone\": \"0912345678\",\n    \"password\": \"12345678\",\n    \"confirmPassword\": \"12345678\",\n    \"isDisabled\" : false,\n    \"titleNo\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -86,7 +87,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "\n    {\n        \"phone\": \"0975026596\",\n        \"password\": \"12345678\"   \n    }\n",
+							"raw": "\n    {\n        \"phone\": \"0912345678\",\n        \"password\": \"12345678\"   \n    }\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -131,14 +132,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/users/644e8d87b5fd478b1335aee0",
+							"raw": "{{base_url}}/v1/users/6460eb68d1c638b9b291ad28",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"v1",
 								"users",
-								"644e8d87b5fd478b1335aee0"
+								"6460eb68d1c638b9b291ad28"
 							]
 						}
 					},
@@ -239,7 +240,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/users/admin?page=11",
+							"raw": "{{base_url}}/v1/users/admin?page=1",
 							"host": [
 								"{{base_url}}"
 							],
@@ -251,7 +252,7 @@
 							"query": [
 								{
 									"key": "page",
-									"value": "11"
+									"value": "1"
 								}
 							]
 						}
@@ -628,7 +629,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"tableName\" : 3,\n        \"seats\" : 20\n}",
+							"raw": "{\n        \"tableName\" : 1,\n        \"seats\" : 20\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -921,7 +922,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"productName\":\"Vite\",\n        \"photoUrl\":\"{{photoUrl}}\",\n        \"price\":100,\n        \"inStockAmount\":60,\n        \"safeStockAmount\": 50,\n        \"productsType\": 2,\n        \"productionTime\": 1,\n        \"description\": \"忘情水\",\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"productName\":\"Vite2\",\n        \"photoUrl\":\"{{photoUrl}}\",\n        \"price\":100,\n        \"inStockAmount\":60,\n        \"safeStockAmount\": 50,\n        \"productsType\": 1,\n        \"productionTime\": 1,\n        \"description\": \"忘情水2\",\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1141,7 +1142,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/makeOrders?orderAmount=200&month=1",
+							"raw": "{{base_url}}/v1/products/makeOrders?orderAmount=10&month=7",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1153,11 +1154,11 @@
 							"query": [
 								{
 									"key": "orderAmount",
-									"value": "200"
+									"value": "10"
 								},
 								{
 									"key": "month",
-									"value": "1"
+									"value": "7"
 								}
 							]
 						}
@@ -1170,7 +1171,51 @@
 			"name": "coupons",
 			"item": [
 				{
-					"name": "O-4-2 店長獲取 優惠活動列表",
+					"name": "O-4-1 店員獲取優惠活動列表",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/coupons",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"coupons"
+							],
+							"query": [
+								{
+									"key": "activity",
+									"value": "cuponCode",
+									"description": "cuponCode,oneFreeOne,aPlusB",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "O-4-2 店長獲取 優惠活動列表 Copy",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -1219,7 +1264,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"couponName\" :\"優惠活動名稱22\",\n        \"couponCode\" : \"ABC22\",\n        \"discount\" : 99,\n        \"isDisabled\": true\n}",
+							"raw": "{\n        \"couponName\" :\"九折卷\",\n        \"couponCode\" : \"off90\",\n        \"discount\" : 90,\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1334,7 +1379,7 @@
 							"urlencoded": []
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/?productsType=2",
+							"raw": "{{base_url}}/v1/products/?productsType=1",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1346,7 +1391,7 @@
 							"query": [
 								{
 									"key": "productsType",
-									"value": "2"
+									"value": "1"
 								}
 							]
 						}
@@ -1366,7 +1411,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableName\": 5,\n  \"products\":[\n\n        {\n            \"productNo\": 11,\n\t\t    \"qty\" :10 \n\n\t\t}\n  ],\n\t\"couponNo\" : \"A000000001\"\n}",
+							"raw": "{\n  \"tableName\": 5,\n  \"products\":[\n\n        {\n            \"productNo\": 7,\n\t\t    \"qty\" :11 \n\n\t\t}\n  ]\n\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1401,7 +1446,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableName\": 5,\n  \"products\":[\n\t\t{\n\t\t\t\"productNo\" : 8,\n\t\t    \"qty\" : 15,\n\t\t\t\"description\" : \"vite is fast\"\n\t\t}\n  ],\n\t\"couponNo\" : \"A000000001\"\n}",
+							"raw": "{\n  \"tableName\": 5,\n  \"products\":[\n\n        {\n            \"productNo\": 7,\n\t\t    \"qty\" :1 \n\n\t\t}\n  ]\n\n}",
 							"options": {
 								"raw": {
 									"language": "json"
