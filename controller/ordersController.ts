@@ -237,7 +237,7 @@ export const orders = {
           return prev
         }, [])
         await ProductManagementModel.bulkWrite(updateObjs);
-        return handleSuccess(res, "訂單成功建立成功", order);
+        return handleSuccess(res, "建立訂單成功", order);
       } else {
         return next(appError(400, "訂單路由錯誤", next));
       }
