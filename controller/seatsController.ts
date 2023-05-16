@@ -40,7 +40,7 @@ export const seats = {
 
       const errorMsgArray: string[] = []
       // 座位人數上限最大二十人
-      if (!validator.isInt(seats.toString(), { min: 1, max: 20 })) {
+      if (seats && !validator.isInt(seats.toString(), { min: 1, max: 20 })) {
         errorMsgArray.push("座位人數最大上限 20 人");
       }
       const hasSameTableName = await TableManagementModel.findOne({
