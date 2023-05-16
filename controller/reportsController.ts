@@ -143,7 +143,7 @@ export const report = {
 
       const reportType = Number(req.params.reportType)
       const { email } = req.query
-      if (!validator.isInt(reportType?.toString(), { min: 1, max: 3 })) {
+      if (reportType && !validator.isInt(reportType?.toString(), { min: 1, max: 3 })) {
         return next(appError(400, "無該報表種類", next));
       }
 
@@ -254,7 +254,7 @@ export const report = {
       const startOfMonth = dayjs(`${year}-${month}-01`).toDate(); // 設定月初日期
       const endOfMonth = dayjs(`${year}-${month}-01`).endOf('month').toDate(); // 設定月底日期
       // isInt 第一個參數要字串
-      if (!validator.isInt(perPage?.toString(), { min: 1 })) {
+      if (perPage && !validator.isInt(perPage?.toString(), { min: 1 })) {
         return next(appError(400, "單頁筆數請以正整數輸入", next));
       }
 
@@ -262,7 +262,7 @@ export const report = {
         return next(appError(400, "日期格式錯誤", next));
       }
 
-      if (!validator.isInt(month?.toString(), { min: 1, max: 12 })) {
+      if (month && !validator.isInt(month?.toString(), { min: 1, max: 12 })) {
         return next(appError(400, "月份請輸入 1 ~ 12 月", next));
       }
 
