@@ -7,6 +7,7 @@ import handleErrorAsync from "../service/handleErrorAsync";
 import appError from "../service/appError";
 import handleSuccess from "../service/handleSuccess";
 import OrderModel from "../models/orderModel";
+import { User } from "../models/userModel";
 import { Meta } from "../types/Pagination"
 
 interface RequestQuery {
@@ -147,9 +148,33 @@ export const report = {
         return next(appError(400, "無該報表種類", next));
       }
 
-      // 暫時先用傳入
-      if (!email || !validator.isEmail(email)) {
-        return next(appError(400, "請輸入正確的信箱格式", next));
+      // 符合店長的 email 未刪除，未停用
+      const ownersObj = await User.find({
+        titleNo: 1,
+        isDisabled: false,
+        isDeleted: false
+      })
+
+      if (ownersObj === null) {
+        return next(appError(400, "查無店長，請新增店長。", next));
+      }
+
+      if (email) {
+        // 暫時先用傳入
+        if (!validator.isEmail(email)) {
+          return next(appError(400, "請輸入正確的信箱格式", next));
+        }
+      } else {
+        // 收集 email 驗證失敗的身份
+        const noPassList = ownersObj.filter((user) => (!user.email || !validator.isEmail(user.email)))
+          ?.reduce((acc, cur) => {
+            acc.push(cur.number)
+            return acc
+          }, [] as any).join(';')
+
+        if (noPassList !== "") {
+          return next(appError(400, `編號: ${noPassList};信箱有誤。`, next));
+        }
       }
 
       // 預設獲取當年度
@@ -217,12 +242,20 @@ export const report = {
           accessToken: process.env.ACCESSTOKEN,
         }
       });
-
+      let sendEmail = ''
+      if (email) {
+        sendEmail = email
+      } else {
+        sendEmail = ownersObj.reduce((acc, cur) => {
+          acc.push(cur.email)
+          return acc
+        }, [] as any).join(', ')
+      }
       // 送完後沒有被捕捉 在寫一層
       try {
         await transporter.sendMail({
           from: `傲嬌甜點 POS 系統<${process.env.ACCOUNT}>`,
-          to: `${email}`,
+          to: `${sendEmail}`,
           subject: `${sheetType}`,
           text: "報表",
           html: `<b>${sheetType}-${combinedDateTimeString()}.xlsx</b>`,
@@ -233,7 +266,7 @@ export const report = {
             },
           ],
         })
-        return handleSuccess(res, "報表寄送成功", data);
+        return handleSuccess(res, "報表寄送成功", null);
       } catch (error) {
         return next(appError(400, "寄送失敗，請確定信箱是否正確", next));
       }

@@ -4,6 +4,7 @@ interface IUser extends Document {
   name: string;
   number: string;
   phone: string;
+  email?: string;
   titleNo: number;
   title: string;
   password: string;
@@ -22,6 +23,9 @@ const userSchema = new Schema(
     },
     number: {
       type: String,
+    },
+    email: {
+      type: String
     },
     phone: {
       type: String,
