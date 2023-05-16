@@ -11,7 +11,15 @@ import { Message } from "../constants/messages";
 export const coupons = {
   getCoupons: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
-      const coupons = await CouponModel.find({ isDeleted: false }).sort({ couponNo: 1 });
+      const searchType: {
+        isDeleted: boolean;
+        isDisabled?: boolean;
+      } = { isDeleted: false }
+
+      if (req.user && req.user.titleNo === 1) {
+        searchType.isDisabled = false
+      }
+      const coupons = await CouponModel.find(searchType).sort({ couponNo: 1 });
       handleSuccess(res, "成功", coupons);
     }
   ),
@@ -37,7 +45,7 @@ export const coupons = {
       if (!discount) {
         errorMsgArray.push('請填優惠卷折扣');
       }
-      if (!validator.isInt(discount.toString(), { min: 1, max: 100 })) {
+      if (discount && !validator.isInt(discount.toString(), { min: 1, max: 100 })) {
         errorMsgArray.push('折扣為 1 ~ 100 數字');
       }
       if (typeof isDisabled !== 'boolean') {
@@ -82,7 +90,7 @@ export const coupons = {
       if (!discount) {
         errorMsgArray.push('請填優惠卷折扣');
       }
-      if (!validator.isInt(discount.toString(), { min: 1, max: 100 })) {
+      if (discount && !validator.isInt(discount.toString(), { min: 1, max: 100 })) {
         errorMsgArray.push('折扣為 1 ~ 100 數字');
       }
       if (typeof isDisabled !== 'boolean') {
