@@ -1264,7 +1264,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"couponName\" :\"九折卷\",\n        \"couponCode\" : \"off90\",\n        \"discount\" : 90,\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"couponName\" :\"九折卷\",\n        \"couponCode\" : \"off901\",\n        \"discount\" : 90,\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1298,7 +1298,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"couponName\" :\"優惠活動名稱22\",\n        \"couponCode\" : \"ABC22\",\n        \"discount\" : 10,\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"couponName\" :\"九折卷223\",\n        \"couponCode\" : \"off91\",\n        \"discount\" : 90,\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1306,7 +1306,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/coupons/admin/A000000001",
+							"raw": "{{base_url}}/v1/coupons/admin/:couponNo",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1314,7 +1314,13 @@
 								"v1",
 								"coupons",
 								"admin",
-								"A000000001"
+								":couponNo"
+							],
+							"variable": [
+								{
+									"key": "couponNo",
+									"value": "A000000002"
+								}
 							]
 						}
 					},
@@ -1341,7 +1347,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/coupons/admin/A000000001",
+							"raw": "{{base_url}}/v1/coupons/admin/:couponNo",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1349,7 +1355,13 @@
 								"v1",
 								"coupons",
 								"admin",
-								"A000000001"
+								":couponNo"
+							],
+							"variable": [
+								{
+									"key": "couponNo",
+									"value": "A000000001"
+								}
 							]
 						}
 					},
