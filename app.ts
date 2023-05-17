@@ -49,13 +49,13 @@ app.use("/v1/", indexRouter);
 
 // // 404 錯誤
 // app.use(notFound);
-
-// 統一管理錯誤處理
-app.use(handleAllError);
-
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'https://front-love-static.onrender.com'));
 });
+// 統一管理錯誤處理
+app.use(handleAllError);
+
+
 // 未捕捉到的 catch
 process.on("unhandledRejection", (err, promise) => {
   console.error("未捕捉到的 rejection：", promise, "原因：", err);
