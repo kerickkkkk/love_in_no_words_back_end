@@ -46,15 +46,16 @@ app.use("/v1", reportsRouter);
 // socket 方式 暫時寫在 indexRouter之後要拿掉
 app.use("/v1/", indexRouter);
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'https://front-love-static.onrender.com/index.html'));
-});
-// 404 錯誤
-app.use(notFound);
+
+// // 404 錯誤
+// app.use(notFound);
 
 // 統一管理錯誤處理
 app.use(handleAllError);
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'https://front-love-static.onrender.com'));
+});
 // 未捕捉到的 catch
 process.on("unhandledRejection", (err, promise) => {
   console.error("未捕捉到的 rejection：", promise, "原因：", err);
