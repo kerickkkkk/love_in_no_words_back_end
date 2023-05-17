@@ -50,7 +50,7 @@ app.use("/v1/", indexRouter);
 // // 404 錯誤
 // app.use(notFound);
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'https://front-love-static.onrender.com'));
+  res.redirect('https://front-love-static.onrender.com');
 });
 // 統一管理錯誤處理
 app.use(handleAllError);
