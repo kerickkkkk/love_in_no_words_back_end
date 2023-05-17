@@ -1264,7 +1264,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"couponName\" :\"九折卷\",\n        \"couponCode\" : \"off90\",\n        \"discount\" : 90,\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"couponName\" :\"九折卷223\",\n        \"couponCode\" : \"off\",\n        \"discount\" : 90,\n        \"isDisabled\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1298,7 +1298,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"couponName\" :\"優惠活動名稱22\",\n        \"couponCode\" : \"ABC22\",\n        \"discount\" : 10,\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"couponName\": \"九折卷223\",\n        \"couponCode\": \"off91\",\n        \"discount\": 90,\n        \"isDisabled\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1306,7 +1306,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/coupons/admin/A000000001",
+							"raw": "{{base_url}}/v1/coupons/admin/:couponNo",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1314,7 +1314,13 @@
 								"v1",
 								"coupons",
 								"admin",
-								"A000000001"
+								":couponNo"
+							],
+							"variable": [
+								{
+									"key": "couponNo",
+									"value": "A000000002"
+								}
 							]
 						}
 					},
@@ -1341,7 +1347,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/coupons/admin/A000000001",
+							"raw": "{{base_url}}/v1/coupons/admin/:couponNo",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1349,7 +1355,13 @@
 								"v1",
 								"coupons",
 								"admin",
-								"A000000001"
+								":couponNo"
+							],
+							"variable": [
+								{
+									"key": "couponNo",
+									"value": "A000000002"
+								}
 							]
 						}
 					},
@@ -1829,7 +1841,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/send/email/admin/report/:reportType",
+							"raw": "{{base_url}}/v1/send/email/admin/report/:reportType?email=填入信箱",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1849,15 +1861,14 @@
 								},
 								{
 									"key": "email",
-									"value": "test@.test.com",
-									"description": "請傳入信箱",
-									"disabled": true
+									"value": "填入信箱",
+									"description": "請傳入信箱"
 								}
 							],
 							"variable": [
 								{
 									"key": "reportType",
-									"value": "1",
+									"value": "2",
 									"description": "1(營收報表),2(賣出數量報表),3(訂單數量報表)"
 								}
 							]

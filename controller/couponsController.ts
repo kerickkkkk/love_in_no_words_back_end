@@ -25,15 +25,18 @@ export const coupons = {
   ),
   createCoupons: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
-      const { couponName, couponCode, discount, isDisabled = false } = req.body;
+      const { couponName, couponCode, discount, isDisabled } = req.body;
 
       const couponNo = await autoIncrement(CouponModel, 'A', 'couponNo')
-      const couponModelObj = await CouponModel.findOne({ $or: [{ couponNo }, { couponName }] });
+
+      const couponModelCouponNoObj = await CouponModel.findOne({ couponNo });
+
+      if (couponModelCouponNoObj !== null) {
+        return next(appError(400, "優惠卷編號重複", next));
+      }
+
       const errorMsgArray: string[] = []
 
-      if (couponModelObj !== null) {
-        errorMsgArray.push('優惠卷編號或代碼重複');
-      }
       if (!couponName) {
         errorMsgArray.push('請填優惠卷名稱');
       }
@@ -55,7 +58,17 @@ export const coupons = {
       if (errorMsgArray.length > 0) {
         return next(appError(400, errorMsgArray.join(";"), next));
       }
-      // 取得 tableCode 第一筆
+
+      const couponModelObj = await CouponModel.findOne({
+        $and: [
+          { $or: [{ couponCode }, { couponName }] },
+          { isDeleted: false },
+        ]
+      });
+
+      if (couponModelObj !== null) {
+        return next(appError(400, "優惠卷號碼或優惠券名稱重複", next));
+      }
 
       const newObj = await CouponModel.create({
         couponNo,
@@ -65,19 +78,21 @@ export const coupons = {
         isDisabled
       });
 
-      return handleSuccess(res, Message.RESULT_SUCCESS, newObj);
+      return handleSuccess(res, "優惠活動新增成功", null);
     }
   ),
   patchCoupons: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
       const { couponNo } = req.params;
-      const { couponName, couponCode, discount, isDisabled = false } = req.body;
-      const errorMsgArray: string[] = []
-      const couponModelObj = await CouponModel.findOne({ couponNo, isDeleted: false })
+      const { couponName, couponCode, discount, isDisabled } = req.body;
 
-      if (couponModelObj === null) {
+      const couponModelForCouponNoObj = await CouponModel.findOne({ couponNo, isDeleted: false })
+
+      if (couponModelForCouponNoObj === null) {
         return next(appError(400, '優惠卷編號有誤', next));
       }
+
+      const errorMsgArray: string[] = []
 
       if (!couponName) {
         errorMsgArray.push('請填優惠卷名稱');
@@ -100,6 +115,19 @@ export const coupons = {
       // 如果有錯誤訊息有返回400
       if (errorMsgArray.length > 0) {
         return next(appError(400, errorMsgArray.join(";"), next));
+      }
+
+      const couponModelObj = await CouponModel.findOne({
+        $and: [
+          { $or: [{ couponCode }, { couponName }] },
+          { isDeleted: false },
+          //  有一鍵更改停用 允許寫入重複(該優惠卷)的 couponCode couponName
+          { couponNo: { $ne: couponNo } }
+        ]
+      });
+
+      if (couponModelObj !== null) {
+        return next(appError(400, "優惠卷號碼或優惠券名稱重複", next));
       }
 
       const updatedSeat = await CouponModel.findOneAndUpdate(
@@ -122,28 +150,18 @@ export const coupons = {
 
       if (updatedSeat === null) {
         errorMsgArray.push('查無優惠卷');
-      }
-      // 如果有錯誤訊息有返回400
-      if (errorMsgArray.length > 0) {
-        return next(appError(400, errorMsgArray.join(";"), next));
+        return next(appError(400, '查無優惠卷', next));
       }
 
-      return handleSuccess(res, "修改成功", null);
+      return handleSuccess(res, "優惠碼活動修改成功", null);
     }
   ),
   softDeleteCoupons: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
       const { couponNo } = req.params;
 
-      const errorMsgArray: string[] = []
-
       if (!couponNo) {
-        errorMsgArray.push('優惠卷不得為空');
-      }
-
-      // 如果有錯誤訊息有返回400
-      if (errorMsgArray.length > 0) {
-        return next(appError(400, errorMsgArray.join(";"), next));
+        return next(appError(400, '優惠卷不得為空', next));
       }
 
       const updatedObj = await CouponModel.findOneAndUpdate(
@@ -160,14 +178,10 @@ export const coupons = {
         }
       );
       if (updatedObj === null) {
-        errorMsgArray.push('查無優惠券');
-      }
-      // 如果有錯誤訊息有返回400
-      if (errorMsgArray.length > 0) {
-        return next(appError(400, errorMsgArray.join(";"), next));
+        return next(appError(400, '查無優惠券', next));
       }
 
-      return handleSuccess(res, Message.RESULT_SUCCESS, updatedObj);
+      return handleSuccess(res, "優惠活動刪除成功", null);
     }
   )
 };
