@@ -47,7 +47,7 @@ app.use("/v1", reportsRouter);
 app.use("/v1/", indexRouter);
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'https://love-in-no-words-front-end.onrender.com/index.html'));
+  res.sendFile(path.join(__dirname, 'https://front-love-static.onrender.com/index.html'));
 });
 // 404 錯誤
 app.use(notFound);
