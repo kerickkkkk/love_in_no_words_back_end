@@ -45,6 +45,10 @@ app.use("/v1/coupons", couponsRouter);
 app.use("/v1", reportsRouter);
 // socket 方式 暫時寫在 indexRouter之後要拿掉
 app.use("/v1/", indexRouter);
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'https://love-in-no-words-front-end.onrender.com/index.html'));
+});
 // 404 錯誤
 app.use(notFound);
 
