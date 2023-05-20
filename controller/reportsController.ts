@@ -258,7 +258,56 @@ export const report = {
           to: `${sendEmail}`,
           subject: `${sheetType}`,
           text: "報表",
-          html: `<b>${sheetType}-${combinedDateTimeString()}.xlsx</b>`,
+          html: `
+          <!DOCTYPE html>
+            <html>
+            <head>
+              <style>
+                /* 添加樣式以提高電子郵件的外觀 */
+                body {
+                  font-family: Arial, sans-serif;
+                  margin: 0;
+                  padding: 0;
+                }
+                .header {
+                  background-color: #f5f5f5;
+                  padding: 20px;
+                }
+                .content {
+                  padding: 20px;
+                }
+                .footer {
+                  background-color: #f5f5f5;
+                  padding: 20px;
+                  text-align: center;
+                }
+              </style>
+            </head>
+            <body>
+              <div class="header">
+                <h2>傲嬌甜點電商 - 報表</h2>
+              </div>
+              
+              <div class="content">
+                <p>親愛的客戶，</p>
+                
+                <p>以下是傲嬌甜點電商的最新報表：</p>
+                
+                <b>${sheetType}-${combinedDateTimeString()}.xlsx</b>
+                <p>感謝您對我們甜點電商的支持！如有任何問題或需要進一步的資訊，請隨時聯繫我們。</p>
+                
+                <p>謹上</p>
+                <p>傲嬌甜點電商團隊</p>
+              </div>
+              
+              <div class="footer">
+                <p>如需協助，請聯繫我們：<br>
+                電子郵件：loveinnowords@gmail.com<br>
+                電話：123-456-7890</p>
+              </div>
+            </body>
+            </html>
+          `,
           attachments: [
             {
               filename: `${sheetType}-${combinedDateTimeString()}.xlsx`,
