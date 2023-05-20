@@ -158,7 +158,7 @@ export const orders = {
 
       if (couponObj !== null) {
         const originalPrice = totalPrice
-        totalPrice = Math.round(totalPrice * (100 - Number(couponObj.discount)) * 100 / 10000)
+        totalPrice = Math.round(totalPrice * (Number(couponObj.discount)) / 100)
         result.couponNo = couponNo
         result.couponName = couponObj.couponName
         result.discount = originalPrice - totalPrice
