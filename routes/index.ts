@@ -3,7 +3,8 @@ import express from "express";
 const router = express.Router();
 /* GET home page. */
 router.get("/", (req: Request, res: Response): void => {
-  res.render("index", { title: "歡迎來到傲嬌甜點店" });
+  // res.render("index", { title: "歡迎來到傲嬌甜點店" });
+  res.json({ title: "歡迎來到傲嬌甜點店" });
 });
 
 router.get("/socket", (req: Request, res: Response): void => {
