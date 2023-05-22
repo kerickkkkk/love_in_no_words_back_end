@@ -1,15 +1,21 @@
 import { Request, Response, NextFunction } from "express";
-import dayjs, { combinedDateTimeString } from "../utils/dayjs"
+import dayjs, { combinedDateTimeString } from "../utils/dayjs";
 import validator from "validator";
-import XLSX from "xlsx"
-import nodemailer from "nodemailer"
+import XLSX from "xlsx";
+import nodemailer from "nodemailer";
 import handleErrorAsync from "../service/handleErrorAsync";
 import appError from "../service/appError";
 import handleSuccess from "../service/handleSuccess";
 import OrderModel from "../models/orderModel";
 import { User } from "../models/userModel";
-import { Meta } from "../types/Pagination"
-
+import { Meta } from "../types/Pagination";
+import { Message } from "../constants/messages";
+import { isEffectVal } from "../utils/common";
+import fs from "fs";
+import * as path from "path";
+import firebaseAdmin from "../service/firebase";
+import { v4 as uuidv4 } from "uuid";
+import { GetSignedUrlConfig } from "@google-cloud/storage";
 interface RequestQuery {
   year?: number;
   month?: number;
@@ -23,31 +29,31 @@ const getRevenueData = async (year: number) => {
     isDeleted: false,
     createdAt: {
       $gte: new Date(`${year}-01-01T00:00:00.000Z`),
-      $lte: new Date(`${year}-12-31T23:59:59.999Z`)
-    }
+      $lte: new Date(`${year}-12-31T23:59:59.999Z`),
+    },
   })
     .populate({
       path: "orderDetail",
-      select: "totalPrice"
-    }).sort({ createdAt: 1 });
+      select: "totalPrice",
+    })
+    .sort({ createdAt: 1 });
 
   const tempData = orders.reduce((prev: any, next: any) => {
-    const currentMonth = dayjs(next.createdAt).month() + 1
+    const currentMonth = dayjs(next.createdAt).month() + 1;
     if (prev[currentMonth] === undefined) {
-      prev[currentMonth] = 0
+      prev[currentMonth] = 0;
     }
-    prev[currentMonth] += next.orderDetail.totalPrice
-    return prev
-  }, {})
-  const data = Object.entries(tempData)
-    .map(item => {
-      return {
-        month: Number(item[0]),
-        monthTotal: item[1]
-      }
-    })
+    prev[currentMonth] += next.orderDetail.totalPrice;
+    return prev;
+  }, {});
+  const data = Object.entries(tempData).map((item) => {
+    return {
+      month: Number(item[0]),
+      monthTotal: item[1],
+    };
+  });
   return data;
-}
+};
 
 const getSellQuantityData = async (year: number) => {
   const orders = await OrderModel.find({
@@ -55,13 +61,14 @@ const getSellQuantityData = async (year: number) => {
     isDeleted: false,
     createdAt: {
       $gte: new Date(`${year}-01-01T00:00:00.000Z`),
-      $lte: new Date(`${year}-12-31T23:59:59.999Z`)
-    }
+      $lte: new Date(`${year}-12-31T23:59:59.999Z`),
+    },
   })
     .populate({
       path: "orderDetail",
-      select: "orderList"
-    }).sort({ createdAt: 1 });
+      select: "orderList",
+    })
+    .sort({ createdAt: 1 });
 
   const tempData = orders.reduce((prev: any, next: any) => {
     next.orderDetail.orderList.forEach((orderItem: any) => {
@@ -69,16 +76,16 @@ const getSellQuantityData = async (year: number) => {
         prev[orderItem.productNo] = {
           productNo: orderItem.productNo,
           productName: orderItem.productName,
-          amount: 0
-        }
+          amount: 0,
+        };
       }
-      prev[orderItem.productNo].amount += orderItem.qty
-    })
-    return prev
-  }, {})
-  const data = Object.values(tempData)
-  return data
-}
+      prev[orderItem.productNo].amount += orderItem.qty;
+    });
+    return prev;
+  }, {});
+  const data = Object.values(tempData);
+  return data;
+};
 
 const getOrderQuantityData = async (year: number) => {
   const orders = await OrderModel.find({
@@ -86,35 +93,33 @@ const getOrderQuantityData = async (year: number) => {
     isDeleted: false,
     createdAt: {
       $gte: new Date(`${year}-01-01T00:00:00.000Z`),
-      $lte: new Date(`${year}-12-31T23:59:59.999Z`)
-    }
+      $lte: new Date(`${year}-12-31T23:59:59.999Z`),
+    },
   }).sort({ createdAt: 1 });
 
   const tempData = orders.reduce((prev: any, next: any) => {
-    const currentMonth = dayjs(next.createdAt).month() + 1
+    const currentMonth = dayjs(next.createdAt).month() + 1;
     if (prev[currentMonth] === undefined) {
-      prev[currentMonth] = 0
+      prev[currentMonth] = 0;
     }
-    prev[currentMonth] += 1
-    return prev
-  }, {})
+    prev[currentMonth] += 1;
+    return prev;
+  }, {});
 
-  const data = Object.entries(tempData)
-    .map(item => {
-      return {
-        month: Number(item[0]),
-        orderNumber: item[1]
-      }
-    })
-  return data
-}
+  const data = Object.entries(tempData).map((item) => {
+    return {
+      month: Number(item[0]),
+      orderNumber: item[1],
+    };
+  });
+  return data;
+};
 export const report = {
   // O-5-1 獲取賣出數量資料
   getRevenue: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
-
-      const year = req.query.year || dayjs().year()
-      const data = await getRevenueData(year)
+      const year = req.query.year || dayjs().year();
+      const data = await getRevenueData(year);
 
       handleSuccess(res, "成功", data);
     }
@@ -123,8 +128,8 @@ export const report = {
   getSellQuantity: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
       // 預設獲取當年度
-      const year = req.query.year || dayjs().year()
-      const data = await getSellQuantityData(year)
+      const year = req.query.year || dayjs().year();
+      const data = await getSellQuantityData(year);
       handleSuccess(res, "成功", data);
     }
   ),
@@ -132,8 +137,8 @@ export const report = {
   getOrderQuantity: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
       // 預設獲取當年度
-      const year = req.query.year || dayjs().year()
-      const data = await getOrderQuantityData(year)
+      const year = req.query.year || dayjs().year();
+      const data = await getOrderQuantityData(year);
       handleSuccess(res, "成功", data);
     }
   ),
@@ -141,10 +146,12 @@ export const report = {
   // O-5-4 寄送報表
   sendReport: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
-
-      const reportType = Number(req.params.reportType)
-      const { email } = req.query
-      if (reportType && !validator.isInt(reportType?.toString(), { min: 1, max: 3 })) {
+      const reportType = Number(req.params.reportType);
+      const { email } = req.query;
+      if (
+        reportType &&
+        !validator.isInt(reportType?.toString(), { min: 1, max: 3 })
+      ) {
         return next(appError(400, "無該報表種類", next));
       }
 
@@ -152,8 +159,8 @@ export const report = {
       const ownersObj = await User.find({
         titleNo: 1,
         isDisabled: false,
-        isDeleted: false
-      })
+        isDeleted: false,
+      });
 
       if (ownersObj === null) {
         return next(appError(400, "查無店長，請新增店長。", next));
@@ -166,11 +173,13 @@ export const report = {
         }
       } else {
         // 收集 email 驗證失敗的身份
-        const noPassList = ownersObj.filter((user) => (!user.email || !validator.isEmail(user.email)))
+        const noPassList = ownersObj
+          .filter((user) => !user.email || !validator.isEmail(user.email))
           ?.reduce((acc, cur) => {
-            acc.push(cur.number)
-            return acc
-          }, [] as any).join(';')
+            acc.push(cur.number);
+            return acc;
+          }, [] as any)
+          .join(";");
 
         if (noPassList !== "") {
           return next(appError(400, `編號: ${noPassList};信箱有誤。`, next));
@@ -178,42 +187,42 @@ export const report = {
       }
 
       // 預設獲取當年度
-      const year = req.query.year || dayjs().year()
-      let data = null
+      const year = req.query.year || dayjs().year();
+      let data = null;
       switch (reportType) {
         case 1:
-          data = await getRevenueData(year)
+          data = await getRevenueData(year);
           break;
         case 2:
-          data = await getSellQuantityData(year)
-          break
+          data = await getSellQuantityData(year);
+          break;
         case 3:
-          data = await getOrderQuantityData(year)
-          break
+          data = await getOrderQuantityData(year);
+          break;
         default:
           return next(appError(400, "無該報表種類", next));
       }
 
       const worksheet = XLSX.utils.json_to_sheet(data);
       // 設定表頭
-      let sheetType = ""
+      let sheetType = "";
       switch (reportType) {
         case 1:
-          worksheet['A1'] = { t: 's', v: '月' };
-          worksheet['B1'] = { t: 's', v: '月營收' };
-          sheetType = "營收資料"
+          worksheet["A1"] = { t: "s", v: "月" };
+          worksheet["B1"] = { t: "s", v: "月營收" };
+          sheetType = "營收資料";
           break;
         case 2:
-          worksheet['A1'] = { t: 's', v: '產品編碼' };
-          worksheet['B1'] = { t: 's', v: '產品名稱' };
-          worksheet['C1'] = { t: 's', v: '數量' };
-          sheetType = "賣出數量"
-          break
+          worksheet["A1"] = { t: "s", v: "產品編碼" };
+          worksheet["B1"] = { t: "s", v: "產品名稱" };
+          worksheet["C1"] = { t: "s", v: "數量" };
+          sheetType = "賣出數量";
+          break;
         case 3:
-          worksheet['A1'] = { t: 's', v: '月' };
-          worksheet['B1'] = { t: 's', v: '訂單數' };
-          sheetType = "訂單筆數"
-          break
+          worksheet["A1"] = { t: "s", v: "月" };
+          worksheet["B1"] = { t: "s", v: "訂單數" };
+          sheetType = "訂單筆數";
+          break;
         default:
           return next(appError(400, "請輸入正確的報表編號", next));
       }
@@ -222,15 +231,13 @@ export const report = {
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, `${sheetType}`);
 
-
-
       // 本地可以打開看寫入本地
       // XLSX.writeFile(workbook, `${sheetType}-${combinedDateTimeString()}.xlsx`);
 
-      const buffer = XLSX.write(workbook, { type: 'buffer' });
+      const buffer = XLSX.write(workbook, { type: "buffer" });
 
       const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
+        host: "smtp.gmail.com",
         port: 465,
         secure: true,
         auth: {
@@ -240,16 +247,18 @@ export const report = {
           clientSecret: process.env.CLINENTSECRET,
           refreshToken: process.env.REFRESHTOKEN,
           accessToken: process.env.ACCESSTOKEN,
-        }
+        },
       });
-      let sendEmail = ''
+      let sendEmail = "";
       if (email) {
-        sendEmail = email
+        sendEmail = email;
       } else {
-        sendEmail = ownersObj.reduce((acc, cur) => {
-          acc.push(cur.email)
-          return acc
-        }, [] as any).join(', ')
+        sendEmail = ownersObj
+          .reduce((acc, cur) => {
+            acc.push(cur.email);
+            return acc;
+          }, [] as any)
+          .join(", ");
       }
       // 送完後沒有被捕捉 在寫一層
       try {
@@ -314,7 +323,7 @@ export const report = {
               content: buffer,
             },
           ],
-        })
+        });
         return handleSuccess(res, "報表寄送成功", null);
       } catch (error) {
         return next(appError(400, "寄送失敗，請確定信箱是否正確", next));
@@ -322,10 +331,13 @@ export const report = {
     }
   ),
 
-  // O-5-5 條件搜尋訂單資訊 
+  // O-5-5 條件搜尋訂單資訊
   getOrderInformation: handleErrorAsync(
-    async (req: Request<any, any, any, RequestQuery>, res: Response, next: NextFunction) => {
-
+    async (
+      req: Request<any, any, any, RequestQuery>,
+      res: Response,
+      next: NextFunction
+    ) => {
       const { query } = req;
       const year = Number(query.year) || dayjs().year();
       const month = Number(query.month) || dayjs().month() + 1;
@@ -334,7 +346,7 @@ export const report = {
 
       // 使用 dayjs 建立起始日期和結束日期物件
       const startOfMonth = dayjs(`${year}-${month}-01`).toDate(); // 設定月初日期
-      const endOfMonth = dayjs(`${year}-${month}-01`).endOf('month').toDate(); // 設定月底日期
+      const endOfMonth = dayjs(`${year}-${month}-01`).endOf("month").toDate(); // 設定月底日期
       // isInt 第一個參數要字串
       if (perPage && !validator.isInt(perPage?.toString(), { min: 1 })) {
         return next(appError(400, "單頁筆數請以正整數輸入", next));
@@ -356,8 +368,8 @@ export const report = {
           isDeleted: false,
           createdAt: {
             $gte: startOfMonth,
-            $lte: endOfMonth
-          }
+            $lte: endOfMonth,
+          },
         }),
         OrderModel.aggregate([
           {
@@ -366,36 +378,36 @@ export const report = {
               isDeleted: false,
               createdAt: {
                 $gte: startOfMonth,
-                $lte: endOfMonth
-              }
-            }
+                $lte: endOfMonth,
+              },
+            },
           },
           {
-            $skip: skip
+            $skip: skip,
           },
           {
-            $limit: perPage
+            $limit: perPage,
           },
           {
             $lookup: {
               from: "orderDetail",
               localField: "orderDetail",
               foreignField: "_id",
-              as: "orderDetail"
-            }
+              as: "orderDetail",
+            },
           },
           {
-            $unwind: "$orderDetail"
+            $unwind: "$orderDetail",
           },
           {
             $addFields: {
               createdAtFormatted: {
                 $dateToString: {
                   format: "%Y-%m-%d %H:%M:%S",
-                  date: "$createdAt"
-                }
-              }
-            }
+                  date: "$createdAt",
+                },
+              },
+            },
           },
           {
             $project: {
@@ -403,12 +415,12 @@ export const report = {
               orderNo: 1,
               createdAt: "$createdAtFormatted",
               totalPrice: "$orderDetail.totalPrice",
-            }
+            },
           },
           {
-            $sort: { createdAt: 1 }
-          }
-        ])
+            $sort: { createdAt: 1 },
+          },
+        ]),
       ]);
 
       if (total > 0) {
@@ -416,10 +428,8 @@ export const report = {
         const nextPage = currentPage == lastPage ? null : currentPage + 1;
         const prevPage = currentPage == 1 ? null : currentPage - 1;
         const from = (currentPage - 1) * 10 + 1;
-        const to = currentPage * perPage > total
-          ? total
-          : currentPage * perPage;
-
+        const to =
+          currentPage * perPage > total ? total : currentPage * perPage;
 
         if (lastPage < currentPage) {
           return next(appError(400, "超出分頁上限", next));
@@ -435,18 +445,188 @@ export const report = {
             prevPage,
             from,
             to,
-          }
-        }
+          },
+        };
         return handleSuccess(res, "成功", {
           data: orders,
-          meta
+          meta,
         });
       } else {
         return next(appError(400, "無該月份資料", next));
       }
     }
   ),
+  // O-5-6 訂單資訊下載API
+  downloadReports: handleErrorAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+      let { month, dataAmount } = req.query;
+      const errorMsgArray = [];
+      if (!isEffectVal(month) || Number.isNaN(Number(month))) {
+        errorMsgArray.push(Message.NEED_POSITIVE_PAGE);
+      }
+      if (!isEffectVal(dataAmount) || Number.isNaN(Number(dataAmount))) {
+        errorMsgArray.push(Message.MONTH_DATA_NOT_FOUND);
+      }
+      // 如果有錯誤訊息有返回400
+      if (errorMsgArray.length > 0) {
+        return next(appError(400, errorMsgArray.join(";"), next));
+      }
 
+      // 生成Excel文件
+      const startOfMonth = dayjs(
+        `${dayjs().year()}-${Number(month)}-01`
+      ).toDate(); // 設定月初日期
+      const endOfMonth = dayjs(`${dayjs().year()}-${Number(month)}-01`)
+        .endOf("month")
+        .toDate(); // 設定月底日期
+
+      const workbook = XLSX.utils.book_new();
+      const orders = await OrderModel.aggregate([
+        {
+          $match: {
+            orderStatus: "已結帳",
+            isDeleted: false,
+            createdAt: {
+              $gte: startOfMonth,
+              $lte: endOfMonth,
+            },
+          },
+        },
+
+        {
+          $limit: Number(dataAmount),
+        },
+        {
+          $lookup: {
+            from: "orderDetail",
+            localField: "orderDetail",
+            foreignField: "_id",
+            as: "orderDetail",
+          },
+        },
+        {
+          $unwind: "$orderDetail",
+        },
+        {
+          $addFields: {
+            createdAtFormatted: {
+              $dateToString: {
+                format: "%Y-%m-%d %H:%M:%S",
+                date: "$createdAt",
+                timezone: "+08:00",
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            orderNo: 1,
+            totalPrice: "$orderDetail.totalPrice",
+            createdAt: "$createdAtFormatted",
+          },
+        },
+        {
+          $sort: { createdAt: 1 },
+        },
+      ]);
+      // 增加項次
+      const data = orders.map((element, index) => {
+        const itemNo = index + 1;
+        return { itemNo, ...element };
+      });
+
+      const worksheet = XLSX.utils.json_to_sheet(data);
+
+      var wscols = [{ wch: 6 }, { wch: 15 }, { wch: 10 }, { wch: 20 }];
+
+      worksheet["!cols"] = wscols;
+
+      worksheet["A1"] = { t: "s", v: "項次" };
+      worksheet["B1"] = { t: "s", v: "訂單編號" };
+      worksheet["C1"] = { t: "s", v: "價錢" };
+      worksheet["D1"] = { t: "s", v: "時間" };
+
+      XLSX.utils.book_append_sheet(workbook, worksheet, "營收資料");
+      // 儲存在本地方法
+      const fileName = dayjs().format("YYYY年") + month + "月營收報表.xlsx";
+
+      const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
+
+      // 將Excel文件作為附件下載
+      const encodedFileName = encodeURIComponent(fileName);
+
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename*=UTF-8\'\'${encodedFileName}`
+      );
+      res.setHeader(
+        "Content-Type",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      );
+      res.send(buffer);
+      // 要用URL打打看 postman會不能改名稱
+      // http://localhost:3000/v1/reports/admin/orders/download?month=6&dataAmount=100
+      // 以下sendFile方法只能用在儲存在本地的檔案夾的時候
+      // res.sendFile(path.join(__dirname, "..", "temp", fileName), (err) => {
+      //   if (err) {
+      //     return next(appError(400, Message.FILE_DOWNLOAD_FAIL, next));
+      //   }
+      //   // 下載完成後刪除Excel文件
+      //   fs.unlinkSync(path.join(__dirname, "..", "temp", fileName));
+      // });
+      // res.sendFile(buffer, (err) => {
+      //   if (err) {
+      //     return next(appError(400, Message.FILE_DOWNLOAD_FAIL, next));
+      //   }
+      //   // 下載完成後刪除Excel文件
+      //   fs.unlinkSync(path.join(__dirname, "..", "temp", fileName));
+      // });
+
+      // 以下是把檔案放到firebase的方法
+      // const excelData = XLSX.write(workbook, {
+      //   type: "buffer",
+      //   bookType: "xlsx",
+      // });
+
+      // // 上傳 Excel 檔案到 Firebase 雲端儲存體
+      // const bucket = firebaseAdmin.storage().bucket();
+      // const filename = "orderReport_" + dayjs().format("YYYY-MM-DD");
+      // // 檔案路徑
+      // const filePath = `reports/${filename}.xlsx`;
+      // const file = bucket.file(filePath);
+
+      // file
+      //   .save(excelData, {
+      //     contentType:
+      //       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      //   })
+      //   .then(() => {
+      //     console.log("Excel 檔案上傳成功");
+      //   })
+      //   .catch((error) => {
+      //     console.error("上傳失敗:", error);
+      //   });
+
+      // // 取得具有限時有效性的下載網址
+      // const options = {
+      //   action: "read",
+      //   expires: Date.now() + 24 * 60 * 60 * 1000, // 有效期限，此處為一天
+      // };
+      // let downloadUrl: string = "";
+      // await bucket
+      //   .file(filePath)
+      //   .getSignedUrl(options as GetSignedUrlConfig)
+      //   .then((urls) => {
+      //     downloadUrl = urls[0];
+      //   })
+      //   .catch((error) => {
+      //     console.error("獲取下載網址失敗:", error);
+      //   });
+
+      // handleSuccess(res, "成功", { reportUrl: downloadUrl });
+    }
+  ),
 };
 
 export default report;

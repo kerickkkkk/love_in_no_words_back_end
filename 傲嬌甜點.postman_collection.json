@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "69b7453f-b1fc-46d7-b17b-ca4b897453bf",
+		"_postman_id": "21953a3c-ba0f-4173-afb9-07201b4bc617",
 		"name": "傲嬌甜點",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "6878038"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -1929,6 +1928,61 @@
 								},
 								{
 									"key": "number",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "O-5-6 訂單資訊下載",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"month\": 6,\r\n\t\"dataAmount\" : 100\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/reports/admin/orders/download?month=6&dataAmount=100",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"reports",
+								"admin",
+								"orders",
+								"download"
+							],
+							"query": [
+								{
+									"key": "month",
+									"value": "6"
+								},
+								{
+									"key": "dataAmount",
 									"value": "100"
 								}
 							]
