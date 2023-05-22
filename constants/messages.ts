@@ -26,6 +26,7 @@ export enum Message {
   NEED_CORRECT_STATUS = "請輸入正確狀態",
   NEED_PHOTO_URL = "請輸入圖片網址",
   NEED_POSITIVE_PAGE = "單頁筆數請以正整數輸入",
+  NEED_EMAIL = "請輸入正確email格式",
   // API返回內容錯誤訊息
   PAGE_NEED_IN_NUMBER = "頁碼請以數字輸入",
   PAGE_NOT_FOUND = "查無此頁碼",

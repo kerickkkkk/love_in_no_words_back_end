@@ -271,7 +271,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\r\n    \"name\": \"註冊店員\",\r\n    \"phone\": \"0975026599\",\r\n    \"titleNo\": \"2\",\r\n    \"isDisabled\" : false,\r\n    \"password\": \"12345678\"\r\n\r\n}",
+							"raw": "{\r\n\r\n    \"name\": \"註冊店員\",\r\n    \"phone\": \"0975026599\",\r\n    \"titleNo\": \"1\",\r\n    \"email\":\"a468223@gmail.com\",\r\n    \"isDisabled\" : false,\r\n    \"password\": \"12345678\"\r\n\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
