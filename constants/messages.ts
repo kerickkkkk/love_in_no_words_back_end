@@ -25,6 +25,8 @@ export enum Message {
   NEED_PRICE_UPPERLIMIT_LARGER_LOWERLIMIT = "價格區間上限不可小於價格區間下限",
   NEED_CORRECT_STATUS = "請輸入正確狀態",
   NEED_PHOTO_URL = "請輸入圖片網址",
+  NEED_POSITIVE_PAGE = "單頁筆數請以正整數輸入",
+  NEED_EMAIL = "請輸入正確email格式",
   // API返回內容錯誤訊息
   PAGE_NEED_IN_NUMBER = "頁碼請以數字輸入",
   PAGE_NOT_FOUND = "查無此頁碼",
@@ -41,7 +43,8 @@ export enum Message {
   SAME_PRODUCT_NAME = "有相同產品名稱",
   PHOTOURL_SOURCE_ERROR = "圖片來源網址錯誤",
   PRODUCTNO_NOT_FOUND = "無該商品編號",
-
+  MONTH_DATA_NOT_FOUND = "無該月份資料",
+  FILE_DOWNLOAD_FAIL = "檔案下載失敗",
   // API結果
   RESULT_SUCCESS = "成功",
   CREATE_SUCCESS = "新增成功",

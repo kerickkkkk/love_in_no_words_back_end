@@ -70,6 +70,7 @@ export const users = {
           number,
           name,
           phone,
+          email,
           titleNo,
           title,
           createdAt,
@@ -81,6 +82,7 @@ export const users = {
             number,
             name,
             phone,
+            email,
             titleNo,
             title,
             createdAt: transferDate,
@@ -154,7 +156,7 @@ export const users = {
   creatUser: handleErrorAsync(
     async (req: Request, res: Response, next: NextFunction) => {
       // 姓名 電話 職位 密碼
-      const { name, phone, titleNo, isDisabled, password } = req.body;
+      const { name, phone, email, titleNo, isDisabled, password } = req.body;
       // title
       const titleMap: string[] = ["", "店長", "店員", "廚師", "會員"];
 
@@ -166,6 +168,13 @@ export const users = {
       if (!isEffectVal(phone) || !validator.isMobilePhone(phone, "zh-TW")) {
         errorMsgArray.push(Message.NEED_INPUT_PHONE);
       }
+
+      if (titleNo == 1) {
+        if (!isEffectVal(email) || !validator.isEmail(email)) {
+          errorMsgArray.push(Message.NEED_EMAIL);
+        }
+      }
+
       // 如果不是會員的職位代號的話需要驗證密碼
       if (titleNo != 4) {
         if (!password || !validator.isLength(password, { min: 8 })) {
@@ -209,22 +218,35 @@ export const users = {
           : await autoIncrement(Member, "B");
 
       // 職位代號不是4的話，在user collection新增，如果是4表示是會員，在member collection新增
-      if (titleNo != 4) {
+      if (titleNo == 1) {
         // 加密
         const bcryptPassword = await bcrypt.hash(password, 12);
         await User.create({
           name,
           phone,
+          email,
           password: bcryptPassword,
           titleNo,
           title,
           isDisabled,
           number: autoIncrementIndex,
         });
-      } else {
+      } else if (titleNo == 4) {
         await Member.create({
           name,
           phone,
+          titleNo,
+          title,
+          isDisabled,
+          number: autoIncrementIndex,
+        });
+      } else {
+        // 加密
+        const bcryptPassword = await bcrypt.hash(password, 12);
+        await User.create({
+          name,
+          phone,
+          password: bcryptPassword,
           titleNo,
           title,
           isDisabled,
@@ -238,7 +260,7 @@ export const users = {
   updateUser: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
       // 姓名 電話 職位 密碼
-      const { name, phone, titleNo, isDisabled, password } = req.body;
+      const { name, phone, email, titleNo, isDisabled, password } = req.body;
 
       const userId: string = req.params.id;
       let hasRightUser = null;
@@ -274,6 +296,13 @@ export const users = {
       if (!isEffectVal(phone) || !validator.isMobilePhone(phone, "zh-TW")) {
         errorMsgArray.push(Message.NEED_INPUT_PHONE);
       }
+
+      if (titleNo == 1) {
+        if (!isEffectVal(email) || !validator.isEmail(email)) {
+          errorMsgArray.push(Message.NEED_EMAIL);
+        }
+      }
+
       // 如果不是會員的職位代號的話需要驗證密碼
       if (titleNo != 4) {
         if (
@@ -327,6 +356,7 @@ export const users = {
       interface IUserParam {
         name: string;
         phone: string;
+        email?: string;
         password?: string;
         titleNo: number;
         title: string;
@@ -336,7 +366,7 @@ export const users = {
 
       const title = titleMap[titleNo];
 
-      const params: IUserParam = {
+      let params: IUserParam = {
         name,
         phone,
         titleNo,
@@ -344,6 +374,9 @@ export const users = {
         isDisabled,
         revisedAt: isoDate(),
       };
+      if (titleNo == 1) {
+        params.email = email;
+      }
 
       // 職位代號不是4的話，在user collection新增，如果是4表示是會員，在member collection更新
       if (titleNo != 4) {
