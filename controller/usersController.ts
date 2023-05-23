@@ -445,14 +445,11 @@ export const users = {
   signUp: handleErrorAsync(
     async (req: Request, res: Response, next: NextFunction) => {
       // 姓名 電話 職位(預設給 4 ) 密碼
-      const { name, phone, titleNo, password, confirmPassword, isDisabled } =
+      const { name, phone, email, password, confirmPassword, isDisabled } =
         req.body;
 
-      // title
-      const titleMap: string[] = ["", "店長", "店員", "廚師", "會員"];
-
       // 驗證
-      if (!name || !phone || !password || !confirmPassword) {
+      if (!name || !phone || !password || !confirmPassword || !email) {
         return next(appError(400, "欄位不可為空", next));
       }
 
@@ -468,13 +465,13 @@ export const users = {
         return next(appError(400, "電話長度需大於 8 碼", next));
       }
 
-      if (!validator.isInt(titleNo.toString(), { min: 1, max: 4 })) {
-        return next(appError(400, "職位有誤", next));
-      }
-
-      const hasSamePhone = await User.findOne({ phone });
+      const hasSamePhone = await User.findOne({ phone, isDeleted: false });
       if (hasSamePhone !== null) {
         return next(appError(400, "電話重複", next));
+      }
+
+      if (!isEffectVal(email) || !validator.isEmail(email)) {
+        return next(appError(400, Message.NEED_EMAIL, next));
       }
       let revisedAt: null | string = null;
       if (isDisabled) {
@@ -482,7 +479,7 @@ export const users = {
       } else {
         revisedAt = null;
       }
-      const title = titleMap[titleNo];
+
       // 加密
       const bcryptPassword = await bcrypt.hash(password, 12);
       const autoIncrementIndex = await autoIncrement(User, "A");
@@ -491,8 +488,9 @@ export const users = {
         name,
         phone,
         password: bcryptPassword,
-        titleNo,
-        title,
+        email,
+        titleNo: 1,
+        title: "店長",
         isDisabled,
         revisedAt,
         number: autoIncrementIndex,
