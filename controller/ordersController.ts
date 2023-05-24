@@ -7,7 +7,59 @@ import ProductManagementModel from '../models/productManagementModel';
 import Order from "../models/orderModel";
 import CouponModel from "../models/couponModel"
 import OrderDetail from "../models/orderDetailModel";
+import AbCouponModel from "../models/abCouponModel";
 import { combinedDateTimeString, period } from "../utils/dayjs"
+
+/*
+  a 必須為 qty 比較多的陣列
+  
+*/
+const data = {
+  'B000000002-2': [{ productNo: 2, price: 200, qty: 5 }, { productNo: 4, price: 50, qty: 5 }],
+  'B000000002-3': [
+    { productNo: 5, price: 100, qty: 10 },
+    { productNo: 6, price: 50, qty: 15 }
+  ]
+};
+
+function calculateTotalPrice(a: any, b: any, discount: number) {
+  let totalPrice = 0;
+
+  const qtyA = a.reduce((total: number, item: any) => total + item.qty, 0);
+  const qtyB = b.reduce((total: number, item: any) => total + item.qty, 0);
+
+  // 判斷哪個陣列的 qty 總數更長，並將其設為 a，另一個陣列設為 b。
+  if (qtyA < qtyB) {
+    [a, b] = [b, a];
+  }
+
+  for (let i = 0; i < a.length; i++) {
+    let remainingQty = a[i].qty;
+
+    for (let j = 0; j < b.length && remainingQty > 0; j++) {
+      if (b[j].qty === 0) {
+        continue;
+      }
+
+      const matchedQty = Math.min(remainingQty, b[j].qty);
+      const minPrice = Math.min(a[i].price, b[j].price);
+
+      const subtotal = minPrice * matchedQty;
+      totalPrice += subtotal;
+
+      remainingQty -= matchedQty;
+      b[j].qty -= matchedQty;
+
+      if (remainingQty === 0) {
+        break;
+      }
+    }
+  }
+
+  const discountedPrice = Math.ceil(totalPrice * (100 - discount) / 100);
+  return discountedPrice;
+}
+
 export const orders = {
   handleOrder: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
@@ -136,14 +188,90 @@ export const orders = {
       // 商品內優惠活動 (未計算)
 
       // 訂單優惠碼
+      const selectedProductTypes = await AbCouponModel
+        .find({ isDeleted: false })
+        .populate({
+          path: "productsTypeA",
+          select: "productsType productsTypeName"
+        })
+        .populate({
+          path: "productsTypeB",
+          select: "productsType productsTypeName"
+        })
+        .sort({ couponNo: 1 });
+      // ab 分類與 折扣
+      const productsTypeInAbCoupon = selectedProductTypes.reduce((prev: any, next: any) => {
+        prev[next.productsTypeA.productsType] = {
+          productsType: next.productsTypeA.productsType,
+          productsTypeName: next.productsTypeA.productsTypeName,
+          couponNo: next.couponNo,
+          couponName: next.couponName,
+          discount: next.discount
+        }
+
+        prev[next.productsTypeB.productsType] = {
+          productsType: next.productsTypeB.productsType,
+          productsTypeName: next.productsTypeB.productsTypeName,
+          couponNo: next.couponNo,
+          couponName: next.couponName,
+          discount: next.discount
+        }
+        return prev
+      }, {})
+      // 不同 Ａ+Ｂ 可能折扣不同
+      /*
+        {
+          'B000000001' : {
+            '1':[ { productNo: 1, price: 100, qty: 10 } ],
+            2': [
+              { productNo: 4, price: 100, qty: 10 },
+              { productNo: 2, price: 50, qty: 10 }
+            ]
+          }
+        }
+      */
+      const abMinus: any = {}
       const products = tempProducts.reduce((prev: any[], next, index) => {
         const { qty, note } = inputProducts[index]
-        const product = {
+        const product: any = {
           ...next,
           qty,
           note,
           subTotal: next.price * qty
         }
+        // 計算要再回扣的Ａ＋Ｂ的錢
+
+        // 使用的 couponName true 則塞入 符合 A ＋ Ｂ
+        if (productsTypeInAbCoupon[next.productsType.productsType] !== undefined) {
+          const tempItem = productsTypeInAbCoupon[next.productsType.productsType]
+
+          // 符合規則就在商品加上 couponName , 
+          product.couponNo = tempItem.couponNo
+          product.couponName = tempItem.couponName
+          product.discount = tempItem.discount
+          if (abMinus[product.couponNo] === undefined) {
+            abMinus[product.couponNo] = {}
+          }
+          // 整理出要 abCoupon
+          if (abMinus[product.couponNo][next.productsType.productsType] === undefined) {
+            abMinus[product.couponNo][next.productsType.productsType] = [{
+              productNo: next.productNo,
+              price: next.price,
+              discount: product.discount,
+              qty
+            }]
+          } else {
+            const targetLength = abMinus[product.couponNo][next.productsType.productsType].length
+            // 依照大到小排列
+            const method = abMinus[product.couponNo][next.productsType.productsType][targetLength - 1].price < next.price ? 'unshift' : 'push'
+            abMinus[product.couponNo][next.productsType.productsType][method]({
+              productNo: next.productNo,
+              price: next.price,
+              qty
+            })
+          }
+        }
+
         totalTime += next.productionTime * qty
         totalPrice += next.price * qty
         prev.push(product)
@@ -154,6 +282,30 @@ export const orders = {
         orderList: products,
         totalTime,
         totalPrice
+      }
+      // 扣回多的優惠
+      // a + b
+      // 取出兩個內容以陣列短的因為有符合數量 且排序由高到低 再乘以折扣數
+      // 取出要計算的組別
+      /*
+        abMinus
+        {
+          B000000001: { '5': [ [Object] ] },
+          B000000002: { '2': [ [Object] ], '3': [ [Object], [Object] ] }
+        }
+      */
+      // abCoupon 有值 再扣
+      if (Object.values(abMinus).length > 0) {
+        const totalAbMinus = Object.keys(abMinus).reduce((prev, next) => {
+          const [a, b] = Object.values(abMinus[next]) as [any, any]
+          const result = (a && b) && calculateTotalPrice(a, b, a[0].discount)
+          return prev + (result || 0)
+        }, 0)
+        console.log({ totalAbMinus });
+
+        result.discount = (result.discount || 0) + totalAbMinus
+        totalPrice = (totalPrice || 0) - totalAbMinus
+        result.totalPrice = totalPrice
       }
 
       if (couponObj !== null) {
