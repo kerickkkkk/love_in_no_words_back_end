@@ -76,6 +76,18 @@ const orderSchema = new Schema(
       type: Date,
       select: false,
     },
+    payment: {
+      type: String,
+      required: [true, "請選擇付款方式"],
+    },
+    satisfaction: {
+      type: Number,
+      required: [true, "請填寫滿意度"],
+    },
+    description: {
+      type: String,
+      required: false,
+    },
   },
   {
     versionKey: false,
