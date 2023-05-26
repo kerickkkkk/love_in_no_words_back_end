@@ -463,15 +463,14 @@ export const orders = {
     async (req: any, res: Response, next: NextFunction) => {
       try {
         // 取得 orderId 參數
-        const { _id } = req.query as { _id?: string };
-
+        const { orderId } = req.params as { orderId?: string };
         // 檢查 orderId 參數是否存在
-        if (!_id) {
+        if (!orderId) {
           return next(appError(400, "缺少訂單ID", next));
         }
 
         // 模擬從資料庫取得訂單資訊
-        const order = await Order.findById(_id).populate("orderDetail");
+        const order = await Order.findById(orderId).populate("orderDetail");
 
         // 檢查訂單是否存在
         if (!order) {
@@ -483,12 +482,12 @@ export const orders = {
 
         // 組合訂單詳細內容
         const formattedOrderDetail = {
-          // _id: orderDetail._id,
+          _id: orderDetail._id,
           orderNo: orderDetail.orderNo,
           tableNo: orderDetail.tableNo,
           tableName: orderDetail.tableName,
           orderList: orderDetail.orderList.map((item: any) => ({
-            // _id: item._id,
+            _id: item._id,
             productNo: item.productNo,
             productName: item.productName,
             photoUrl: item.photoUrl,
@@ -519,6 +518,7 @@ export const orders = {
       }
     }
   ),
+
 
   //S-3-3 滿意度及建議回饋
   postRating: handleErrorAsync(
