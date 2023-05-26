@@ -14,15 +14,8 @@ import { combinedDateTimeString, period } from "../utils/dayjs"
   a 必須為 qty 比較多的陣列
   
 */
-const data = {
-  'B000000002-2': [{ productNo: 2, price: 200, qty: 5 }, { productNo: 4, price: 50, qty: 5 }],
-  'B000000002-3': [
-    { productNo: 5, price: 100, qty: 10 },
-    { productNo: 6, price: 50, qty: 15 }
-  ]
-};
 
-function calculateTotalPrice(a: any, b: any, discount: number) {
+export const calculateTotalPrice = (a: any, b: any, discount: number) => {
   let totalPrice = 0;
 
   const qtyA = a.reduce((total: number, item: any) => total + item.qty, 0);
@@ -301,8 +294,6 @@ export const orders = {
           const result = (a && b) && calculateTotalPrice(a, b, a[0].discount)
           return prev + (result || 0)
         }, 0)
-        console.log({ totalAbMinus });
-
         result.discount = (result.discount || 0) + totalAbMinus
         totalPrice = (totalPrice || 0) - totalAbMinus
         result.totalPrice = totalPrice
