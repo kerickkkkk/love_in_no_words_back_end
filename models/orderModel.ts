@@ -1,4 +1,4 @@
-import { Schema, Document, model } from "mongoose";
+import { Schema, Document, model, Types } from "mongoose";
 interface Order extends Document {
   orderNo: string;
   orderStatus: string;
@@ -6,6 +6,7 @@ interface Order extends Document {
   tableNo: number;
   tableName: number;
   createdAt: Date;
+  orderDetail?: Types.ObjectId;
   isDisabled: boolean;
   revisedAt?: Date;
   isDeleted: boolean;

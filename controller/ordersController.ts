@@ -248,7 +248,7 @@ export const orders = {
   getOrders: handleErrorAsync(
     async (req: Request, res: Response, next: NextFunction) => {
       interface Query {
-        isCompleted: boolean;
+        isDeleted: boolean;
         orderStatus?: string;
         date?: string;
       }
@@ -258,7 +258,7 @@ export const orders = {
         page?: string;
       };
       const perPage = 10; // 每頁回傳的筆數
-      const query: Query = { isCompleted: false };
+      const query: Query = { isDeleted: false };
 
       if (orderStatus !== undefined && orderStatus !== '') {
         query.orderStatus = orderStatus;
@@ -321,60 +321,60 @@ export const orders = {
 
   // S-3-2 詳細訂單內容查詢
   getOrderDetail: handleErrorAsync(
-    async (req: Request, res: Response, next: NextFunction) => {
+    async (req: any, res: Response, next: NextFunction) => {
       try {
         // 取得 orderId 參數
-        const { orderId } = req.query as { orderId?: string };
+        const { _id } = req.query as { _id?: string };
+
+        // 檢查 orderId 參數是否存在
+        if (!_id) {
+          return next(appError(400, "缺少訂單ID", next));
+        }
 
         // 模擬從資料庫取得訂單資訊
-        const order = await Order.findById(orderId) as Document & typeof Order;
+        const order = await Order.findById(_id).populate("orderDetail");
 
         // 檢查訂單是否存在
         if (!order) {
           return next(appError(400, "訂單不存在", next));
         }
 
-        // 將訂單轉換為普通 JavaScript 物件
-        //const orderObject = order.toObject();
-        const orderObject = JSON.parse(JSON.stringify(order));
+        // 取得訂單詳細內容
+        const orderDetail = order.orderDetail as any;
+
         // 組合訂單詳細內容
-        const orderDetail = {
-          orderNo: orderObject.orderNo,
-          tableNo: orderObject.tableNo,
-          tableName: orderObject.tableName,
-          orderList: orderObject.orderList.map((item: {
-            productNo: number,
-            productName: string,
-            qty: number,
-            subTotal: number,
-            productionTime: number,
-            productsType: number,
-            productsTypeName: string,
-            note: string,
-            couponNo: string,
-            couponName: string
-          }) => ({
+        const formattedOrderDetail = {
+          // _id: orderDetail._id,
+          orderNo: orderDetail.orderNo,
+          tableNo: orderDetail.tableNo,
+          tableName: orderDetail.tableName,
+          orderList: orderDetail.orderList.map((item: any) => ({
+            // _id: item._id,
             productNo: item.productNo,
             productName: item.productName,
+            photoUrl: item.photoUrl,
+            price: item.price,
+            inStockAmount: item.inStockAmount,
+            safeStockAmount: item.safeStockAmount,
+            amountStatus: item.amountStatus,
+            productsType: item.productsType,
+            productionTime: item.productionTime,
+            description: item.description,
+            isDeleted: item.isDeleted,
             qty: item.qty,
             subTotal: item.subTotal,
-            productionTime: item.productionTime,
-            productsType: item.productsType,
-            productsTypeName: item.productsTypeName,
-            note: item.note,
-            couponNo: item.couponNo,
-            couponName: item.couponName,
           })),
-          totalTime: orderObject.totalTime,
-          status: orderObject.status,
-          couponNo: orderObject.couponNo,
-          couponName: orderObject.couponName,
-          discount: orderObject.discount,
-          totalPrice: orderObject.totalPrice,
+          totalTime: orderDetail.totalTime,
+          discount: orderDetail.discount,
+          totalPrice: orderDetail.totalPrice,
+          status: orderDetail.status,
+          createdAt: orderDetail.createdAt,
+          revisedAt: orderDetail.revisedAt,
+          isDeleted: orderDetail.isDeleted,
         };
 
         // 回傳訂單詳細內容
-        return handleSuccess(res, "查詢成功", orderDetail);
+        return handleSuccess(res, "查詢成功", formattedOrderDetail);
       } catch (err) {
         return next(appError(400, "查詢訂單詳細內容失敗", next));
       }
@@ -386,13 +386,12 @@ export const orders = {
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         // 解構請求的內容
-        const { orderNo, payment, orderType, satisfaction, description } = req.body;
+        const { _id, payment, orderType, satisfaction, description } = req.body;
 
         // 檢查必填欄位是否存在
         if (!payment || !orderType || !satisfaction) {
           return next(appError(400, "請填寫必要欄位", next));
         }
-
         // 假設這裡要將評分資訊儲存到資料庫中或進行其他相關操作
 
         // 假設成功儲存評分資訊，回傳相應的回應
@@ -401,7 +400,7 @@ export const orders = {
           message: "新增成功！",
           code: "200",
           data: {
-            orderNo,
+            _id,
             payment: "現金",
             orderType: orderType,
             satisfaction: satisfaction,
