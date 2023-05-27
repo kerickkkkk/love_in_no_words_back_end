@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import {AppError} from '../types/AppError';
+import { AppError } from '../types/AppError';
 
-const resErrorProd = (err:AppError, res:Response) => {
+const resErrorProd = (err: AppError, res: Response) => {
   err.statusCode = err.statusCode || 400
   if (err.isOperational) {
     res.status(err.statusCode).json({
+      status: "NG",
       message: err.message
     });
   } else {
@@ -18,7 +19,7 @@ const resErrorProd = (err:AppError, res:Response) => {
   }
 };
 
-const resErrorDev = (err: AppError, res:Response) => {
+const resErrorDev = (err: AppError, res: Response) => {
   err.statusCode = err.statusCode || 500
   res.status(err.statusCode).json({
     message: err.message,
@@ -28,17 +29,17 @@ const resErrorDev = (err: AppError, res:Response) => {
 };
 
 // 統一管理錯誤處理
-const handleAllError = (err :any, req:Request , res:Response, next: NextFunction) => {
+const handleAllError = (err: any, req: Request, res: Response, next: NextFunction) => {
   // dev
   if (process.env.NODE_ENV === 'dev') {
     return resErrorDev(err, res);
-  } 
+  }
   // production
-  if (err.name === 'ValidationError'){
+  if (err.name === 'ValidationError') {
     err.message = "資料欄位未填寫正確，請重新輸入！"
     err.isOperational = true;
     return resErrorProd(err, res)
   }
-  resErrorProd(err, res) 
+  resErrorProd(err, res)
 }
 export default handleAllError

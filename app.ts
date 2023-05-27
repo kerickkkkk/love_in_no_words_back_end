@@ -10,6 +10,8 @@ import seatsRouter from "./routes/seats";
 import ordersRouter from "./routes/orders";
 import productsRouter from "./routes/products";
 import couponsRouter from "./routes/coupons";
+import abCouponsRouter from "./routes/abCoupons";
+import onePlusOnesRouter from "./routes/onePlusOnes";
 import membersRouter from "./routes/members";
 import reportsRouter from "./routes/reports";
 import handleAllError from "./service/handleAllError";
@@ -42,6 +44,8 @@ app.use("/v1/seats", seatsRouter);
 app.use("/v1/orders", ordersRouter);
 app.use("/v1/products", productsRouter);
 app.use("/v1/coupons", couponsRouter);
+app.use("/v1/abcoupons", abCouponsRouter);
+app.use("/v1/oneplusones", onePlusOnesRouter);
 app.use("/v1", reportsRouter);
 // socket 方式 暫時寫在 indexRouter之後要拿掉
 app.use("/v1/", indexRouter);

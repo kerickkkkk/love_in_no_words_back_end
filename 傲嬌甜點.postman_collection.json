@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "69b7453f-b1fc-46d7-b17b-ca4b897453bf",
+		"_postman_id": "327895cb-46a6-4b9a-899a-b803c00c92c5",
 		"name": "傲嬌甜點",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "6878038"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -42,7 +41,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\n    \"name\": \"我是店長\",\n    \"phone\": \"0912345678\",\n    \"password\": \"12345678\",\n    \"confirmPassword\": \"12345678\",\n    \"isDisabled\" : false,\n    \"titleNo\": 1\n}",
+							"raw": "{\n\n    \"name\": \"我是店長\",\n    \"phone\": \"0912345678\",\n    \"email\":\"a468223@gmail.com\",\n    \"password\": \"12345678\",\n    \"confirmPassword\": \"12345678\",\n    \"isDisabled\" : false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -272,7 +271,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\r\n    \"name\": \"註冊店員\",\r\n    \"phone\": \"0975026599\",\r\n    \"titleNo\": \"2\",\r\n    \"isDisabled\" : false,\r\n    \"password\": \"12345678\"\r\n\r\n}",
+							"raw": "{\r\n\r\n    \"name\": \"註冊店員\",\r\n    \"phone\": \"0975026597\",\r\n    \"titleNo\": \"1\",\r\n    \"email\":\"a468223@gmail.com\",\r\n    \"isDisabled\" : false,\r\n    \"password\": \"12345678\"\r\n\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -306,7 +305,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"註冊店員\",\n    \"phone\": \"0975026599\",\n    \"titleNo\": \"2\",\n    \"isDisabled\" : false,\n    \"password\": \"12345678\"\n}",
+							"raw": "{\n    \"name\": \"註冊店員\",\n    \"phone\": \"0975026599\",\n    \"email\":\"adssdafa@gmail.com\",\n    \"titleNo\": \"1\",\n    \"isDisabled\" : false,\n    \"password\": \"12345678\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -314,7 +313,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/users/admin/6453286ca72b9435971e38cf",
+							"raw": "{{base_url}}/v1/users/admin/64605d6c91b0ade36a65d53d",
 							"host": [
 								"{{base_url}}"
 							],
@@ -322,7 +321,7 @@
 								"v1",
 								"users",
 								"admin",
-								"6453286ca72b9435971e38cf"
+								"64605d6c91b0ade36a65d53d"
 							]
 						}
 					},
@@ -629,7 +628,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"tableName\" : 1,\n        \"seats\" : 20\n}",
+							"raw": "{\n        \"tableName\" : 1,\n        \"seats\" : 2\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -822,7 +821,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/admin?productsType=2",
+							"raw": "{{base_url}}/v1/products/admin",
 							"host": [
 								"{{base_url}}"
 							],
@@ -832,10 +831,6 @@
 								"admin"
 							],
 							"query": [
-								{
-									"key": "productsType",
-									"value": "2"
-								},
 								{
 									"key": "priceLowerLimit",
 									"value": "0",
@@ -849,6 +844,11 @@
 								{
 									"key": "amountStatus",
 									"value": "danger",
+									"disabled": true
+								},
+								{
+									"key": "productsType",
+									"value": "4",
 									"disabled": true
 								}
 							]
@@ -922,7 +922,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"productName\":\"Vite2\",\n        \"photoUrl\":\"{{photoUrl}}\",\n        \"price\":100,\n        \"inStockAmount\":60,\n        \"safeStockAmount\": 50,\n        \"productsType\": 1,\n        \"productionTime\": 1,\n        \"description\": \"忘情水2\",\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"productName\":\"Vite6-2\",\n        \"photoUrl\":\"{{photoUrl}}\",\n        \"price\":100,\n        \"inStockAmount\":60,\n        \"safeStockAmount\": 50,\n        \"productsType\": 6,\n        \"productionTime\": 1,\n        \"description\": \"忘情水2\",\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1063,7 +1063,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"productsTypeName\" : \"酒精飲料\"\n}",
+							"raw": "{\n    \"productsTypeName\" : \"qqqqqqq777\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1423,7 +1423,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableName\": 5,\n  \"products\":[\n\n        {\n            \"productNo\": 7,\n\t\t    \"qty\" :11 \n\n\t\t}\n  ]\n\n}",
+							"raw": "{\n  \"tableName\": 1,\n  \"products\":[\n\n        {\n            \"productNo\": 1,\n\t\t    \"qty\" :11 \n\n\t\t}\n  ],\n  \"couponNo\": \"A000000003\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1458,7 +1458,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableName\": 5,\n  \"products\":[\n\n        {\n            \"productNo\": 7,\n\t\t    \"qty\" :1 \n\n\t\t}\n  ]\n\n}",
+							"raw": "{\n  \"tableName\": 1,\n  \"products\":[\n\n        {\n            \"productNo\": 1,\n\t\t    \"qty\" :1 \n\n\t\t}\n  ]\n\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1841,7 +1841,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/send/email/admin/report/:reportType?email=填入信箱",
+							"raw": "{{base_url}}/v1/send/email/admin/report/:reportType",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1861,8 +1861,9 @@
 								},
 								{
 									"key": "email",
-									"value": "填入信箱",
-									"description": "請傳入信箱"
+									"value": "請傳入信箱",
+									"description": "請傳入信箱",
+									"disabled": true
 								}
 							],
 							"variable": [
@@ -1930,6 +1931,295 @@
 								{
 									"key": "number",
 									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "O-5-6 訂單資訊下載",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"month\": 6,\r\n\t\"dataAmount\" : 100\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/reports/admin/orders/download?month=6&dataAmount=100",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"reports",
+								"admin",
+								"orders",
+								"download"
+							],
+							"query": [
+								{
+									"key": "month",
+									"value": "6"
+								},
+								{
+									"key": "dataAmount",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "abcoupon",
+			"item": [
+				{
+					"name": "O-6-1 獲取 a+b 活動",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/abcoupons/admin",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"abcoupons",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "O-6-2 新增 a+b 活動",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"list\":[2,3],\n    \"discount\" : 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/abcoupons/admin",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"abcoupons",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "O-6-3 刪除 a+b 活動",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"list\":[1,2],\n    \"discount\" : 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/abcoupons/admin/:couponNo",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"abcoupons",
+								"admin",
+								":couponNo"
+							],
+							"variable": [
+								{
+									"key": "couponNo",
+									"value": "B000000002"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "oneplusone",
+			"item": [
+				{
+					"name": "O-7-1 獲取 1+1 活動",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/oneplusones/admin",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"oneplusones",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "O-7-2 新增 1+1  活動",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"selectedList\":[10,11]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/oneplusones/admin",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"oneplusones",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "O-7-3 刪除 1+1 活動",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"list\":[1,2],\n    \"discount\" : 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/oneplusones/admin/:couponNo",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"oneplusones",
+								"admin",
+								":couponNo"
+							],
+							"variable": [
+								{
+									"key": "couponNo",
+									"value": "C000000004"
 								}
 							]
 						}
