@@ -7,6 +7,7 @@ import ProductManagementModel from '../models/productManagementModel';
 import Order from "../models/orderModel";
 import CouponModel from "../models/couponModel"
 import OrderDetail from "../models/orderDetailModel";
+import Rating from "../models/ratingModel";
 import AbCouponModel from "../models/abCouponModel";
 import { combinedDateTimeString, period, slashDate } from "../utils/dayjs"
 import { Meta } from "../types/Pagination";
@@ -523,17 +524,24 @@ export const orders = {
   //S-3-3 滿意度及建議回饋
   postRating: handleErrorAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        // 解構請求的內容
-        const { _id, payment, orderType, satisfaction, description } = req.body;
+      // 解構請求的內容
+      const { _id, payment, orderType, satisfaction, description } = req.body;
 
-        // 檢查必填欄位是否存在
-        if (!payment || !orderType || !satisfaction) {
-          return next(appError(400, "請填寫必要欄位", next));
-        }
-        // 假設這裡要將評分資訊儲存到資料庫中或進行其他相關操作
+      // 檢查必填欄位是否存在
+      if (!payment || !orderType || !satisfaction) {
+        return next(appError(400, "請填寫必要欄位", next));
+      }
+      // 假設這裡要將評分資訊儲存到資料庫中或進行其他相關操作
+      // 將評分資料儲存到資料庫
+      const savedRating = await Rating.create({
+        payment,
+        orderType,
+        satisfaction,
+        description,
+      });
 
-        // 假設成功儲存評分資訊，回傳相應的回應
+      if (savedRating) {
+        // 評分資訊成功寫入資料庫
         const response = {
           status: "OK",
           message: "新增成功！",
@@ -541,22 +549,18 @@ export const orders = {
           data: {
             _id,
             payment: "現金",
-            orderType: orderType,
-            satisfaction: satisfaction,
-            description: description,
+            orderType,
+            satisfaction,
+            description,
           },
         };
-
         return handleSuccess(res, "新增成功！", response);
-      } catch (err) {
+      } else {
+        // 評分資訊寫入資料庫失敗
         return next(appError(400, "提交評分資訊失敗", next));
       }
     }
   ),
-
-
-
-
 };
 
 export default orders;
