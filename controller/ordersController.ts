@@ -10,10 +10,6 @@ import OrderDetail from "../models/orderDetailModel";
 import AbCouponModel from "../models/abCouponModel";
 import { combinedDateTimeString, period } from "../utils/dayjs"
 
-/*
-  a 必須為 qty 比較多的陣列
-  
-*/
 
 export const calculateTotalPrice = (a: any, b: any, discount: number) => {
   let totalPrice = 0;
@@ -334,7 +330,7 @@ export const orders = {
 
         const newOrder = await Order.create({
           orderNo,
-          orderStatus: "已結帳",
+          orderStatus: "未結帳",
           time: period(),
           tableNo: tableObj?.tableNo,
           tableName: tableObj?.tableName,
