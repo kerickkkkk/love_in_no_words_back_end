@@ -16,6 +16,8 @@ import * as path from "path";
 import firebaseAdmin from "../service/firebase";
 import { v4 as uuidv4 } from "uuid";
 import { GetSignedUrlConfig } from "@google-cloud/storage";
+import { setCache } from "../connection/service/redis";
+
 interface RequestQuery {
   year?: number;
   month?: number;
@@ -120,7 +122,7 @@ export const report = {
     async (req: any, res: Response, next: NextFunction) => {
       const year = req.query.year || dayjs().year();
       const data = await getRevenueData(year);
-
+      setCache(req.originalUrl, data)
       handleSuccess(res, "成功", data);
     }
   ),
@@ -130,6 +132,7 @@ export const report = {
       // 預設獲取當年度
       const year = req.query.year || dayjs().year();
       const data = await getSellQuantityData(year);
+      setCache(req.originalUrl, data)
       handleSuccess(res, "成功", data);
     }
   ),
@@ -139,6 +142,7 @@ export const report = {
       // 預設獲取當年度
       const year = req.query.year || dayjs().year();
       const data = await getOrderQuantityData(year);
+      setCache(req.originalUrl, data)
       handleSuccess(res, "成功", data);
     }
   ),
@@ -447,6 +451,10 @@ export const report = {
             to,
           },
         };
+        setCache(req.originalUrl, {
+          data: orders,
+          meta,
+        })
         return handleSuccess(res, "成功", {
           data: orders,
           meta,
@@ -459,7 +467,7 @@ export const report = {
   // O-5-6 訂單資訊下載API
   downloadReports: handleErrorAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-      let { month, dataAmount } = req.query;
+      const { month, dataAmount } = req.query;
       const errorMsgArray = [];
       if (!isEffectVal(month) || Number.isNaN(Number(month))) {
         errorMsgArray.push(Message.NEED_POSITIVE_PAGE);
@@ -538,7 +546,7 @@ export const report = {
 
       const worksheet = XLSX.utils.json_to_sheet(data);
 
-      var wscols = [{ wch: 6 }, { wch: 15 }, { wch: 10 }, { wch: 20 }];
+      const wscols = [{ wch: 6 }, { wch: 15 }, { wch: 10 }, { wch: 20 }];
 
       worksheet["!cols"] = wscols;
 
