@@ -1,4 +1,6 @@
 import { Schema, Document, model, Types } from "mongoose";
+import Rating from "../models/ratingModel";
+
 interface Order extends Document {
   orderNo: string;
   orderStatus: string;
@@ -11,6 +13,11 @@ interface Order extends Document {
   revisedAt?: Date;
   isDeleted: boolean;
   deletedAt?: Date;
+  //rating
+  // Added rating field
+  rating?: Types.ObjectId;
+  // Added payment field
+  payment?: string;
 }
 
 const orderSchema = new Schema(
@@ -84,10 +91,28 @@ const orderSchema = new Schema(
       type: String,
       required: false,
     },
+    //add rating
+    rating: {
+      type: Schema.Types.ObjectId,
+      ref: "Rating",
+      required: false,
+    }
   },
   {
     versionKey: false,
   }
 );
+orderSchema.pre<Order>("save", async function (next) {
+  if (this.isModified("rating") && this.rating) {
+    const ratingModel = await Rating.findById(this.rating); // Use the imported RatingModel
+    if (ratingModel) {
+      this.payment = "現金";
+      this.orderStatus = "已付款";
+    }
+  }
+  next();
+});
+
+
 
 export default model<Order>("Order", orderSchema);

@@ -526,26 +526,33 @@ export const orders = {
 
 
   //S-3-3 滿意度及建議回饋
-  postRating: handleErrorAsync(
-    async (req: Request, res: Response, next: NextFunction) => {
-      // 解構請求的內容
-      const { _id, payment, orderType, satisfaction, description } = req.body;
+  postRating: handleErrorAsync(async (req: Request, res: Response, next: NextFunction) => {
+    // Destructure the request body
+    const { _id, payment, orderType, satisfaction, description } = req.body;
 
-      // 檢查必填欄位是否存在
-      if (!payment || !orderType || !satisfaction) {
-        return next(appError(400, "請填寫必要欄位", next));
-      }
-      // 假設這裡要將評分資訊儲存到資料庫中或進行其他相關操作
-      // 將評分資料儲存到資料庫
-      const savedRating = await Rating.create({
-        payment,
-        orderType,
-        satisfaction,
-        description,
+    // Check if the required fields are present
+    if (!payment || !orderType || !satisfaction) {
+      return next(appError(400, "請填寫必要欄位", next));
+    }
+
+    // Create the rating document
+    const savedRating = await Rating.create({
+      payment,
+      orderType,
+      satisfaction,
+      description,
+    });
+
+    if (savedRating) {
+      // Rating document created successfully
+      // Update the corresponding order document
+      const order = await Order.findByIdAndUpdate(_id, {
+        payment: "現金",
+        orderStatus: "已付款",
+        rating: savedRating._id,
       });
 
-      if (savedRating) {
-        // 評分資訊成功寫入資料庫
+      if (order) {
         const response = {
           status: "OK",
           message: "新增成功！",
@@ -560,11 +567,14 @@ export const orders = {
         };
         return handleSuccess(res, "新增成功！", response);
       } else {
-        // 評分資訊寫入資料庫失敗
-        return next(appError(400, "提交評分資訊失敗", next));
+        // Failed to update the order document
+        return next(appError(400, "無法更新訂單資訊", next));
       }
+    } else {
+      // Failed to create the rating document
+      return next(appError(400, "提交評分資訊失敗", next));
     }
-  ),
+  })
 };
 
 export default orders;
