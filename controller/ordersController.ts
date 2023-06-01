@@ -528,26 +528,29 @@ export const orders = {
   //S-3-3 滿意度及建議回饋
   postRating: handleErrorAsync(async (req: Request, res: Response, next: NextFunction) => {
     // Destructure the request body
-    const { _id, satisfaction, description } = req.body;
-
+    const { satisfaction, description } = req.body;
+    const { orderId: _id } = req.params;
     // Check if the required fields are present
     if (!satisfaction) {
       return next(appError(400, "請填寫必要欄位", next));
     }
-
+    //rating 內 order 不可以出現重複的
     try {
       // Create the rating document
       const rating = await Rating.create({
         satisfaction,
         description,
+        order: _id
       });
 
       // Update the corresponding order document with the rating
       const order = await Order.findByIdAndUpdate(_id, {
         payment: "現金",
-        orderStatus: "已付款",
+        orderStatus: "已結帳",
         rating: rating._id,
-      });
+      }
+        , { new: true }
+      );
 
       if (!order) {
         return next(appError(400, "無法更新訂單資訊", next));
