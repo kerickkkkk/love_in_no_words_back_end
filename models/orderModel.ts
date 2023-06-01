@@ -122,7 +122,7 @@ const orderSchema = new Schema(
 orderSchema.pre<Order>("save", async function (next) {
   if (this.rating && this.rating.satisfaction) {
     this.payment = "現金";
-    this.orderStatus = "已付款";
+    this.orderStatus = "已結帳";
   }
   next();
 });
