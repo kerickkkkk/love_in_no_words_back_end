@@ -149,7 +149,6 @@ export const coupons = {
       );
 
       if (updatedSeat === null) {
-        errorMsgArray.push('查無優惠卷');
         return next(appError(400, '查無優惠卷', next));
       }
 
