@@ -1,6 +1,7 @@
 import reportsController from "../controller/reportsController";
 import express from "express";
 import { isOwnerAuth } from "../middleware/auth";
+import { cache } from "../middleware/cache"
 
 const router = express.Router();
 
@@ -8,6 +9,7 @@ const router = express.Router();
 router.get(
   "/send/email/admin/revenue/report",
   isOwnerAuth,
+  cache,
   reportsController.getRevenue
 );
 
@@ -15,6 +17,7 @@ router.get(
 router.get(
   "/send/email/admin/sell-quantity/report",
   isOwnerAuth,
+  cache,
   reportsController.getSellQuantity
 );
 
@@ -22,6 +25,7 @@ router.get(
 router.get(
   "/send/email/admin/orders-quantity/report",
   isOwnerAuth,
+  cache,
   reportsController.getOrderQuantity
 );
 
@@ -36,6 +40,7 @@ router.get(
 router.get(
   "/reports/admin/orders",
   isOwnerAuth,
+  cache,
   reportsController.getOrderInformation
 );
 

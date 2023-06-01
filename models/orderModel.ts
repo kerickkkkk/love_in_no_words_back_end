@@ -7,6 +7,7 @@ interface Order extends Document {
   time: string;
   tableNo: number;
   tableName: number;
+  transactionId?: number;
   createdAt: Date;
   orderDetail?: Types.ObjectId;
   isDisabled: boolean;
@@ -66,6 +67,10 @@ const orderSchema = new Schema(
     orderDetail: {
       type: Schema.Types.ObjectId,
       ref: "OrderDetail",
+    },
+    // Line Pay 交易 ID 需配合 orderNo 使用
+    transactionId: {
+      type: Number,
     },
     createdAt: {
       type: Date,

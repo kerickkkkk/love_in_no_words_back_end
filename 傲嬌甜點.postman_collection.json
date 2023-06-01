@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "82224bda-073e-4efe-a018-23a57285963c",
+		"_postman_id": "9e638e8c-0bf2-4be2-a8ca-6fd8ec029c9f",
 		"name": "傲嬌甜點",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "26724792"
+		"_exporter_id": "6878038"
 	},
 	"item": [
 		{
@@ -58,6 +58,13 @@
 								"v1",
 								"users",
 								"sign_up"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -1424,7 +1431,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableName\": 1,\n  \"products\":[\n\n        {\n            \"productNo\": 1,\n\t\t    \"qty\" :11 \n\n\t\t}\n  ],\n  \"couponNo\": \"A000000003\"\n}",
+							"raw": "{\n  \"tableName\": 1,\n  \"products\":[\n\n        {\n            \"productNo\": 1,\n\t\t    \"qty\" :11 \n\n\t\t}\n  ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1459,7 +1466,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableName\": 1,\n  \"products\":[\n\n        {\n            \"productNo\": 1,\n\t\t    \"qty\" :1 \n\n\t\t}\n  ]\n\n}",
+							"raw": "{\n  \"tableName\": 1,\n  \"products\":[\n\n        {\n            \"productNo\": 1,\n\t\t    \"qty\" :1 \n\t\t}\n  ]\n\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2379,6 +2386,109 @@
 								{
 									"key": "couponNo",
 									"value": "C000000004"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "line_pay",
+			"item": [
+				{
+					"name": "S- 結帳",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/line_pay/:orderNo",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"line_pay",
+								":orderNo"
+							],
+							"query": [
+								{
+									"key": "redirectDevUrl",
+									"value": "true",
+									"description": "開發機轉指定本地網址",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "orderNo",
+									"value": "20230530212758"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "S- 查詢是否結帳",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							},
+							{
+								"key": "X-LINE-ChannelId",
+								"value": "1661254953",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/line_pay/check/:orderNo",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"line_pay",
+								"check",
+								":orderNo"
+							],
+							"variable": [
+								{
+									"key": "orderNo",
+									"value": "20230530212758",
+									"description": "payStatus :\nCAPTURE：已請款\nAUTHORIZATION：授權\nVOIDED_AUTHORIZATION：授權無效（在呼叫\"Void API\"的狀態）\nEXPIRED_AUTHORIZATION：授權到期（LINE Pay所允許的商家授權有效期已過期）"
 								}
 							]
 						}
