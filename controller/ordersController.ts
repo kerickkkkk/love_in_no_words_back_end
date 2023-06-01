@@ -7,9 +7,10 @@ import ProductManagementModel from '../models/productManagementModel';
 import Order from "../models/orderModel";
 import CouponModel from "../models/couponModel"
 import OrderDetail from "../models/orderDetailModel";
+import Rating from "../models/ratingModel";
 import AbCouponModel from "../models/abCouponModel";
 import { combinedDateTimeString, period } from "../utils/dayjs"
-
+import { Meta } from "../types/Pagination";
 
 export const calculateTotalPrice = (a: any, b: any, discount: number) => {
   let totalPrice = 0;
@@ -382,6 +383,192 @@ export const orders = {
       }
     }
   ),
+  //S-3-1 訂單查詢
+  getOrders: handleErrorAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+      interface Query {
+        isDeleted: boolean;
+        orderStatus?: string;
+        date?: string;
+      }
+      const { orderStatus, date, page } = req.query as {
+        orderStatus?: string;
+        date?: string;
+        page?: string;
+      };
+      const perPage = 10; // 每頁回傳的筆數
+      const query: Query = { isDeleted: false };
+
+      if (orderStatus !== undefined && orderStatus !== '') {
+        query.orderStatus = orderStatus;
+      }
+
+      if (date !== undefined && date !== '') {
+        query.date = date;
+      }
+
+      const currentPage = parseInt(page ?? '1'); // 解析頁碼參數，預設為 1
+      const skipCount = (currentPage - 1) * perPage; // 要跳過的筆數
+
+      try {
+        const totalNum = await Order.countDocuments(query);
+        const orders = await Order.find(query).skip(skipCount).limit(perPage);
+
+        if (orders.length === 0) {
+          // 若沒有符合條件的訂單，回傳訊息即可
+          return handleSuccess(res, "查詢訂單成功", {
+            ordersList: [],
+            meta: null,
+          });
+        }
+
+        const ordersList = orders.map((order) => {
+          const { _id, orderNo, tableName, createdAt, isDisabled } = order;
+          //const transferDate = slashDate(createdAt);
+          return {
+            _id,
+            orderNo,
+            tableName,
+            //createdAt: transferDate,
+            createdAt,
+            isDisabled,
+          };
+        });
+
+        const totalPages = Math.ceil(totalNum / perPage); // 總頁數
+        const meta: Meta = {
+          pagination: {
+            total: ordersList.length,
+            perPage: perPage,
+            currentPage: currentPage,
+            lastPage: totalPages,
+            nextPage: currentPage < totalPages ? currentPage + 1 : null,
+            prevPage: currentPage > 1 ? currentPage - 1 : null,
+            from: skipCount + 1,
+            to: skipCount + ordersList.length,
+          },
+        };
+
+        return handleSuccess(res, "查詢訂單成功", {
+          ordersList,
+          meta,
+        });
+      } catch (err) {
+        return next(appError(400, "查詢訂單失敗", next));
+      }
+    }
+  ),
+
+  // S-3-2 詳細訂單內容查詢
+  getOrderDetail: handleErrorAsync(
+    async (req: any, res: Response, next: NextFunction) => {
+      try {
+        // 取得 orderId 參數
+        const { orderId } = req.params as { orderId?: string };
+        // 檢查 orderId 參數是否存在
+        if (!orderId) {
+          return next(appError(400, "缺少訂單ID", next));
+        }
+
+        // 模擬從資料庫取得訂單資訊
+        const order = await Order.findById(orderId).populate("orderDetail");
+
+        // 檢查訂單是否存在
+        if (!order) {
+          return next(appError(400, "訂單不存在", next));
+        }
+
+        // 取得訂單詳細內容
+        const orderDetail = order.orderDetail as any;
+
+        // 組合訂單詳細內容
+        const formattedOrderDetail = {
+          _id: orderDetail._id,
+          orderNo: orderDetail.orderNo,
+          tableNo: orderDetail.tableNo,
+          tableName: orderDetail.tableName,
+          orderList: orderDetail.orderList.map((item: any) => ({
+            _id: item._id,
+            productNo: item.productNo,
+            productName: item.productName,
+            photoUrl: item.photoUrl,
+            price: item.price,
+            inStockAmount: item.inStockAmount,
+            safeStockAmount: item.safeStockAmount,
+            amountStatus: item.amountStatus,
+            productsType: item.productsType,
+            productionTime: item.productionTime,
+            description: item.description,
+            isDeleted: item.isDeleted,
+            qty: item.qty,
+            subTotal: item.subTotal,
+          })),
+          totalTime: orderDetail.totalTime,
+          discount: orderDetail.discount,
+          totalPrice: orderDetail.totalPrice,
+          status: orderDetail.status,
+          createdAt: orderDetail.createdAt,
+          revisedAt: orderDetail.revisedAt,
+          isDeleted: orderDetail.isDeleted,
+        };
+
+        // 回傳訂單詳細內容
+        return handleSuccess(res, "查詢成功", formattedOrderDetail);
+      } catch (err) {
+        return next(appError(400, "查詢訂單詳細內容失敗", next));
+      }
+    }
+  ),
+
+
+  //S-3-3 滿意度及建議回饋
+  postRating: handleErrorAsync(async (req: Request, res: Response, next: NextFunction) => {
+    // Destructure the request body
+    const { satisfaction, description } = req.body;
+    const { orderId: _id } = req.params;
+    // Check if the required fields are present
+    if (!satisfaction) {
+      return next(appError(400, "請填寫必要欄位", next));
+    }
+    //rating 內 order 不可以出現重複的
+    try {
+      // Create the rating document
+      const rating = await Rating.create({
+        satisfaction,
+        description,
+        order: _id
+      });
+
+      // Update the corresponding order document with the rating
+      const order = await Order.findByIdAndUpdate(_id, {
+        payment: "現金",
+        orderStatus: "已結帳",
+        rating: rating._id,
+      }
+        , { new: true }
+      );
+
+      if (!order) {
+        return next(appError(400, "無法更新訂單資訊", next));
+      }
+
+      const response = {
+        status: "OK",
+        message: "新增成功！",
+        code: "200",
+        data: {
+          _id,
+          satisfaction,
+          description,
+        },
+      };
+
+      return handleSuccess(res, "新增成功！", response);
+    } catch (error) {
+      return next(appError(400, "提交評分資訊失敗", next));
+    }
+  })
+
 };
 
 export default orders;

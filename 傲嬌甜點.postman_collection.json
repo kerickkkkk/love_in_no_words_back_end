@@ -1485,6 +1485,164 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "S-3-1 訂單查詢",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/orders",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"orders"
+							],
+							"query": [
+								{
+									"key": "orderStatus",
+									"value": "已結帳",
+									"description": "{orderType}",
+									"disabled": true
+								},
+								{
+									"key": "date",
+									"value": "2023-05-24",
+									"description": "2023-04-12",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "S-3-2 詳細訂單內容查詢",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "apikey"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/orders/detail/:orderId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"orders",
+								"detail",
+								":orderId"
+							],
+							"query": [
+								{
+									"key": "orderId",
+									"value": "646e10d3c5d43e553625d041",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "orderId",
+									"value": "646e10d3c5d43e553625d041"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "S-3-3 滿意度及建議回饋",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"payment\": \"現金\",\n    \"orderType\": \"已結帳\",\n    \"satisfaction\": 10,\n    \"description\": \"22\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/orders/rating/:orderId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"orders",
+								"rating",
+								":orderId"
+							],
+							"query": [
+								{
+									"key": "orderStatus",
+									"value": "已結帳",
+									"description": "{orderType}",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "orderId",
+									"value": "646e10d3c5d43e553625d048"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

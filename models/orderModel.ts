@@ -1,4 +1,6 @@
-import { Schema, Document, model } from "mongoose";
+import { Schema, Document, model, Types } from "mongoose";
+import Rating from "../models/ratingModel";
+
 interface Order extends Document {
   orderNo: string;
   orderStatus: string;
@@ -7,11 +9,28 @@ interface Order extends Document {
   tableName: number;
   transactionId?: number;
   createdAt: Date;
+  orderDetail?: Types.ObjectId;
   isDisabled: boolean;
   revisedAt?: Date;
   isDeleted: boolean;
   deletedAt?: Date;
+  //rating
+  payment?: string;
+  // Reference to the Rating subdocument
+  rating?: Rating;
 }
+interface Rating {
+  satisfaction?: number; // Make satisfaction field optional
+  description?: string; // Make description field optional
+}
+const ratingSchema = new Schema<Rating>({
+  satisfaction: {
+    type: Number,
+  },
+  description: {
+    type: String,
+  },
+});
 
 const orderSchema = new Schema(
   {
@@ -76,10 +95,36 @@ const orderSchema = new Schema(
       type: Date,
       select: false,
     },
+    payment: {
+      type: String,
+      //required: [true, "請選擇付款方式"],
+    },
+    satisfaction: {
+      type: Number,
+      //required: [true, "請填寫滿意度"],
+    },
+    description: {
+      type: String,
+      required: false,
+    },
+    //add rating
+    rating: {
+      type: Schema.Types.ObjectId,
+      ref: "Rating",
+      required: false,
+    }
   },
   {
     versionKey: false,
   }
 );
+
+orderSchema.pre<Order>("save", async function (next) {
+  if (this.rating && this.rating.satisfaction) {
+    this.payment = "現金";
+    this.orderStatus = "已結帳";
+  }
+  next();
+});
 
 export default model<Order>("Order", orderSchema);
