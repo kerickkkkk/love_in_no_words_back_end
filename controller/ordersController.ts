@@ -528,53 +528,48 @@ export const orders = {
   //S-3-3 滿意度及建議回饋
   postRating: handleErrorAsync(async (req: Request, res: Response, next: NextFunction) => {
     // Destructure the request body
-    const { _id, payment, orderType, satisfaction, description } = req.body;
+    const { _id, satisfaction, description } = req.body;
 
     // Check if the required fields are present
-    if (!payment || !orderType || !satisfaction) {
+    if (!satisfaction) {
       return next(appError(400, "請填寫必要欄位", next));
     }
 
-    // Create the rating document
-    const savedRating = await Rating.create({
-      payment,
-      orderType,
-      satisfaction,
-      description,
-    });
+    try {
+      // Create the rating document
+      const rating = await Rating.create({
+        satisfaction,
+        description,
+      });
 
-    if (savedRating) {
-      // Rating document created successfully
-      // Update the corresponding order document
+      // Update the corresponding order document with the rating
       const order = await Order.findByIdAndUpdate(_id, {
         payment: "現金",
         orderStatus: "已付款",
-        rating: savedRating._id,
+        rating: rating._id,
       });
 
-      if (order) {
-        const response = {
-          status: "OK",
-          message: "新增成功！",
-          code: "200",
-          data: {
-            _id,
-            payment: "現金",
-            orderType,
-            satisfaction,
-            description,
-          },
-        };
-        return handleSuccess(res, "新增成功！", response);
-      } else {
-        // Failed to update the order document
+      if (!order) {
         return next(appError(400, "無法更新訂單資訊", next));
       }
-    } else {
-      // Failed to create the rating document
+
+      const response = {
+        status: "OK",
+        message: "新增成功！",
+        code: "200",
+        data: {
+          _id,
+          satisfaction,
+          description,
+        },
+      };
+
+      return handleSuccess(res, "新增成功！", response);
+    } catch (error) {
       return next(appError(400, "提交評分資訊失敗", next));
     }
   })
+
 };
 
 export default orders;

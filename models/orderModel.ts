@@ -14,11 +14,22 @@ interface Order extends Document {
   isDeleted: boolean;
   deletedAt?: Date;
   //rating
-  // Added rating field
-  rating?: Types.ObjectId;
-  // Added payment field
   payment?: string;
+  // Reference to the Rating subdocument
+  rating?: Rating;
 }
+interface Rating {
+  satisfaction?: number; // Make satisfaction field optional
+  description?: string; // Make description field optional
+}
+const ratingSchema = new Schema<Rating>({
+  satisfaction: {
+    type: Number,
+  },
+  description: {
+    type: String,
+  },
+});
 
 const orderSchema = new Schema(
   {
@@ -81,11 +92,11 @@ const orderSchema = new Schema(
     },
     payment: {
       type: String,
-      required: [true, "請選擇付款方式"],
+      //required: [true, "請選擇付款方式"],
     },
     satisfaction: {
       type: Number,
-      required: [true, "請填寫滿意度"],
+      //required: [true, "請填寫滿意度"],
     },
     description: {
       type: String,
@@ -102,17 +113,13 @@ const orderSchema = new Schema(
     versionKey: false,
   }
 );
+
 orderSchema.pre<Order>("save", async function (next) {
-  if (this.isModified("rating") && this.rating) {
-    const ratingModel = await Rating.findById(this.rating); // Use the imported RatingModel
-    if (ratingModel) {
-      this.payment = "現金";
-      this.orderStatus = "已付款";
-    }
+  if (this.rating && this.rating.satisfaction) {
+    this.payment = "現金";
+    this.orderStatus = "已付款";
   }
   next();
 });
-
-
 
 export default model<Order>("Order", orderSchema);
