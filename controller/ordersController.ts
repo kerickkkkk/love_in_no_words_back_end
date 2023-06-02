@@ -476,8 +476,15 @@ export const orders = {
         }
 
         // 模擬從資料庫取得訂單資訊
-        const order = await Order.findById(orderId).populate("orderDetail");
-
+        //const order = await Order.findById(orderId).populate("orderDetail");
+        const order = await Order.findById(orderId)
+          .populate("orderDetail")
+          .populate({
+            path: "rating",
+            model: "Rating",
+            select: "satisfaction description",
+          })
+          .exec();
         // 檢查訂單是否存在
         if (!order) {
           return next(appError(400, "訂單不存在", next));
@@ -485,6 +492,7 @@ export const orders = {
 
         // 取得訂單詳細內容
         const orderDetail = order.orderDetail as any;
+        const rating = orderDetail.rating as any;
 
         // 組合訂單詳細內容
         const formattedOrderDetail = {
@@ -515,6 +523,9 @@ export const orders = {
           createdAt: orderDetail.createdAt,
           revisedAt: orderDetail.revisedAt,
           isDeleted: orderDetail.isDeleted,
+          //add rating
+          satisfaction: rating ? rating.satisfaction : null,
+          description: rating ? rating.description : null,
         };
 
         // 回傳訂單詳細內容
@@ -532,11 +543,22 @@ export const orders = {
     const { satisfaction, description } = req.body;
     const { orderId: _id } = req.params;
     // Check if the required fields are present
-    if (!satisfaction) {
-      return next(appError(400, "請填寫必要欄位", next));
+    if (!satisfaction || !_id) {
+      return next(appError(400, "請填寫必要欄位!", next));
     }
-    //rating 內 order 不可以出現重複的
+    // Check if satisfaction is a valid number between 1 and 10
+    if (isNaN(satisfaction) || satisfaction <= 0 || satisfaction > 10) {
+      return next(appError(400, "只能輸入1-10之間的數字!", next));
+    }
     try {
+      //rating 內 order 不可以出現重複的
+      // Check if a rating with the same order ID already exists
+      const existingRating = await Rating.findOne({ order: _id });
+
+      if (existingRating) {
+        return next(appError(400, "不能重複提交評分!", next));
+      }
+
       // Create the rating document
       const rating = await Rating.create({
         satisfaction,
@@ -570,7 +592,7 @@ export const orders = {
 
       return handleSuccess(res, "新增成功！", response);
     } catch (error) {
-      return next(appError(400, "提交評分資訊失敗", next));
+      return next(appError(400, "提交評分資訊失敗!", next));
     }
   })
 
