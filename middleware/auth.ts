@@ -100,8 +100,30 @@ export const generateJWT = (user: any, res: Response) => {
       _id: user._id,
       name: user.name,
       token,
-      titleNo : user.titleNo,
-      title : user.title
+      titleNo: user.titleNo,
+      title: user.title
     },
   });
 };
+
+// 在 controller 內驗證
+export const authToken = async (token: string, next: NextFunction) => {
+  try {
+    const decode = await new Promise<Payload>((resolve, reject) => {
+      jwt.verify(token, process.env.JWT_SECRET!, (err, payload) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(payload as Payload);
+        }
+      });
+    });
+    const currentUser = await User.findById(decode.id);
+    if (!currentUser) {
+      return next(appError(400, Message.USER_NOT_FOUND, next));
+    }
+    return true;
+  } catch (error) {
+    return next(appError(400, '驗證有誤', next));
+  }
+}

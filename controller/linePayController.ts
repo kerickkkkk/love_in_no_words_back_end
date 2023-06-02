@@ -8,6 +8,8 @@ import handleErrorAsync from "../service/handleErrorAsync";
 import handleSuccess from "../service/handleSuccess";
 import appError from "../service/appError";
 import Order from "../models/orderModel";
+import { authToken } from "../middleware/auth";
+import { Message } from "../constants/messages";
 
 dotenv.config();
 
@@ -95,6 +97,14 @@ const createSignature = (uri: any, linePayBody: any, nonce: any) => {
 export const linePay = {
   payment: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
+      const token = req.body._token
+      if (!token) {
+        return next(appError(400, Message.NO_TOKEN, next));
+      }
+      const authRes = await authToken(token, next)
+      if (!authRes) {
+        return false;
+      }
       const { orderNo } = req.params
       const { redirectDevUrl = false } = req.query
       if (redirectDevUrl) {
