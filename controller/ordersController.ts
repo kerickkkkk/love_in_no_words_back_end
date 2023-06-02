@@ -473,13 +473,11 @@ export const orders = {
         // 模擬從資料庫取得訂單資訊
         //const order = await Order.findById(orderId).populate("orderDetail");
         const order = await Order.findById(orderId)
+          .populate("orderDetail")
           .populate({
-            path: "detail",
-            populate: {
-              path: "rating",
-              model: "Rating",
-              select: "satisfaction description",
-            },
+            path: "rating",
+            model: "Rating",
+            select: "satisfaction description",
           })
           .exec();
         // 檢查訂單是否存在
