@@ -9,6 +9,7 @@ import ProductType from '../models/productTypeModel'
 import { isoDate } from "../utils/dayjs";
 
 export const abCoupons = {
+  // O-6-1 獲取 a+b 活動
   getAbCoupons: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
 
@@ -42,6 +43,7 @@ export const abCoupons = {
       handleSuccess(res, "成功", result);
     }
   ),
+  // O-6-2 新增 a+b 活動
   createAbCoupons: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
       const { list, discount } = req.body;
@@ -106,6 +108,52 @@ export const abCoupons = {
       return handleSuccess(res, "A + B 活動新增成功", newItem);
     }
   ),
+  // O-6-3 修改 a+b 活動 折扣數
+  patchAbCoupons: handleErrorAsync(
+    async (req: any, res: Response, next: NextFunction) => {
+      const { discount } = req.body;
+      const { couponNo } = req.params
+      const couponModelCouponNoObj = await AbCouponModel.findOne({ couponNo });
+
+      if (couponModelCouponNoObj === null) {
+        return next(appError(400, "查無 A + B 活動編號", next));
+      }
+
+      const errorMsgArray: string[] = []
+
+      if (!discount) {
+        errorMsgArray.push('請填優惠卷折扣');
+      }
+
+      if (discount && !validator.isInt(discount.toString(), { min: 1, max: 100 })) {
+        errorMsgArray.push('折扣為 1 ~ 100 數字');
+      }
+
+      // 如果有錯誤訊息有返回400
+      if (errorMsgArray.length > 0) {
+        return next(appError(400, errorMsgArray.join(";"), next));
+      }
+      const updatedItem = await AbCouponModel.findOneAndUpdate(
+        {
+          couponNo,
+          isDeleted: false,
+        },
+        {
+          discount
+        },
+        {
+          returnDocument: "after",
+        }
+      );
+
+      if (updatedItem === null) {
+        return next(appError(400, '查無優惠卷', next));
+      }
+
+      return handleSuccess(res, "A + B 活動折扣修改成功", null);
+    }
+  ),
+  // O-6-4 刪除 a+b 活動
   deleteAbCoupons: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
       const { couponNo } = req.params;

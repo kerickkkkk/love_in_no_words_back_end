@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get("/admin", isOwnerAuth, abCouponsController.getAbCoupons);
 router.post("/admin", isOwnerAuth, abCouponsController.createAbCoupons);
+router.patch("/admin/:couponNo", isOwnerAuth, abCouponsController.patchAbCoupons);
 router.delete("/admin/:couponNo", isOwnerAuth, abCouponsController.deleteAbCoupons);
 
 export default router;
