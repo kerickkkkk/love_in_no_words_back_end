@@ -11,12 +11,9 @@ import { User } from "../models/userModel";
 import { Meta } from "../types/Pagination";
 import { Message } from "../constants/messages";
 import { isEffectVal } from "../utils/common";
-import fs from "fs";
-import * as path from "path";
-import firebaseAdmin from "../service/firebase";
-import { v4 as uuidv4 } from "uuid";
-import { GetSignedUrlConfig } from "@google-cloud/storage";
+import ExcelJS from "exceljs";
 import { setCache } from "../connection/service/redis";
+import ImageCharts from "image-charts";
 
 interface RequestQuery {
   year?: number;
@@ -122,7 +119,7 @@ export const report = {
     async (req: any, res: Response, next: NextFunction) => {
       const year = req.query.year || dayjs().year();
       const data = await getRevenueData(year);
-      setCache(req.originalUrl, data)
+      setCache(req.originalUrl, data);
       handleSuccess(res, "成功", data);
     }
   ),
@@ -132,7 +129,7 @@ export const report = {
       // 預設獲取當年度
       const year = req.query.year || dayjs().year();
       const data = await getSellQuantityData(year);
-      setCache(req.originalUrl, data)
+      setCache(req.originalUrl, data);
       handleSuccess(res, "成功", data);
     }
   ),
@@ -142,7 +139,7 @@ export const report = {
       // 預設獲取當年度
       const year = req.query.year || dayjs().year();
       const data = await getOrderQuantityData(year);
-      setCache(req.originalUrl, data)
+      setCache(req.originalUrl, data);
       handleSuccess(res, "成功", data);
     }
   ),
@@ -454,7 +451,7 @@ export const report = {
         setCache(req.originalUrl, {
           data: orders,
           meta,
-        })
+        });
         return handleSuccess(res, "成功", {
           data: orders,
           meta,
@@ -467,7 +464,7 @@ export const report = {
   // O-5-6 訂單資訊下載API
   downloadReports: handleErrorAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-      const { month, dataAmount } = req.query;
+      let { month, dataAmount } = req.query;
       const errorMsgArray = [];
       if (!isEffectVal(month) || Number.isNaN(Number(month))) {
         errorMsgArray.push(Message.NEED_POSITIVE_PAGE);
@@ -479,160 +476,382 @@ export const report = {
       if (errorMsgArray.length > 0) {
         return next(appError(400, errorMsgArray.join(";"), next));
       }
+      try {
+        // 生成Excel文件
+        const startOfMonth = dayjs(
+          `${dayjs().year()}-${Number(month)}-01`
+        ).toDate(); // 設定月初日期
+        const endOfMonth = dayjs(`${dayjs().year()}-${Number(month)}-01`)
+          .endOf("month")
+          .toDate(); // 設定月底日期
 
-      // 生成Excel文件
-      const startOfMonth = dayjs(
-        `${dayjs().year()}-${Number(month)}-01`
-      ).toDate(); // 設定月初日期
-      const endOfMonth = dayjs(`${dayjs().year()}-${Number(month)}-01`)
-        .endOf("month")
-        .toDate(); // 設定月底日期
-
-      const workbook = XLSX.utils.book_new();
-      const orders = await OrderModel.aggregate([
-        {
-          $match: {
-            orderStatus: "已結帳",
-            isDeleted: false,
-            createdAt: {
-              $gte: startOfMonth,
-              $lte: endOfMonth,
-            },
-          },
-        },
-
-        {
-          $limit: Number(dataAmount),
-        },
-        {
-          $lookup: {
-            from: "orderDetail",
-            localField: "orderDetail",
-            foreignField: "_id",
-            as: "orderDetail",
-          },
-        },
-        {
-          $unwind: "$orderDetail",
-        },
-        {
-          $addFields: {
-            createdAtFormatted: {
-              $dateToString: {
-                format: "%Y-%m-%d %H:%M:%S",
-                date: "$createdAt",
-                timezone: "+08:00",
+        const orders = await OrderModel.aggregate([
+          {
+            $match: {
+              orderStatus: "已結帳",
+              isDeleted: false,
+              createdAt: {
+                $gte: startOfMonth,
+                $lte: endOfMonth,
               },
             },
           },
-        },
-        {
-          $project: {
-            _id: 0,
-            orderNo: 1,
-            totalPrice: "$orderDetail.totalPrice",
-            createdAt: "$createdAtFormatted",
+
+          {
+            $limit: Number(dataAmount),
           },
-        },
-        {
-          $sort: { createdAt: 1 },
-        },
-      ]);
-      // 增加項次
-      const data = orders.map((element, index) => {
-        const itemNo = index + 1;
-        return { itemNo, ...element };
-      });
+          {
+            $lookup: {
+              from: "orderDetail",
+              localField: "orderDetail",
+              foreignField: "_id",
+              as: "orderDetail",
+            },
+          },
+          {
+            $unwind: "$orderDetail",
+          },
+          {
+            $addFields: {
+              createdAtFormatted: {
+                $dateToString: {
+                  format: "%Y-%m-%d %H:%M:%S",
+                  date: "$createdAt",
+                  timezone: "+08:00",
+                },
+              },
+            },
+          },
+          {
+            $project: {
+              _id: 0,
+              orderNo: 1,
+              totalPrice: "$orderDetail.totalPrice",
+              createdAt: "$createdAtFormatted",
+            },
+          },
+          {
+            $sort: { createdAt: 1 },
+          },
+        ]);
 
-      const worksheet = XLSX.utils.json_to_sheet(data);
+        const dailySell = orders.reduce((prev: any, next: any) => {
+          const currentDate = dayjs(next.createdAt).date();
+          // 如果沒有該日期資料就新增一個
+          if (
+            prev[0] === undefined ||
+            prev[prev.length - 1][0] != currentDate
+          ) {
+            prev[prev.length] = [currentDate, next.totalPrice];
+          } else {
+            // 日期一樣就將金額累加
+            prev[prev.length - 1] = [
+              currentDate,
+              Number(next.totalPrice) + Number(prev[prev.length - 1][1]),
+            ];
+          }
+          return prev;
+        }, []);
 
-      const wscols = [{ wch: 6 }, { wch: 15 }, { wch: 10 }, { wch: 20 }];
+        // 增加項次
+        const data = orders.map((element, index) => {
+          const itemNo = index + 1;
+          return { itemNo, ...element };
+        });
 
-      worksheet["!cols"] = wscols;
+        // 檔案名稱
+        const fileName = dayjs().format("YYYY年") + month + "月營收報表.xlsx";
 
-      worksheet["A1"] = { t: "s", v: "項次" };
-      worksheet["B1"] = { t: "s", v: "訂單編號" };
-      worksheet["C1"] = { t: "s", v: "價錢" };
-      worksheet["D1"] = { t: "s", v: "時間" };
+        const workbook = new ExcelJS.Workbook();
 
-      XLSX.utils.book_append_sheet(workbook, worksheet, "營收資料");
-      // 儲存在本地方法
-      const fileName = dayjs().format("YYYY年") + month + "月營收報表.xlsx";
+        // 創建一個新的工作表
+        const worksheet = workbook.addWorksheet("營收資料");
 
-      const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
+        worksheet.views = [
+          {
+            showGridLines: false,
+          },
+        ];
+        // 設定欄寬
+        worksheet.getColumn("A").width = 6;
+        worksheet.getColumn("B").width = 15;
+        worksheet.getColumn("C").width = 10;
+        worksheet.getColumn("D").width = 20;
+        worksheet.getColumn("F").width = 6;
+        worksheet.getColumn("G").width = 20;
 
-      // 將Excel文件作為附件下載
-      const encodedFileName = encodeURIComponent(fileName);
+        // 文件設置
+        workbook.creator = "love_in_no_words_POS_System";
+        workbook.created = new Date();
 
-      res.setHeader(
-        "Content-Disposition",
-        `attachment; filename*=UTF-8\'\'${encodedFileName}`
-      );
-      res.setHeader(
-        "Content-Type",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-      );
-      res.send(buffer);
-      // 要用URL打打看 postman會不能改名稱
-      // http://localhost:3000/v1/reports/admin/orders/download?month=6&dataAmount=100
-      // 以下sendFile方法只能用在儲存在本地的檔案夾的時候
-      // res.sendFile(path.join(__dirname, "..", "temp", fileName), (err) => {
-      //   if (err) {
-      //     return next(appError(400, Message.FILE_DOWNLOAD_FAIL, next));
-      //   }
-      //   // 下載完成後刪除Excel文件
-      //   fs.unlinkSync(path.join(__dirname, "..", "temp", fileName));
-      // });
-      // res.sendFile(buffer, (err) => {
-      //   if (err) {
-      //     return next(appError(400, Message.FILE_DOWNLOAD_FAIL, next));
-      //   }
-      //   // 下載完成後刪除Excel文件
-      //   fs.unlinkSync(path.join(__dirname, "..", "temp", fileName));
-      // });
+        // 通過文件名將圖像添加到工作簿
+        const imageId1 = workbook.addImage({
+          filename: "./assets/img/LOGO.png",
+          extension: "png",
+        });
+        // // 在 A1上插入ICON圖片
+        worksheet.getRow(1).height = 32;
+        worksheet.addImage(imageId1, "A1:A1");
 
-      // 以下是把檔案放到firebase的方法
-      // const excelData = XLSX.write(workbook, {
-      //   type: "buffer",
-      //   bookType: "xlsx",
-      // });
+        // POS系統名稱欄位合併為單一儲存格
+        worksheet.mergeCells("B1:D1");
+        worksheet.getCell("B1").value = `傲嬌甜點 POS 點餐系統${month}月報表`;
+        worksheet.getCell("B1").alignment = {
+          vertical: "middle",
+          horizontal: "center",
+        };
+        worksheet.getCell("B1").font = {
+          size: 14,
+          bold: true,
+        };
+        // 寫入標題行
+        worksheet.getCell("A2").value = "項次";
+        // 設定框線式樣
+        worksheet.getCell("A2").border = {
+          top: { style: "double", color: { argb: "FF00FF00" } },
+          left: { style: "double", color: { argb: "FF00FF00" } },
+          bottom: { style: "double", color: { argb: "FF00FF00" } },
+          right: { style: "thin", color: { argb: "FF00FF00" } },
+        };
+        worksheet.getCell("A2").fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "335AA2AE" },
+        };
+        worksheet.getCell("B2").value = "訂單編號";
+        worksheet.getCell("B2").border = {
+          top: { style: "double", color: { argb: "FF00FF00" } },
+          left: { style: "thin", color: { argb: "FF00FF00" } },
+          bottom: { style: "double", color: { argb: "FF00FF00" } },
+          right: { style: "thin", color: { argb: "FF00FF00" } },
+        };
+        worksheet.getCell("B2").fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "335AA2AE" },
+        };
+        worksheet.getCell("C2").value = "金額(元)";
+        worksheet.getCell("C2").border = {
+          top: { style: "double", color: { argb: "FF00FF00" } },
+          left: { style: "thin", color: { argb: "FF00FF00" } },
+          bottom: { style: "double", color: { argb: "FF00FF00" } },
+          right: { style: "thin", color: { argb: "FF00FF00" } },
+        };
+        worksheet.getCell("C2").fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "335AA2AE" },
+        };
+        worksheet.getCell("D2").value = "時間";
+        worksheet.getCell("D2").border = {
+          top: { style: "double", color: { argb: "FF00FF00" } },
+          left: { style: "thin", color: { argb: "FF00FF00" } },
+          bottom: { style: "double", color: { argb: "FF00FF00" } },
+          right: { style: "double", color: { argb: "FF00FF00" } },
+        };
+        worksheet.getCell("D2").fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "335AA2AE" },
+        };
+        worksheet.getCell("F2").value = "日期";
+        worksheet.getCell("F2").border = {
+          top: { style: "double", color: { argb: "FF00FF00" } },
+          left: { style: "double", color: { argb: "FF00FF00" } },
+          bottom: { style: "double", color: { argb: "FF00FF00" } },
+          right: { style: "thin", color: { argb: "FF00FF00" } },
+        };
+        worksheet.getCell("F2").fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "335AA2AE" },
+        };
+        worksheet.getCell("G2").value = "單日營業額(元)";
+        worksheet.getCell("G2").border = {
+          top: { style: "double", color: { argb: "FF00FF00" } },
+          left: { style: "thin", color: { argb: "FF00FF00" } },
+          bottom: { style: "double", color: { argb: "FF00FF00" } },
+          right: { style: "double", color: { argb: "FF00FF00" } },
+        };
+        worksheet.getCell("G2").fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "335AA2AE" },
+        };
+        worksheet.getRow(2).alignment = {
+          vertical: "middle",
+          horizontal: "center",
+        };
+        worksheet.getRow(2).font = {
+          size: 12,
+          bold: true,
+        };
 
-      // // 上傳 Excel 檔案到 Firebase 雲端儲存體
-      // const bucket = firebaseAdmin.storage().bucket();
-      // const filename = "orderReport_" + dayjs().format("YYYY-MM-DD");
-      // // 檔案路徑
-      // const filePath = `reports/${filename}.xlsx`;
-      // const file = bucket.file(filePath);
+        // 寫入每筆資料
+        data.forEach((data, index) => {
+          const row = worksheet.getRow(index + 3); // 從第2行開始寫入數據
+          if (index % 2 === 1) {
+            row.getCell("A").fill = {
+              type: "pattern",
+              pattern: "solid",
+              fgColor: { argb: "FFDAEEF3" },
+            };
+            row.getCell("B").fill = {
+              type: "pattern",
+              pattern: "solid",
+              fgColor: { argb: "FFDAEEF3" },
+            };
+            row.getCell("C").fill = {
+              type: "pattern",
+              pattern: "solid",
+              fgColor: { argb: "FFDAEEF3" },
+            };
+            row.getCell("D").fill = {
+              type: "pattern",
+              pattern: "solid",
+              fgColor: { argb: "FFDAEEF3" },
+            };
+          }
+          row.getCell("A").value = data.itemNo;
+          row.getCell("A").border = {
+            left: { style: "double", color: { argb: "FF00FF00" } },
+            bottom: { style: "thin", color: { argb: "FF00FF00" } },
+            right: { style: "thin", color: { argb: "FF00FF00" } },
+          };
+          row.getCell("B").value = data.orderNo;
+          row.getCell("B").border = {
+            bottom: { style: "thin", color: { argb: "FF00FF00" } },
+            right: { style: "thin", color: { argb: "FF00FF00" } },
+          };
+          row.getCell("C").value = data.totalPrice;
+          row.getCell("C").border = {
+            bottom: { style: "thin", color: { argb: "FF00FF00" } },
+            right: { style: "thin", color: { argb: "FF00FF00" } },
+          };
+          row.getCell("D").value = data.createdAt;
+          row.getCell("D").border = {
+            bottom: { style: "thin", color: { argb: "FF00FF00" } },
+            right: { style: "double", color: { argb: "FF00FF00" } },
+          };
+        });
+        // 設定圖片所需字串
+        let dailySellString = "a:";
+        let dailySellxLabel = "0:|";
+        // 每日營業額累計
+        dailySell.forEach((data: any, index: any) => {
+          const row = worksheet.getRow(index + 3); // 從第2行開始寫入數據
+          if (index % 2 === 1) {
+            row.getCell("F").fill = {
+              type: "pattern",
+              pattern: "solid",
+              fgColor: { argb: "FFDAEEF3" },
+            };
+            row.getCell("G").fill = {
+              type: "pattern",
+              pattern: "solid",
+              fgColor: { argb: "FFDAEEF3" },
+            };
+          }
+          row.getCell("F").value = data[0];
+          row.getCell("F").border = {
+            left: { style: "double", color: { argb: "FF00FF00" } },
+            bottom: { style: "thin", color: { argb: "FF00FF00" } },
+            right: { style: "thin", color: { argb: "FF00FF00" } },
+          };
 
-      // file
-      //   .save(excelData, {
-      //     contentType:
-      //       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      //   })
-      //   .then(() => {
-      //     console.log("Excel 檔案上傳成功");
-      //   })
-      //   .catch((error) => {
-      //     console.error("上傳失敗:", error);
-      //   });
+          row.getCell("G").value = data[1];
+          row.getCell("G").border = {
+            bottom: { style: "thin", color: { argb: "FF00FF00" } },
+            right: { style: "double", color: { argb: "FF00FF00" } },
+          };
+          // 最後一筆的外框線為雙框線式樣
+          if (index === dailySell.length - 1) {
+            row.getCell("F").border = {
+              left: { style: "double", color: { argb: "FF00FF00" } },
+              bottom: { style: "double", color: { argb: "FF00FF00" } },
+              right: { style: "thin", color: { argb: "FF00FF00" } },
+            };
+            row.getCell("G").border = {
+              bottom: { style: "double", color: { argb: "FF00FF00" } },
+              right: { style: "double", color: { argb: "FF00FF00" } },
+            };
+            dailySellxLabel = dailySellxLabel + data[0];
+            dailySellString = dailySellString + data[1];
+          } else {
+            dailySellxLabel = dailySellxLabel + data[0] + "|";
+            dailySellString = dailySellString + data[1] + ",";
+          }
+        });
 
-      // // 取得具有限時有效性的下載網址
-      // const options = {
-      //   action: "read",
-      //   expires: Date.now() + 24 * 60 * 60 * 1000, // 有效期限，此處為一天
-      // };
-      // let downloadUrl: string = "";
-      // await bucket
-      //   .file(filePath)
-      //   .getSignedUrl(options as GetSignedUrlConfig)
-      //   .then((urls) => {
-      //     downloadUrl = urls[0];
-      //   })
-      //   .catch((error) => {
-      //     console.error("獲取下載網址失敗:", error);
-      //   });
+        const lastLow = worksheet.getRow(Number(dataAmount) + 3);
+        // 總營業額部分合併為單一儲存格
+        worksheet.mergeCells(
+          `A${Number(dataAmount) + 3}:B${Number(dataAmount) + 3}`
+        );
+        worksheet.mergeCells(
+          `C${Number(dataAmount) + 3}:D${Number(dataAmount) + 3}`
+        );
 
-      // handleSuccess(res, "成功", { reportUrl: downloadUrl });
+        //  設定總結公式
+        worksheet.getCell(`C${Number(dataAmount) + 3}`).value = {
+          formula: `=SUM(C3:C${Number(dataAmount) + 2})`,
+          result: 0,
+          date1904: false,
+        };
+        lastLow.getCell("A").value = "營業額總計(元)：";
+        lastLow.getCell("A").border = {
+          left: { style: "double", color: { argb: "FF00FF00" } },
+          bottom: { style: "double", color: { argb: "FF00FF00" } },
+          right: { style: "thin", color: { argb: "FF00FF00" } },
+        };
+        lastLow.getCell("C").border = {
+          bottom: { style: "double", color: { argb: "FF00FF00" } },
+          right: { style: "double", color: { argb: "FF00FF00" } },
+        };
+
+        // 繪製每日營業額直方圖
+        const barChart = new ImageCharts()
+          .chtt("單日營業額圖")
+          .chts("000000,24")
+          .cht("bvg")
+          .chxt("x,y")
+          .chbr("5")
+          .chdl("單日營業額(元)")
+          .chd(dailySellString)
+          .chxl(dailySellxLabel)
+          .chf("b0,lg,0,5AA2AE,0.8,5AA2AE,0.8")
+          .chdls("000000,12")
+          .chg("0,1")
+          .chs("700x300");
+        const uri = await barChart.toDataURI();
+        const imageId2 = workbook.addImage({
+          base64: uri,
+          extension: "png",
+        });
+
+        worksheet.addImage(imageId2, {
+          tl: { col: 8, row: 3 }, // 指定插入圖片的起始位置
+          ext: { width: 700, height: 300 },
+          editAs: "absolute", // 將圖片位置設置為絕對值
+        });
+
+        const buffer = await workbook.xlsx.writeBuffer();
+
+        // 將Excel文件作為附件下載
+        const encodedFileName = encodeURIComponent(fileName);
+        res.setHeader(
+          "Content-Disposition",
+          `attachment; filename*=UTF-8\'\'${encodedFileName}`
+        );
+        res.setHeader(
+          "Content-Type",
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        );
+
+        res.send(buffer);
+      } catch (error) {
+        return next(appError(400, Message.FILE_DOWNLOAD_FAIL, next));
+      }
     }
   ),
 };
