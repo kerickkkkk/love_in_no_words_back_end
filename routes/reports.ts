@@ -48,7 +48,6 @@ router.get(
 router.get(
   "/reports/admin/orders/download",
   isOwnerAuth,
-  cache,
   reportsController.downloadReports
 );
 
