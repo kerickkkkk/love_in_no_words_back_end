@@ -554,7 +554,7 @@ export const report = {
         }, []);
 
         // 增加項次
-        const data = orders.map((element, index) => {
+        const dataArray = orders.map((element, index) => {
           const itemNo = index + 1;
           return { itemNo, ...element };
         });
@@ -688,8 +688,8 @@ export const report = {
         };
 
         // 寫入每筆資料
-        data.forEach((data, index) => {
-          const row = worksheet.getRow(index + 3); // 從第2行開始寫入數據
+        dataArray.forEach((data, index) => {
+          const row = worksheet.getRow(index + 3); // 從第3行開始寫入數據
           if (index % 2 === 1) {
             row.getCell("A").fill = {
               type: "pattern",
@@ -733,7 +733,33 @@ export const report = {
             bottom: { style: "thin", color: { argb: "FF00FF00" } },
             right: { style: "double", color: { argb: "FF00FF00" } },
           };
+
+          if (index === dataArray.length - 1) {
+            // 最後一行設定為總營業額
+            const lastLow = worksheet.getRow(index + 4);
+            // 總營業額部分合併為單一儲存格
+            worksheet.mergeCells(`A${index + 4}:B${index + 4}`);
+            worksheet.mergeCells(`C${index + 4}:D${index + 4}`);
+
+            //  設定總結公式
+            worksheet.getCell(`C${index + 4}`).value = {
+              formula: `=SUM(C3:C${index + 3})`,
+              result: 0,
+              date1904: false,
+            };
+            lastLow.getCell("A").value = "營業額總計(元)：";
+            lastLow.getCell("A").border = {
+              left: { style: "double", color: { argb: "FF00FF00" } },
+              bottom: { style: "double", color: { argb: "FF00FF00" } },
+              right: { style: "thin", color: { argb: "FF00FF00" } },
+            };
+            lastLow.getCell("C").border = {
+              bottom: { style: "double", color: { argb: "FF00FF00" } },
+              right: { style: "double", color: { argb: "FF00FF00" } },
+            };
+          }
         });
+
         // 設定圖片所需字串
         let dailySellString = "a:";
         let dailySellxLabel = "0:|";
@@ -782,32 +808,6 @@ export const report = {
             dailySellString = dailySellString + data[1] + ",";
           }
         });
-
-        const lastLow = worksheet.getRow(Number(dataAmount) + 3);
-        // 總營業額部分合併為單一儲存格
-        worksheet.mergeCells(
-          `A${Number(dataAmount) + 3}:B${Number(dataAmount) + 3}`
-        );
-        worksheet.mergeCells(
-          `C${Number(dataAmount) + 3}:D${Number(dataAmount) + 3}`
-        );
-
-        //  設定總結公式
-        worksheet.getCell(`C${Number(dataAmount) + 3}`).value = {
-          formula: `=SUM(C3:C${Number(dataAmount) + 2})`,
-          result: 0,
-          date1904: false,
-        };
-        lastLow.getCell("A").value = "營業額總計(元)：";
-        lastLow.getCell("A").border = {
-          left: { style: "double", color: { argb: "FF00FF00" } },
-          bottom: { style: "double", color: { argb: "FF00FF00" } },
-          right: { style: "thin", color: { argb: "FF00FF00" } },
-        };
-        lastLow.getCell("C").border = {
-          bottom: { style: "double", color: { argb: "FF00FF00" } },
-          right: { style: "double", color: { argb: "FF00FF00" } },
-        };
 
         // 繪製每日營業額直方圖
         const barChart = new ImageCharts()

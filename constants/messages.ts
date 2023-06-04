@@ -45,6 +45,7 @@ export enum Message {
   PRODUCTNO_NOT_FOUND = "無該商品編號",
   MONTH_DATA_NOT_FOUND = "無該月份資料",
   FILE_DOWNLOAD_FAIL = "檔案下載失敗",
+  CLASSIFICATION_EXIST_ON_A_PLUS_B_ACTIVITY = "該分類存在於A+B優惠活動中，請先刪除含有此分類的A+B活動",
   // API結果
   RESULT_SUCCESS = "成功",
   CREATE_SUCCESS = "新增成功",

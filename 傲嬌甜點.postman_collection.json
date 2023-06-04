@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "9e638e8c-0bf2-4be2-a8ca-6fd8ec029c9f",
+		"_postman_id": "a4f92607-1bc9-429d-b3bf-0ef4f2b8c492",
 		"name": "傲嬌甜點",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "6878038"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -1114,7 +1113,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/admin/dessertcodes/1",
+							"raw": "{{base_url}}/v1/products/admin/dessertcodes/6",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1123,7 +1122,7 @@
 								"products",
 								"admin",
 								"dessertcodes",
-								"1"
+								"6"
 							]
 						}
 					},
@@ -2213,7 +2212,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"list\":[2,3],\n    \"discount\" : 10\n}",
+							"raw": "{\n    \"list\":[6,7],\n    \"discount\" : 10\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2247,7 +2246,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"list\":[1,2],\n    \"discount\" : 10\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2268,7 +2267,7 @@
 							"variable": [
 								{
 									"key": "couponNo",
-									"value": "B000000002"
+									"value": "B000000003"
 								}
 							]
 						}
