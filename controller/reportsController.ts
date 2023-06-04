@@ -14,7 +14,7 @@ import { isEffectVal } from "../utils/common";
 import ExcelJS from "exceljs";
 import { setCache } from "../connection/service/redis";
 import ImageCharts from "image-charts";
-
+import Jimp from "jimp";
 interface RequestQuery {
   year?: number;
   month?: number;
@@ -824,16 +824,43 @@ export const report = {
           .chg("0,1")
           .chs("700x300");
         const uri = await barChart.toDataURI();
-        const imageId2 = workbook.addImage({
-          base64: uri,
-          extension: "png",
-        });
 
-        worksheet.addImage(imageId2, {
-          tl: { col: 8, row: 3 }, // 指定插入圖片的起始位置
-          ext: { width: 700, height: 300 },
-          editAs: "absolute", // 將圖片位置設置為絕對值
-        });
+        // 把原圖右上角的image-charts.com文字用白色置換
+        await Jimp.read(Buffer.from(uri.split(",")[1], "base64")).then(
+          (image) => {
+            // 取得圖片的寬度和高度
+            const width = image.getWidth();
+
+            // 要覆蓋的區域寬度和高度
+            const overlayWidth = 90;
+            const overlayHeight = 20;
+
+            // 要覆蓋的區域起始點坐標 (右上角)
+            const overlayX = width - overlayWidth;
+            const overlayY = 0;
+
+            // 將區域設為白色
+            for (let x = overlayX; x < width; x++) {
+              for (let y = overlayY; y < overlayY + overlayHeight; y++) {
+                image.setPixelColor(Jimp.cssColorToHex("#FFFFFF"), x, y);
+              }
+            }
+
+            // 將圖片轉換為 base64
+            image.getBase64Async(Jimp.AUTO).then((base64Result) => {
+              const imageId2 = workbook.addImage({
+                base64: base64Result,
+                extension: "png",
+              });
+
+              worksheet.addImage(imageId2, {
+                tl: { col: 8, row: 3 }, // 指定插入圖片的起始位置
+                ext: { width: 700, height: 300 },
+                editAs: "absolute", // 將圖片位置設置為絕對值
+              });
+            });
+          }
+        );
 
         const buffer = await workbook.xlsx.writeBuffer();
 
