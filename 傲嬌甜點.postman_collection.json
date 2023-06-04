@@ -2234,7 +2234,48 @@
 					"response": []
 				},
 				{
-					"name": "O-6-3 刪除 a+b 活動",
+					"name": "O-6-3 修改 a+b 活動",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"discount\" : 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/abcoupons/admin/:couponNo",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"abcoupons",
+								"admin",
+								":couponNo"
+							],
+							"variable": [
+								{
+									"key": "couponNo",
+									"value": "B000000005"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "O-6-4 刪除 a+b 活動",
 					"request": {
 						"method": "DELETE",
 						"header": [
