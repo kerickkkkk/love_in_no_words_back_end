@@ -148,7 +148,7 @@ export const orders = {
         errorMsgArray.push('查無座位');
       }
 
-      const couponObj = await CouponModel.findOne({
+      const couponObj: any = await CouponModel.findOne({
         couponNo,
         isDisabled: false,
         isDeleted: false
@@ -175,6 +175,7 @@ export const orders = {
       // 計算商品 總價
       let totalTime = 0
       let totalPrice = 0
+      let discount = 0
       // 商品內優惠活動 (未計算)
 
       // 訂單優惠碼
@@ -223,10 +224,13 @@ export const orders = {
       const abMinus: any = {}
       const products = tempProducts.reduce((prev: any[], next, index) => {
         const { qty, note } = inputProducts[index]
+        const tempDiscount = couponObj ? next.price * (100 - couponObj.discount) / 100 : 0
+        next.price = couponObj ? next.price * couponObj.discount / 100 : next.price
         const product: any = {
           ...next,
           qty,
           note,
+          discount: tempDiscount * qty,
           subTotal: next.price * qty
         }
         // 計算要再回扣的Ａ＋Ｂ的錢
@@ -261,9 +265,9 @@ export const orders = {
             })
           }
         }
-
+        discount += tempDiscount * qty
         totalTime += next.productionTime * qty
-        totalPrice += next.price * qty
+        totalPrice = Number(totalPrice) + next.price * qty
         prev.push(product)
         return prev
       }, [])
@@ -297,11 +301,12 @@ export const orders = {
       }
 
       if (couponObj !== null) {
-        const originalPrice = totalPrice
-        totalPrice = Math.round(totalPrice * (Number(couponObj.discount)) / 100)
+        // 改直接寫入 產品的 price 是否有要再多一個 original price 欄位
+        // const originalPrice = totalPrice
+        // totalPrice = Math.round(totalPrice * (Number(couponObj.discount)) / 100)
         result.couponNo = couponNo
         result.couponName = couponObj.couponName
-        result.discount = originalPrice - totalPrice
+        result.discount = discount
         result.totalPrice = totalPrice
       }
       // 訂單試算

@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "6e9268b5-b4e7-476c-bd88-d01078929a3d",
+		"_postman_id": "a4f92607-1bc9-429d-b3bf-0ef4f2b8c492",
 		"name": "傲嬌甜點",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "26724792"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -1114,7 +1113,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/admin/dessertcodes/1",
+							"raw": "{{base_url}}/v1/products/admin/dessertcodes/6",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1123,7 +1122,7 @@
 								"products",
 								"admin",
 								"dessertcodes",
-								"1"
+								"6"
 							]
 						}
 					},
@@ -2306,7 +2305,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"list\":[2,3],\n    \"discount\" : 10\n}",
+							"raw": "{\n    \"list\":[6,7],\n    \"discount\" : 10\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2328,9 +2327,9 @@
 					"response": []
 				},
 				{
-					"name": "O-6-3 刪除 a+b 活動",
+					"name": "O-6-3 修改 a+b 活動",
 					"request": {
-						"method": "DELETE",
+						"method": "PATCH",
 						"header": [
 							{
 								"key": "Authorization",
@@ -2340,7 +2339,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"list\":[1,2],\n    \"discount\" : 10\n}",
+							"raw": "{\n    \"discount\" : 10\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2361,7 +2360,48 @@
 							"variable": [
 								{
 									"key": "couponNo",
-									"value": "B000000002"
+									"value": "B000000005"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "O-6-4 刪除 a+b 活動",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/abcoupons/admin/:couponNo",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"abcoupons",
+								"admin",
+								":couponNo"
+							],
+							"variable": [
+								{
+									"key": "couponNo",
+									"value": "B000000003"
 								}
 							]
 						}

@@ -14,6 +14,7 @@ import https from "https";
 import validator from "validator";
 import { ProductType } from "../models/productTypeModel";
 import { isEffectVal } from "../utils/common";
+import AbCouponModel from "../models/abCouponModel";
 // 大量製造訂單測試用
 import TableManagementModel from "../models/tableManagementModel";
 import OrderDetail from "../models/orderDetailModel";
@@ -527,11 +528,40 @@ export const products = {
   deleteProductType: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
       const { productsType } = req.params;
+
       // 如果productsType不是數字就返回錯誤
       if (Number.isNaN(Number(productsType))) {
         return next(appError(400, Message.PRODUCT_TYPE_NOT_FOUND, next));
       }
-      const productTypeObj = await ProductTypeModel.findOneAndUpdate(
+
+      const productTypeObj = await ProductTypeModel.findOne({
+        productsType,
+        isDeleted: false,
+      });
+      // productsType是數字但在db搜尋不到的狀況
+      if (productTypeObj === null) {
+        return next(appError(400, Message.PRODUCT_TYPE_NOT_FOUND, next));
+      }
+      const isExistAtAbCoupon = await AbCouponModel.find({
+        $and: [
+          {
+            $or: [
+              { productsTypeA: productTypeObj._id },
+              { productsTypeB: productTypeObj._id },
+            ],
+          },
+          { isDeleted: false },
+        ],
+      });
+
+      // 如果已經在A+B活動出現，必須先刪除該A+B活動才能刪除此分類
+      if (isExistAtAbCoupon.length !== 0) {
+        return next(
+          appError(400, Message.CLASSIFICATION_EXIST_ON_A_PLUS_B_ACTIVITY, next)
+        );
+      }
+      // 已確認過productType為尚未刪除且沒有出現在A+B活動分類中，直接進行修改刪除flag設定
+      await ProductTypeModel.findOneAndUpdate(
         {
           productsType,
           isDeleted: false,
@@ -539,15 +569,9 @@ export const products = {
         {
           isDeleted: true,
           deletedAt: isoDate(),
-        },
-        {
-          returnDocument: "after",
         }
       );
-      // productsType是數字但在db搜尋不到的狀況
-      if (productTypeObj === null) {
-        return next(appError(400, Message.PRODUCT_TYPE_NOT_FOUND, next));
-      }
+
       handleSuccess(res, Message.DELETE_SUCCESS, null);
     }
   ),

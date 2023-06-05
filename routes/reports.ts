@@ -1,7 +1,7 @@
 import reportsController from "../controller/reportsController";
 import express from "express";
 import { isOwnerAuth } from "../middleware/auth";
-import { cache } from "../middleware/cache"
+import { cache } from "../middleware/cache";
 
 const router = express.Router();
 
@@ -44,10 +44,10 @@ router.get(
   reportsController.getOrderInformation
 );
 
-// O-5-6 訂單資訊下載API 之後要加店長權限
+// O-5-6 訂單資訊下載API
 router.get(
   "/reports/admin/orders/download",
-
+  isOwnerAuth,
   reportsController.downloadReports
 );
 
