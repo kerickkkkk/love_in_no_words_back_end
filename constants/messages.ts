@@ -61,4 +61,5 @@ export enum Message {
   NO_TOKEN = "請輸入token",
   USER_NOT_FOUND = "非有效使用者token",
   NOT_OWNER_AUTH = "非店長權限",
+  NOT_COOK_AUTH = "非廚師權限",
 }
