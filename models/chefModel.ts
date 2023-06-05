@@ -1,6 +1,5 @@
 import { Schema, Document, model } from "mongoose";
 import Order from "../models/orderModel";
-
 export interface Chef extends Document {
   orderId: string;
   orderList: IOrderItem[];

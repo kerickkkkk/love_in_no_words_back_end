@@ -12,5 +12,5 @@ router.get("/detail/:orderId", isAuth, ordersController.getOrderDetail);
 router.post("/rating/:orderId", isAuth, ordersController.postRating);
 //chef
 router.get("/pick-up", isAuth, chefController.getPickUpOrders);
-router.patch("/pick-up/:orderId", isAuth, chefController.getPickUpOrders);
+router.patch("/pick-up/:orderId", isAuth, chefController.updateOrderStatus);
 export default router;
