@@ -39,6 +39,7 @@ export const chef = {
 
           return {
             orderNo: `${year}${month}${day}${hour}${minute}`,
+            status: orderDetail.status,
             orderList: orderDetail.orderList.map((item: any) => {
               return {
                 productNo: item.productNo,
@@ -71,15 +72,15 @@ export const chef = {
   updateOrderStatus: handleErrorAsync(
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        const { orderId } = req.params as { orderId?: string };
-        if (!orderId) {
+        //const { orderId } = req.params as { orderId?: string };
+        const { orderId: _id } = req.params;
+        if (!_id) {
           return next(appError(400, "缺少訂單ID", next));
         }
-
         const { status } = req.body;
 
         const updatedOrder = await Order.findOneAndUpdate(
-          { orderNo: orderId }, // 將 orderNo 改為 orderId
+          { _id: _id },
           { status },
           { new: true }
         );
@@ -97,16 +98,19 @@ export const chef = {
 
         const orderIdFormatted = `${year}${month}${day}${hour}${minute}`;
 
-        const updatedOrderWithTime = {
-          ...updatedOrder.toJSON(),
-          orderNo: orderIdFormatted, // 將 orderIdFormatted 賦值給 orderNo
-          status
-        };
-
+        // const updatedOrderWithTime = {
+        //   ...updatedOrder.toJSON(),
+        //   orderNo: orderIdFormatted, // 將 orderIdFormatted 賦值給 orderNo
+        //   status
+        // };
+        // const responseData = {
+        //   data: updatedOrderWithTime,
+        // };
         const responseData = {
-          data: updatedOrderWithTime,
+          orderId: orderIdFormatted,
+          // status: status
+          status: status === "已出餐" ? "已出餐" : "未出餐"
         };
-
         return handleSuccess(res, "更新成功！", responseData);
       } catch (err) {
         return next(appError(400, "更新訂單狀態失敗！", next));
