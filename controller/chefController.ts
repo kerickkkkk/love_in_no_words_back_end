@@ -8,7 +8,7 @@ import { combinedDateTimeString, period } from "../utils/dayjs";
 import dayjs from 'dayjs';
 import Chef from "../models/chefModel";
 
-export const chef = {
+const chefController = {
   //C-1-1 訂單內容查詢
   // 取得待取餐訂單列表
   getPickUpOrders: handleErrorAsync(
@@ -27,7 +27,7 @@ export const chef = {
         }
 
         // 根據出餐狀態查詢訂單
-        const orderDetails = await orderDetail.find({ status });
+        const orderDetails = await orderDetail.find({ status, isDeleted: false, idDisabled: false });
 
         // 準備回傳的資料
         const responseData = orderDetails.map((orderDetail: any) => {
@@ -82,7 +82,7 @@ export const chef = {
 
 
         const updatedOrder = await Order.findOneAndUpdate(
-          { _id: _id },
+          { _id: _id, status: "未出餐", isDeleted: false },
           { status },
           { new: true }
         );
@@ -105,8 +105,4 @@ export const chef = {
 
 };
 
-export default chef;
-function async(arg0: number, arg1: number, req: any, arg3: { prototype: globalThis.Request; }, res: any, Response: { new(body?: BodyInit | null | undefined, init?: ResponseInit | undefined): globalThis.Response; prototype: globalThis.Response; error(): globalThis.Response; redirect(url: string | URL, status?: number | undefined): globalThis.Response; }, next: any, NextFunction: any) {
-  throw new Error("Function not implemented.");
-}
-
+export default chefController;
