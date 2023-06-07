@@ -4,13 +4,14 @@ import appError from "../service/appError";
 import handleSuccess from "../service/handleSuccess";
 import Order from "../models/orderModel";
 import orderDetail from "../models/orderDetailModel";
-
+import { combinedDateTimeString, period } from "../utils/dayjs"
 import Chef from "../models/chefModel";
+import { isCookAuth } from "../middleware/auth";
 
 export const chef = {
   //C-1-1 訂單內容查詢
   // 取得待取餐訂單列表
-  getPickUpOrders: handleErrorAsync(
+  getPickUpOrders: [isCookAuth, handleErrorAsync(
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { status } = req.query;
@@ -65,19 +66,25 @@ export const chef = {
         return next(appError(400, "查詢訂單失敗", next));
       }
     }
-  ),
+  )],
 
-  //C-1-2 訂單出餐
+  // C-1-2 訂單出餐
   // 更新訂單狀態
-  updateOrderStatus: handleErrorAsync(
+  updateOrderStatus: [isCookAuth, handleErrorAsync(
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        //const { orderId } = req.params as { orderId?: string };
         const { orderId: _id } = req.params;
         if (!_id) {
           return next(appError(400, "缺少訂單ID", next));
         }
         const { status } = req.body;
+
+        // 檢查 status 參數是否有效
+        const validStatuses = ["未出餐", "已出餐"]; // 定義有效的出餐狀態列表
+        if (status && !validStatuses.includes(status)) {
+          return next(appError(400, "無效的出餐狀態", next));
+        }
+
 
         const updatedOrder = await Order.findOneAndUpdate(
           { _id: _id },
@@ -89,26 +96,9 @@ export const chef = {
           return next(appError(400, "找不到指定的訂單", next));
         }
 
-        const orderNo = updatedOrder.orderNo;
-        const year = orderNo.slice(0, 4);
-        const month = orderNo.slice(4, 6);
-        const day = orderNo.slice(6, 8);
-        const hour = orderNo.slice(8, 10);
-        const minute = orderNo.slice(10, 12);
-
-        const orderIdFormatted = `${year}${month}${day}${hour}${minute}`;
-
-        // const updatedOrderWithTime = {
-        //   ...updatedOrder.toJSON(),
-        //   orderNo: orderIdFormatted, // 將 orderIdFormatted 賦值給 orderNo
-        //   status
-        // };
-        // const responseData = {
-        //   data: updatedOrderWithTime,
-        // };
+        const orderNo = combinedDateTimeString();
         const responseData = {
-          orderId: orderIdFormatted,
-          // status: status
+          orderId: orderNo,
           status: status === "已出餐" ? "已出餐" : "未出餐"
         };
         return handleSuccess(res, "更新成功！", responseData);
@@ -116,8 +106,12 @@ export const chef = {
         return next(appError(400, "更新訂單狀態失敗！", next));
       }
     }
-  ),
+  )]
 
 };
 
 export default chef;
+function async(arg0: number, arg1: number, req: any, arg3: { prototype: globalThis.Request; }, res: any, Response: { new(body?: BodyInit | null | undefined, init?: ResponseInit | undefined): globalThis.Response; prototype: globalThis.Response; error(): globalThis.Response; redirect(url: string | URL, status?: number | undefined): globalThis.Response; }, next: any, NextFunction: any) {
+  throw new Error("Function not implemented.");
+}
+
