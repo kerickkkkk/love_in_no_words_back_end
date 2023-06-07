@@ -1702,7 +1702,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "",
+							"raw": "{\n    \"status\":\"已出餐\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1719,13 +1719,6 @@
 								"orders",
 								"pick-up",
 								":orderNo"
-							],
-							"query": [
-								{
-									"key": "status",
-									"value": "未出餐",
-									"disabled": true
-								}
 							],
 							"variable": [
 								{

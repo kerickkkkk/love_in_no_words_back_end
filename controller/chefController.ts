@@ -91,10 +91,9 @@ const chefController = {
           return next(appError(400, "找不到指定的訂單", next));
         }
 
-        const orderNo = combinedDateTimeString();
         const responseData = {
-          orderId: orderNo,
-          status: status === "已出餐" ? "已出餐" : "未出餐"
+          orderId: updatedOrder.orderNo,
+          status: updatedOrder.status
         };
         return handleSuccess(res, "更新成功！", responseData);
       } catch (err) {
