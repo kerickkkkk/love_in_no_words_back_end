@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "a4f92607-1bc9-429d-b3bf-0ef4f2b8c492",
+		"_postman_id": "6ce5d7d3-f27b-4dbf-9f69-23612819a2a4",
 		"name": "傲嬌甜點",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26724792"
 	},
 	"item": [
 		{
@@ -1637,6 +1638,92 @@
 								{
 									"key": "orderId",
 									"value": "646e10d3c5d43e553625d048"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "C-1-1 訂單內容查詢",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/orders/pick-up/?status=未出餐",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"orders",
+								"pick-up",
+								""
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "未出餐",
+									"description": "未出餐 已出餐"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "C-1-2 訂單出餐",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\":\"已出餐\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/orders/pick-up/:orderNo",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"orders",
+								"pick-up",
+								":orderNo"
+							],
+							"variable": [
+								{
+									"key": "orderNo",
+									"value": null
 								}
 							]
 						}

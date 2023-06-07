@@ -434,6 +434,7 @@ export const orders = {
             _id,
             orderNo,
             tableName,
+            time: period(),
             //createdAt: transferDate,
             createdAt,
             isDisabled,
