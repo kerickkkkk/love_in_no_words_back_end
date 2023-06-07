@@ -27,14 +27,14 @@ const chefController = {
         }
 
         // 根據出餐狀態查詢訂單
-        const orderDetails = await orderDetail.find({ status, isDeleted: false, idDisabled: false });
+        const orderDetails = await orderDetail.find({ status, isDeleted: false });
 
         // 準備回傳的資料
         const responseData = orderDetails.map((orderDetail: any) => {
           const orderNo = orderDetail.orderNo;
-          const formattedDateTime = dayjs(orderNo).format("YYYYMMDDHHmmss");
+          //const formattedDateTime = dayjs(orderNo).format("YYYYMMDDHHmmss");
           return {
-            orderNo: formattedDateTime,
+            orderNo,
             status: orderDetail.status,
             orderList: orderDetail.orderList.map((item: any) => {
               return {
@@ -68,7 +68,7 @@ const chefController = {
   updateOrderStatus: handleErrorAsync(
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        const { orderId: _id } = req.params;
+        const { orderNo: _id } = req.params;
         if (!_id) {
           return next(appError(400, "缺少訂單ID", next));
         }
@@ -81,8 +81,8 @@ const chefController = {
         }
 
 
-        const updatedOrder = await Order.findOneAndUpdate(
-          { _id: _id, status: "未出餐", isDeleted: false },
+        const updatedOrder = await orderDetail.findOneAndUpdate(
+          { orderNo: _id },
           { status },
           { new: true }
         );

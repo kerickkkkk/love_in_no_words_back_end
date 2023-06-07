@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "a4f92607-1bc9-429d-b3bf-0ef4f2b8c492",
+		"_postman_id": "6ce5d7d3-f27b-4dbf-9f69-23612819a2a4",
 		"name": "傲嬌甜點",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26724792"
 	},
 	"item": [
 		{
@@ -1709,7 +1710,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/orders/pick-up/:orderId",
+							"raw": "{{base_url}}/v1/orders/pick-up/:orderNo",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1717,7 +1718,7 @@
 								"v1",
 								"orders",
 								"pick-up",
-								":orderId"
+								":orderNo"
 							],
 							"query": [
 								{
@@ -1728,8 +1729,8 @@
 							],
 							"variable": [
 								{
-									"key": "orderId",
-									"value": "20230602224"
+									"key": "orderNo",
+									"value": null
 								}
 							]
 						}
