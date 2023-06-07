@@ -78,7 +78,7 @@ export const coupons = {
         isDisabled
       });
 
-      return handleSuccess(res, "優惠活動新增成功", null);
+      return handleSuccess(res, "優惠活動新增成功", newObj);
     }
   ),
   patchCoupons: handleErrorAsync(
@@ -130,7 +130,7 @@ export const coupons = {
         return next(appError(400, "優惠卷號碼或優惠券名稱重複", next));
       }
 
-      const updatedSeat = await CouponModel.findOneAndUpdate(
+      const updatedCoupon = await CouponModel.findOneAndUpdate(
         {
           couponNo,
           isDeleted: false,
@@ -148,11 +148,11 @@ export const coupons = {
         }
       );
 
-      if (updatedSeat === null) {
+      if (updatedCoupon === null) {
         return next(appError(400, '查無優惠卷', next));
       }
 
-      return handleSuccess(res, "優惠碼活動修改成功", null);
+      return handleSuccess(res, "優惠碼活動修改成功", updatedCoupon);
     }
   ),
   softDeleteCoupons: handleErrorAsync(
@@ -180,7 +180,7 @@ export const coupons = {
         return next(appError(400, '查無優惠券', next));
       }
 
-      return handleSuccess(res, "優惠活動刪除成功", null);
+      return handleSuccess(res, "優惠活動刪除成功", updatedObj);
     }
   )
 };

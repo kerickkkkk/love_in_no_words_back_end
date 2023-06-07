@@ -123,7 +123,7 @@ export const seats = {
         return next(appError(400, errorMsgArray.join(";"), next));
       }
 
-      return handleSuccess(res, "座位修改成功", null);
+      return handleSuccess(res, "座位修改成功", updatedSeat);
     }
   ),
   softDeleteSeat: handleErrorAsync(
@@ -161,7 +161,7 @@ export const seats = {
         return next(appError(400, errorMsgArray.join(";"), next));
       }
 
-      return handleSuccess(res, "刪除成功", null);
+      return handleSuccess(res, "刪除成功", updatedSeat);
     }
   ),
   // 保留座位功能 改成直接寫入 seats 座位人數上限
