@@ -6,12 +6,11 @@ import Order from "../models/orderModel";
 import orderDetail from "../models/orderDetailModel";
 import { combinedDateTimeString, period } from "../utils/dayjs"
 import Chef from "../models/chefModel";
-import { isCookAuth } from "../middleware/auth";
 
 export const chef = {
   //C-1-1 訂單內容查詢
   // 取得待取餐訂單列表
-  getPickUpOrders: [isCookAuth, handleErrorAsync(
+  getPickUpOrders: handleErrorAsync(
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { status } = req.query;
@@ -66,11 +65,11 @@ export const chef = {
         return next(appError(400, "查詢訂單失敗", next));
       }
     }
-  )],
+  ),
 
   // C-1-2 訂單出餐
   // 更新訂單狀態
-  updateOrderStatus: [isCookAuth, handleErrorAsync(
+  updateOrderStatus: handleErrorAsync(
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { orderId: _id } = req.params;
@@ -106,7 +105,7 @@ export const chef = {
         return next(appError(400, "更新訂單狀態失敗！", next));
       }
     }
-  )]
+  )
 
 };
 
