@@ -4,7 +4,8 @@ import appError from "../service/appError";
 import handleSuccess from "../service/handleSuccess";
 import Order from "../models/orderModel";
 import orderDetail from "../models/orderDetailModel";
-import { combinedDateTimeString, period } from "../utils/dayjs"
+import { combinedDateTimeString, period } from "../utils/dayjs";
+import dayjs from 'dayjs';
 import Chef from "../models/chefModel";
 
 export const chef = {
@@ -30,15 +31,10 @@ export const chef = {
 
         // 準備回傳的資料
         const responseData = orderDetails.map((orderDetail: any) => {
-          const orderNo = Number(orderDetail.orderNo); // 將 orderNo 轉為數字
-          const year = orderNo.toString().slice(0, 4); // 提取年份
-          const month = orderNo.toString().slice(4, 6); // 提取月份
-          const day = orderNo.toString().slice(6, 8); // 提取日期
-          const hour = orderNo.toString().slice(8, 10); // 提取小時
-          const minute = orderNo.toString().slice(10, 12); // 提取分鐘
-
+          const orderNo = orderDetail.orderNo;
+          const formattedDateTime = dayjs(orderNo).format("YYYYMMDDHHmmss");
           return {
-            orderNo: `${year}${month}${day}${hour}${minute}`,
+            orderNo: formattedDateTime,
             status: orderDetail.status,
             orderList: orderDetail.orderList.map((item: any) => {
               return {
