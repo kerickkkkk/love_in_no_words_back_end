@@ -4,7 +4,7 @@ import handleSuccess from "../service/handleSuccess";
 
 export const cache = async (req: any, res: Response, next: NextFunction) => {
     const hasCache: any = await checkCacheKeyExist(req.originalUrl)
-    if (hasCache === null) {
+    if (!hasCache) {
         next()
     } else {
         console.log('這是快取')

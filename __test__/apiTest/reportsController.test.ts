@@ -2,6 +2,7 @@ import supertest from 'supertest'
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import app from '../../app'
+import dayjs from '../../utils/dayjs'
 
 describe('店長 - 訂單', () => {
     beforeAll(async () => {
@@ -161,6 +162,7 @@ describe('店長 - 訂單', () => {
     })
 
     let orderNo = ''
+    let order_id = ''
     // 建立訂單
     const orderPayload = {
         tableName: 1,
@@ -197,6 +199,7 @@ describe('店長 - 訂單', () => {
                 couponNo
             })
         orderNo = body.data.orderNo
+        order_id = body.data._id
         expect(statusCode).toBe(200)
         expect(body.status).toBe('OK')
         expect(body.data.tableName).toBe(orderPayload.tableName)
@@ -218,6 +221,60 @@ describe('店長 - 訂單', () => {
         expect(body.data.ordersList).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({ orderNo }),
+            ])
+        );
+    })
+
+    const rating = {
+        "payment": "現金",
+        "orderType": "已結帳",
+        "satisfaction": 9,
+        "description": "description"
+    }
+
+    test("S-3-3 滿意度及建議回饋", async () => {
+        const { statusCode, body } = await supertest(app)
+            .post(`/v1/orders/rating/${order_id}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send(rating)
+
+        expect(statusCode).toBe(200)
+        expect(body.data.data._id).toBe(order_id);
+    })
+
+    test("O-5-1  獲取營收資料", async () => {
+        const { statusCode, body } = await supertest(app)
+            .get('/v1/send/email/admin/revenue/report')
+            .set('Authorization', `Bearer ${token}`)
+        const month = +dayjs(orderNo, 'YYYYMMDDHHmmss').format('M');
+        expect(statusCode).toBe(200)
+        expect(body.data).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ month }),
+            ])
+        );
+    })
+    test("O-5-2 獲取賣出數量資料", async () => {
+        const { statusCode, body } = await supertest(app)
+            .get('/v1/send/email/admin/sell-quantity/report')
+            .set('Authorization', `Bearer ${token}`)
+        expect(statusCode).toBe(200)
+        expect(body.data).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ productNo: 1 }),
+                expect.objectContaining({ productNo: 2 })
+            ])
+        );
+    })
+    test("O-5-3 獲取訂單數量資料", async () => {
+        const { statusCode, body } = await supertest(app)
+            .get('/v1/send/email/admin/orders-quantity/report')
+            .set('Authorization', `Bearer ${token}`)
+        const month = +dayjs(orderNo, 'YYYYMMDDHHmmss').format('M');
+        expect(statusCode).toBe(200)
+        expect(body.data).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ month }),
             ])
         );
     })
