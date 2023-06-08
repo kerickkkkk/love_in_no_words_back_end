@@ -13,8 +13,10 @@ const connectRedis = async () => {
   await redisClient.connect();
   return 'Redis 連線成功';
 };
-connectRedis();
-
+// 先隔開
+if (process.env.NODE_ENV !== 'test') {
+  connectRedis();
+}
 export const setCache = async (cacheKey: string, data: any) => {
   try {
     const key = btoa(cacheKey)

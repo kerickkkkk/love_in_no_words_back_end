@@ -30,8 +30,8 @@ const resErrorDev = (err: AppError, res: Response) => {
 
 // 統一管理錯誤處理
 const handleAllError = (err: any, req: Request, res: Response, next: NextFunction) => {
-  // dev
-  if (process.env.NODE_ENV === 'dev') {
+  // dev test 顯示詳細錯誤訊息
+  if (process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'test') {
     return resErrorDev(err, res);
   }
   // production
