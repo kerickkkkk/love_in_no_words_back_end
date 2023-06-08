@@ -3,7 +3,9 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import app from '../../app'
 import dayjs from '../../utils/dayjs'
+import redisMock from 'redis-mock'; // 导入模拟库
 
+const redisClient = redisMock.createClient();
 describe('店長 - 訂單', () => {
     beforeAll(async () => {
         const mongoServer = await MongoMemoryServer.create();
@@ -12,6 +14,7 @@ describe('店長 - 訂單', () => {
     afterAll(async () => {
         await mongoose.disconnect();
         await mongoose.connection.close();
+        redisClient.quit();
     });
     let token = ''
     const userSignUpPayload = {
@@ -241,7 +244,6 @@ describe('店長 - 訂單', () => {
         expect(statusCode).toBe(200)
         expect(body.data.data._id).toBe(order_id);
     })
-
     test("O-5-1  獲取營收資料", async () => {
         const { statusCode, body } = await supertest(app)
             .get('/v1/send/email/admin/revenue/report')
@@ -254,6 +256,14 @@ describe('店長 - 訂單', () => {
             ])
         );
     })
+    test("O-5-1  獲取營收資料 - Redis 快取", async () => {
+        const { statusCode, body } = await supertest(app)
+            .get('/v1/send/email/admin/revenue/report')
+            .set('Authorization', `Bearer ${token}`)
+        expect(statusCode).toBe(200)
+        expect(body.message).toContain("快取");
+    })
+
     test("O-5-2 獲取賣出數量資料", async () => {
         const { statusCode, body } = await supertest(app)
             .get('/v1/send/email/admin/sell-quantity/report')
@@ -266,6 +276,14 @@ describe('店長 - 訂單', () => {
             ])
         );
     })
+    test("O-5-2 獲取賣出數量資料 - Redis 快取", async () => {
+        const { statusCode, body } = await supertest(app)
+            .get('/v1/send/email/admin/sell-quantity/report')
+            .set('Authorization', `Bearer ${token}`)
+        expect(statusCode).toBe(200)
+        expect(body.message).toContain("快取");
+
+    })
     test("O-5-3 獲取訂單數量資料", async () => {
         const { statusCode, body } = await supertest(app)
             .get('/v1/send/email/admin/orders-quantity/report')
@@ -277,6 +295,14 @@ describe('店長 - 訂單', () => {
                 expect.objectContaining({ month }),
             ])
         );
+    })
+    test("O-5-3 獲取訂單數量資料 - Redis 快取", async () => {
+        const { statusCode, body } = await supertest(app)
+            .get('/v1/send/email/admin/orders-quantity/report')
+            .set('Authorization', `Bearer ${token}`)
+        expect(statusCode).toBe(200)
+        expect(body.message).toContain("快取");
+
     })
 })
 
