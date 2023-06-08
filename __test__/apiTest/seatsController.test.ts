@@ -63,7 +63,7 @@ describe('店長 - 座位', () => {
         expect(body.data).toEqual([])
     })
 
-    test("O-4-2 新增 優惠活動", async () => {
+    test("O-2-4 新增座位", async () => {
         const { statusCode, body } = await supertest(app)
             .post('/v1/seats/admin')
             .set('Authorization', `Bearer ${token}`)
@@ -75,7 +75,7 @@ describe('店長 - 座位', () => {
         expect(body.data.seats).toBe(seatPayload.seats)
     })
 
-    test("O-4-3 修改 優惠活動", async () => {
+    test("O-2-2 修改座位", async () => {
         const { statusCode, body } = await supertest(app)
             .patch(`/v1/seats/admin/${tableNo}`)
             .set('Authorization', `Bearer ${token}`)
@@ -86,7 +86,7 @@ describe('店長 - 座位', () => {
         expect(body.data.seats).toBe(updateSeatPayload.seats)
     })
 
-    test("O-4-4 刪除 優惠活動", async () => {
+    test("O-2-5 刪除 座位", async () => {
         const { statusCode, body } = await supertest(app)
             .delete(`/v1/seats/admin/${tableNo}`)
             .set('Authorization', `Bearer ${token}`)

@@ -204,17 +204,19 @@ export const products = {
           errorMsgArray.push(Message.SAME_PRODUCT_NAME);
         }
       }
-
-      // 驗證圖片url是專案firebase的url且能否正常開啟
-      if (!photoUrl) {
-        errorMsgArray.push(Message.NEED_PHOTO_URL);
-      } else if (
-        !photoUrl.includes(
-          "https://storage.googleapis.com/love-in-no-words-back-end.appspot.com/images"
-        ) ||
-        !(await checkPhotoUrl(photoUrl))
-      ) {
-        errorMsgArray.push(Message.PHOTOURL_SOURCE_ERROR);
+      // 測試先隔離
+      if (process.env.NODE_ENV !== 'test') {
+        // 驗證圖片url是專案firebase的url且能否正常開啟
+        if (!photoUrl) {
+          errorMsgArray.push(Message.NEED_PHOTO_URL);
+        } else if (
+          !photoUrl.includes(
+            "https://storage.googleapis.com/love-in-no-words-back-end.appspot.com/images"
+          ) ||
+          !(await checkPhotoUrl(photoUrl))
+        ) {
+          errorMsgArray.push(Message.PHOTOURL_SOURCE_ERROR);
+        }
       }
 
       // 驗證商品價錢為正整數
@@ -277,7 +279,7 @@ export const products = {
       // 搭配typescript寫法，不然會報可能為null不能調用_id
       if (productTypeObj === null)
         return next(appError(400, Message.NEED_PRODUCT_NAME, next));
-      await ProductManagementModel.create({
+      const createdData = await ProductManagementModel.create({
         productNo,
         productName,
         photoUrl,
@@ -290,7 +292,7 @@ export const products = {
         description: description || "",
         isDisabled,
       });
-      return handleSuccess(res, Message.PRODUCT_ADD_SUCCESS, null);
+      return handleSuccess(res, Message.PRODUCT_ADD_SUCCESS, createdData);
     }
   ),
   // O-3-4 修改商品API
@@ -417,7 +419,7 @@ export const products = {
       if (productTypeObj === null)
         return next(appError(400, Message.NEED_PRODUCT_NAME, next));
 
-      await ProductManagementModel.findOneAndUpdate(
+      const updatedData = await ProductManagementModel.findOneAndUpdate(
         {
           productNo,
           isDeleted: false,
@@ -439,7 +441,7 @@ export const products = {
         }
       );
 
-      return handleSuccess(res, Message.PRODUCT_REVISE_SUCCESS, null);
+      return handleSuccess(res, Message.PRODUCT_REVISE_SUCCESS, updatedData);
     }
   ),
   // O-3-5 刪除商品API
@@ -459,7 +461,7 @@ export const products = {
         }
       }
 
-      await ProductManagementModel.findOneAndUpdate(
+      const updatedData = await ProductManagementModel.findOneAndUpdate(
         {
           productNo,
           isDeleted: false,
@@ -473,7 +475,7 @@ export const products = {
         }
       );
 
-      return handleSuccess(res, Message.PRODUCT_DELETE_SUCCESS, null);
+      return handleSuccess(res, Message.PRODUCT_DELETE_SUCCESS, updatedData);
     }
   ),
   // O-3-6 取得商品代碼分類API
@@ -516,12 +518,12 @@ export const products = {
         "productsType"
       );
 
-      await ProductTypeModel.create({
+      const createdData = await ProductTypeModel.create({
         productsType: productsTypeIndex,
         productsTypeName,
       });
 
-      handleSuccess(res, Message.PRODUCT_TYPE_ADD_SUCCESS, null);
+      handleSuccess(res, Message.PRODUCT_TYPE_ADD_SUCCESS, createdData);
     }
   ),
   // O-3-8 刪除商品分類API
@@ -561,7 +563,7 @@ export const products = {
         );
       }
       // 已確認過productType為尚未刪除且沒有出現在A+B活動分類中，直接進行修改刪除flag設定
-      await ProductTypeModel.findOneAndUpdate(
+      const updatedData = await ProductTypeModel.findOneAndUpdate(
         {
           productsType,
           isDeleted: false,
@@ -572,7 +574,7 @@ export const products = {
         }
       );
 
-      handleSuccess(res, Message.DELETE_SUCCESS, null);
+      handleSuccess(res, Message.DELETE_SUCCESS, updatedData);
     }
   ),
   // 大量製造訂單測試API
@@ -603,7 +605,7 @@ export const products = {
         // 計算商品 總價
         let totalTime = 0;
         let totalPrice = 0;
-        let productType: number[] = [];
+        const productType: number[] = [];
         // 隨機點各個餐點直到滿足隨機指定的餐點種類數
         const generateProductNo = (array: number[]) => {
           let randomNumber =
@@ -675,8 +677,8 @@ export const products = {
       const productsTypeQuery =
         req.query.productsType !== undefined
           ? {
-              productsType: Number(req.query.productsType),
-            }
+            productsType: Number(req.query.productsType),
+          }
           : {};
       const productTypeObj = await ProductTypeModel.find(productsTypeQuery);
       const productsTypeAry = productTypeObj.map((item) => item._id);

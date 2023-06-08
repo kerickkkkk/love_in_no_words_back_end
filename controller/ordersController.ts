@@ -224,8 +224,10 @@ export const orders = {
       const abMinus: any = {}
       const products = tempProducts.reduce((prev: any[], next, index) => {
         const { qty, note } = inputProducts[index]
-        const tempDiscount = couponObj ? next.price * (100 - couponObj.discount) / 100 : 0
-        next.price = couponObj ? next.price * couponObj.discount / 100 : next.price
+        // discount 無條件進位
+        const tempDiscount = couponObj ? Math.ceil(next.price * (100 - couponObj.discount) / 100) : 0
+        // price 無條件捨去
+        next.price = couponObj ? Math.floor(next.price * couponObj.discount / 100) : next.price
         const product: any = {
           ...next,
           qty,
@@ -358,8 +360,11 @@ export const orders = {
         })
 
         // 通知廚師 要注意 手機與使用者名稱是否會被看到
-        const { io } = req.app.settings;
-        io.emit("chef", order);
+        // 測試先隔開
+        if (process.env.NODE_ENV !== 'test') {
+          const { io } = req.app.settings;
+          io.emit("chef", order);
+        }
 
         // 更新商品庫存與庫存狀態
         const updateObjs = products.reduce((prev: any[], next: any) => {
