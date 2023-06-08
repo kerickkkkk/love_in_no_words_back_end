@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "6ce5d7d3-f27b-4dbf-9f69-23612819a2a4",
+		"_postman_id": "ea57d12c-0d56-420e-9d3d-cfea1650dd0d",
 		"name": "傲嬌甜點",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "26724792"
+		"_exporter_id": "6878038"
 	},
 	"item": [
 		{
@@ -930,7 +930,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"productName\":\"Vite6-2\",\n        \"photoUrl\":\"{{photoUrl}}\",\n        \"price\":100,\n        \"inStockAmount\":60,\n        \"safeStockAmount\": 50,\n        \"productsType\": 6,\n        \"productionTime\": 1,\n        \"description\": \"忘情水2\",\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"productName\":\"Vite6-3\",\n        \"photoUrl\":\"{{photoUrl}}\",\n        \"price\":100,\n        \"inStockAmount\":60,\n        \"safeStockAmount\": 50,\n        \"productsType\": 6,\n        \"productionTime\": 1,\n        \"description\": \"忘情水2\",\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1431,7 +1431,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableName\": 1,\n  \"products\":[\n\n        {\n            \"productNo\": 1,\n\t\t    \"qty\" :11 \n\n\t\t}\n  ]\n}",
+							"raw": "{\n  \"tableName\": 2,\n  \"products\":[\n\n        {\n            \"productNo\": 1,\n\t\t    \"qty\" :11 \n\n\t\t}\n  ],\n  \"couponNo\":\"A000000003\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1466,7 +1466,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableName\": 1,\n  \"products\":[\n\n        {\n            \"productNo\": 1,\n\t\t    \"qty\" :1 \n\t\t}\n  ]\n\n}",
+							"raw": "{\n  \"tableName\": 2,\n  \"products\":[\n\n        {\n            \"productNo\": 1,\n\t\t    \"qty\" :1 \n\t\t}\n  ],\n    \"couponNo\":\"A000000003\"\n\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1637,7 +1637,7 @@
 							"variable": [
 								{
 									"key": "orderId",
-									"value": "646e10d3c5d43e553625d048"
+									"value": "6481b2a28d0142467503e4c0"
 								}
 							]
 						}
@@ -1668,7 +1668,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/orders/pick-up/?status=未出餐",
+							"raw": "{{base_url}}/v1/orders/pick-up/?status=已出餐",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1681,7 +1681,7 @@
 							"query": [
 								{
 									"key": "status",
-									"value": "未出餐",
+									"value": "已出餐",
 									"description": "未出餐 已出餐"
 								}
 							]
@@ -1723,7 +1723,7 @@
 							"variable": [
 								{
 									"key": "orderNo",
-									"value": null
+									"value": "20230606233500"
 								}
 							]
 						}
@@ -1953,7 +1953,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/send/email/admin/revenue/report/?year=2023",
+							"raw": "{{base_url}}/v1/send/email/admin/revenue/report/",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1969,7 +1969,8 @@
 							"query": [
 								{
 									"key": "year",
-									"value": "2023"
+									"value": "2023",
+									"disabled": true
 								}
 							]
 						}
@@ -2000,7 +2001,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/send/email/admin/sell-quantity/report?year=2023",
+							"raw": "{{base_url}}/v1/send/email/admin/sell-quantity/report",
 							"host": [
 								"{{base_url}}"
 							],
@@ -2015,7 +2016,8 @@
 							"query": [
 								{
 									"key": "year",
-									"value": "2023"
+									"value": "2023",
+									"disabled": true
 								}
 							]
 						}
@@ -2153,7 +2155,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/reports/admin/orders?month=5&number=100",
+							"raw": "{{base_url}}/v1/reports/admin/orders?month=6&number=100",
 							"host": [
 								"{{base_url}}"
 							],
@@ -2178,7 +2180,7 @@
 								},
 								{
 									"key": "month",
-									"value": "5"
+									"value": "6"
 								},
 								{
 									"key": "number",
@@ -2525,7 +2527,7 @@
 			"name": "line_pay",
 			"item": [
 				{
-					"name": "S- 結帳",
+					"name": "S-5-1 結帳",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -2573,12 +2575,9 @@
 					"response": []
 				},
 				{
-					"name": "S- 查詢是否結帳",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
+					"name": "S-5-2 查詢是否結帳",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [
 							{
 								"key": "Authorization",
@@ -2592,13 +2591,14 @@
 							}
 						],
 						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "_token",
+									"value": "",
+									"type": "text"
 								}
-							}
+							]
 						},
 						"url": {
 							"raw": "{{base_url}}/v1/line_pay/check/:orderNo",

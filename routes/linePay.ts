@@ -5,6 +5,6 @@ const router = express.Router();
 router.post("/:orderNo", linePayControllers.payment)
 router.get("/confirm", linePayControllers.confirm)
 router.get("/cancel", linePayControllers.cancel)
-router.get("/check/:orderNo", linePayControllers.checkPayment)
+router.post("/check/:orderNo", linePayControllers.checkPayment)
 
 export default router;
