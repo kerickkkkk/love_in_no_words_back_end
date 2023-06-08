@@ -217,7 +217,7 @@ export const linePay = {
           return next(appError(400, `帳單狀態更新失敗，但付款成功。 訂單號碼 : ${orderId}`, next));
         }
         // 成功導向夾帶 orderNo 再讓前端可以回去撈
-        res.redirect(`${frontEndUrl}/${FRONT_END_RETURN_SUCCESS}/${orderId}`)
+        res.redirect(`${frontEndUrl}/${FRONT_END_RETURN_SUCCESS}`)
       } else {
         return next(appError(400, `LinePay異常，錯誤代碼： ${linePayRes.data.returnCode} - ${linePayRes.data.returnMessage}`, next));
       }
@@ -228,6 +228,14 @@ export const linePay = {
     }),
   checkPayment: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
+      const token = req.body._token
+      if (!token) {
+        return next(appError(400, Message.NO_TOKEN, next));
+      }
+      const authRes = await authToken(token, next)
+      if (!authRes) {
+        return false;
+      }
 
       const { orderNo } = req.params
       if (!orderNo) {
