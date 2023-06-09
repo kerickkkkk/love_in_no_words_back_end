@@ -24,7 +24,6 @@ export const seats = {
   createSeat: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
       const { tableName, seats } = req.body;
-      console.log(tableName, seats);
 
       const tableNo = await autoIncrementNumber(TableManagementModel)
 
