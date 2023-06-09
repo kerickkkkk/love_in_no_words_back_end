@@ -22,10 +22,6 @@ const connect = async () => {
       .connect(DB)
       .then(() => `${process.env.NODE_ENV} - 資料庫連線成功`)
       .catch((error: NodeJS.ErrnoException) => console.log('資料庫連線失敗', error));
-  } else if (process.env.NODE_ENV === 'test') {
-    console.log('Testing Database');
-  } else {
-    console.log('未知的領域 Database');
   }
 
 }
