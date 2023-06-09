@@ -228,14 +228,6 @@ export const linePay = {
     }),
   checkPayment: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
-      const token = req.body._token
-      if (!token) {
-        return next(appError(400, Message.NO_TOKEN, next));
-      }
-      const authRes = await authToken(token, next)
-      if (!authRes) {
-        return false;
-      }
 
       const { orderNo } = req.params
       if (!orderNo) {

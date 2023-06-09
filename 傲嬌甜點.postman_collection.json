@@ -2576,8 +2576,11 @@
 				},
 				{
 					"name": "S-5-2 查詢是否結帳",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",
@@ -2592,13 +2595,7 @@
 						],
 						"body": {
 							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "_token",
-									"value": "",
-									"type": "text"
-								}
-							]
+							"urlencoded": []
 						},
 						"url": {
 							"raw": "{{base_url}}/v1/line_pay/check/:orderNo",
@@ -2614,7 +2611,7 @@
 							"variable": [
 								{
 									"key": "orderNo",
-									"value": "20230530212758",
+									"value": "20230608185050",
 									"description": "payStatus :\nCAPTURE：已請款\nAUTHORIZATION：授權\nVOIDED_AUTHORIZATION：授權無效（在呼叫\"Void API\"的狀態）\nEXPIRED_AUTHORIZATION：授權到期（LINE Pay所允許的商家授權有效期已過期）"
 								}
 							]
