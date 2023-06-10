@@ -150,7 +150,7 @@ export const abCoupons = {
         return next(appError(400, '查無優惠卷', next));
       }
 
-      return handleSuccess(res, "A + B 活動折扣修改成功", null);
+      return handleSuccess(res, "A + B 活動折扣修改成功", updatedItem);
     }
   ),
   // O-6-4 刪除 a+b 活動
@@ -179,7 +179,7 @@ export const abCoupons = {
         return next(appError(400, '查無 A + B 活動編號', next));
       }
 
-      return handleSuccess(res, "A + B 活動刪除成功", null);
+      return handleSuccess(res, "A + B 活動刪除成功", updatedItem);
     }
   )
 };

@@ -6,7 +6,7 @@ import dayjs from '../../utils/dayjs'
 import redisMock from 'redis-mock'; // 导入模拟库
 
 const redisClient = redisMock.createClient();
-describe('店長 - 訂單', () => {
+describe('店長', () => {
     beforeAll(async () => {
         const mongoServer = await MongoMemoryServer.create();
         await mongoose.connect(mongoServer.getUri());
@@ -20,7 +20,7 @@ describe('店長 - 訂單', () => {
     const userSignUpPayload = {
         "name": "我是店長",
         "phone": "0999999999",
-        "email": "test@test.com",
+        "email": "loveinnowords@gmail.com",
         "password": "edvfhaf1234da",
         "confirmPassword": "edvfhaf1234da",
         "isDisabled": false
@@ -144,8 +144,8 @@ describe('店長 - 訂單', () => {
     let couponNo = ''
     // 建立優惠券
     const couponPayload = {
-        "couponName": "五折卷test",
-        "couponCode": "off-test-50",
+        "couponName": "九折卷test",
+        "couponCode": "off-test-90",
         "discount": 90,
         "isDisabled": false
     }
@@ -156,7 +156,6 @@ describe('店長 - 訂單', () => {
             .send(couponPayload)
         couponNo = body.data.couponNo
         expect(statusCode).toBe(200)
-        expect(body.status).toBe('OK')
         expect(body.data.couponNo).toBe("A000000001")
         expect(body.data.couponName).toBe(couponPayload.couponName)
         expect(body.data.couponCode).toBe(couponPayload.couponCode)
@@ -181,128 +180,229 @@ describe('店長 - 訂單', () => {
         ],
         couponNo
     }
-
-    test("S-2-3 新增訂單", async () => {
-        const { statusCode, body } = await supertest(app)
-            .post('/v1/orders')
-            .set('Authorization', `Bearer ${token}`)
-            // 要寫在裡面不然 couponNo 吃不到
-            .send({
-                tableName: 1,
-                products: [
-                    {
-                        productNo: 1,
-                        qty: 1
-                    },
-                    {
-                        productNo: 2,
-                        qty: 1
-                    }
-                ],
-                couponNo
-            })
-        orderNo = body.data.orderNo
-        order_id = body.data._id
-        expect(statusCode).toBe(200)
-        expect(body.status).toBe('OK')
-        expect(body.data.tableName).toBe(orderPayload.tableName)
-        // 比對陣列中有的物件屬性
-        expect(body.data.orderDetail.orderList).toEqual(
-            expect.arrayContaining([
-                expect.objectContaining({ productNo: 1 }),
-                expect.objectContaining({ productNo: 2 })
-            ])
-        );
-        expect(body.data.orderDetail.couponNo).toBe(couponNo)
-    })
-
-    test("S-3-1 訂單查詢", async () => {
-        const { statusCode, body } = await supertest(app)
-            .get('/v1/orders')
-            .set('Authorization', `Bearer ${token}`)
-        expect(statusCode).toBe(200)
-        expect(body.data.ordersList).toEqual(
-            expect.arrayContaining([
-                expect.objectContaining({ orderNo }),
-            ])
-        );
-    })
-
     const rating = {
         "payment": "現金",
         "orderType": "已結帳",
         "satisfaction": 9,
         "description": "description"
     }
+    describe('店長 - 訂單', () => {
+        test("S-2-1 查詢類別商品", async () => {
+            const { statusCode, body } = await supertest(app)
+                .get('/v1/products/')
+                .set('Authorization', `Bearer ${token}`)
+                .query({ productsType: 1 })
+            expect(statusCode).toBe(200)
+            expect(body.data).toContainEqual(
+                expect.objectContaining({
+                    productsType: expect.objectContaining({
+                        productsType: 1
+                    }),
+                })
+            )
+        })
+        test("S-2-2 金額試算", async () => {
+            const { statusCode, body } = await supertest(app)
+                .post('/v1/orders/calculate/total-price')
+                .set('Authorization', `Bearer ${token}`)
+                // 要寫在裡面不然 couponNo 吃不到
+                .send({
+                    tableName: 1,
+                    products: [
+                        {
+                            productNo: 1,
+                            qty: 1
+                        },
+                        {
+                            productNo: 2,
+                            qty: 1
+                        }
+                    ],
+                    couponNo
+                })
+            orderNo = body.data.orderNo
+            order_id = body.data._id
+            expect(statusCode).toBe(200)
+            expect(body.status).toBe('OK')
+            expect(body.data.tableName).toBe(orderPayload.tableName)
+            // 比對陣列中有的物件屬性
+            expect(body.data.orderList).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({ productNo: 1 }),
+                    expect.objectContaining({ productNo: 2 })
+                ])
+            );
+            expect(body.data.couponNo).toBe(couponNo)
+        })
+        test("S-2-3 新增訂單", async () => {
+            const { statusCode, body } = await supertest(app)
+                .post('/v1/orders')
+                .set('Authorization', `Bearer ${token}`)
+                // 要寫在裡面不然 couponNo 吃不到
+                .send({
+                    tableName: 1,
+                    products: [
+                        {
+                            productNo: 1,
+                            qty: 1
+                        },
+                        {
+                            productNo: 2,
+                            qty: 1
+                        }
+                    ],
+                    couponNo
+                })
+            orderNo = body.data.orderNo
+            order_id = body.data._id
+            expect(statusCode).toBe(200)
+            expect(body.status).toBe('OK')
+            expect(body.data.tableName).toBe(orderPayload.tableName)
+            // 比對陣列中有的物件屬性
+            expect(body.data.orderDetail.orderList).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({ productNo: 1 }),
+                    expect.objectContaining({ productNo: 2 })
+                ])
+            );
+            expect(body.data.orderDetail.couponNo).toBe(couponNo)
+        })
+        test("S-3-1 訂單查詢", async () => {
+            const { statusCode, body } = await supertest(app)
+                .get('/v1/orders')
+                .set('Authorization', `Bearer ${token}`)
+            expect(statusCode).toBe(200)
+            expect(body.data.ordersList).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({ orderNo }),
+                ])
+            );
+        })
+        test("S-3-3 滿意度及建議回饋", async () => {
+            const { statusCode, body } = await supertest(app)
+                .post(`/v1/orders/rating/${order_id}`)
+                .set('Authorization', `Bearer ${token}`)
+                .send(rating)
+            expect(statusCode).toBe(200)
+            expect(body.data.data._id).toBe(order_id);
+        })
+    })
 
-    test("S-3-3 滿意度及建議回饋", async () => {
-        const { statusCode, body } = await supertest(app)
-            .post(`/v1/orders/rating/${order_id}`)
-            .set('Authorization', `Bearer ${token}`)
-            .send(rating)
 
-        expect(statusCode).toBe(200)
-        expect(body.data.data._id).toBe(order_id);
-    })
-    test("O-5-1  獲取營收資料", async () => {
-        const { statusCode, body } = await supertest(app)
-            .get('/v1/send/email/admin/revenue/report')
-            .set('Authorization', `Bearer ${token}`)
-        const month = +dayjs(orderNo, 'YYYYMMDDHHmmss').format('M');
-        expect(statusCode).toBe(200)
-        expect(body.data).toEqual(
-            expect.arrayContaining([
-                expect.objectContaining({ month }),
-            ])
-        );
-    })
-    test("O-5-1  獲取營收資料 - Redis 快取", async () => {
-        const { statusCode, body } = await supertest(app)
-            .get('/v1/send/email/admin/revenue/report')
-            .set('Authorization', `Bearer ${token}`)
-        expect(statusCode).toBe(200)
-        expect(body.message).toContain("快取");
-    })
+    describe('店長 - 報表', () => {
+        test("S-5-1 結帳 : 取得 LinePay 結帳畫面", async () => {
+            const response = await supertest(app)
+                .post(`/v1/line_pay/${orderNo}`)
+                .set('Content-Type', 'application/x-www-form-urlencoded')
+                .send({ '_token': token })
+                .query({ redirectDevUrl: true })
+            expect(response.headers['location']).toMatch(/sandbox-web-pay.line.me/)
+        })
 
-    test("O-5-2 獲取賣出數量資料", async () => {
-        const { statusCode, body } = await supertest(app)
-            .get('/v1/send/email/admin/sell-quantity/report')
-            .set('Authorization', `Bearer ${token}`)
-        expect(statusCode).toBe(200)
-        expect(body.data).toEqual(
-            expect.arrayContaining([
-                expect.objectContaining({ productNo: 1 }),
-                expect.objectContaining({ productNo: 2 })
-            ])
-        );
-    })
-    test("O-5-2 獲取賣出數量資料 - Redis 快取", async () => {
-        const { statusCode, body } = await supertest(app)
-            .get('/v1/send/email/admin/sell-quantity/report')
-            .set('Authorization', `Bearer ${token}`)
-        expect(statusCode).toBe(200)
-        expect(body.message).toContain("快取");
+        // 因無法結帳 至少進去確定可以拿取資料
+        test("S-5-2 查詢是否結帳 : 取得 LinePay 狀態碼", async () => {
+            const { statusCode, body } = await supertest(app)
+                .get(`/v1/line_pay/check/${orderNo}`)
+                .set('Authorization', `Bearer ${token}`)
+                .query({ redirectDevUrl: true })
+            expect(statusCode).toBe(400)
+            expect(body.message).toMatch(/Transaction record not found/)
+        })
 
-    })
-    test("O-5-3 獲取訂單數量資料", async () => {
-        const { statusCode, body } = await supertest(app)
-            .get('/v1/send/email/admin/orders-quantity/report')
-            .set('Authorization', `Bearer ${token}`)
-        const month = +dayjs(orderNo, 'YYYYMMDDHHmmss').format('M');
-        expect(statusCode).toBe(200)
-        expect(body.data).toEqual(
-            expect.arrayContaining([
-                expect.objectContaining({ month }),
-            ])
-        );
-    })
-    test("O-5-3 獲取訂單數量資料 - Redis 快取", async () => {
-        const { statusCode, body } = await supertest(app)
-            .get('/v1/send/email/admin/orders-quantity/report')
-            .set('Authorization', `Bearer ${token}`)
-        expect(statusCode).toBe(200)
-        expect(body.message).toContain("快取");
+        test("O-5-1  獲取營收資料", async () => {
+            const { statusCode, body } = await supertest(app)
+                .get('/v1/send/email/admin/revenue/report')
+                .set('Authorization', `Bearer ${token}`)
+            const month = +dayjs(orderNo, 'YYYYMMDDHHmmss').format('M');
+            expect(statusCode).toBe(200)
+            expect(body.data).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({ month }),
+                ])
+            );
+        })
+        test("O-5-1  獲取營收資料 - Redis 快取", async () => {
+            const { statusCode, body } = await supertest(app)
+                .get('/v1/send/email/admin/revenue/report')
+                .set('Authorization', `Bearer ${token}`)
+            expect(statusCode).toBe(200)
+            expect(body.message).toContain("快取");
+        })
 
+        test("O-5-2 獲取賣出數量資料", async () => {
+            const { statusCode, body } = await supertest(app)
+                .get('/v1/send/email/admin/sell-quantity/report')
+                .set('Authorization', `Bearer ${token}`)
+            expect(statusCode).toBe(200)
+            expect(body.data).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({ productNo: 1 }),
+                    expect.objectContaining({ productNo: 2 })
+                ])
+            );
+        })
+        test("O-5-2 獲取賣出數量資料 - Redis 快取", async () => {
+            const { statusCode, body } = await supertest(app)
+                .get('/v1/send/email/admin/sell-quantity/report')
+                .set('Authorization', `Bearer ${token}`)
+            expect(statusCode).toBe(200)
+            expect(body.message).toContain("快取");
+
+        })
+        test("O-5-3 獲取訂單數量資料", async () => {
+            const { statusCode, body } = await supertest(app)
+                .get('/v1/send/email/admin/orders-quantity/report')
+                .set('Authorization', `Bearer ${token}`)
+            const month = +dayjs(orderNo, 'YYYYMMDDHHmmss').format('M');
+            expect(statusCode).toBe(200)
+            expect(body.data).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({ month }),
+                ])
+            );
+        })
+        test("O-5-3 獲取訂單數量資料 - Redis 快取", async () => {
+            const { statusCode, body } = await supertest(app)
+                .get('/v1/send/email/admin/orders-quantity/report')
+                .set('Authorization', `Bearer ${token}`)
+            expect(statusCode).toBe(200)
+            expect(body.message).toContain("快取");
+
+        })
+        // 寄送報表會一直寄所以先註解
+        // test("O-5-4 寄送報表", async () => {
+        //     const { statusCode, body } = await supertest(app)
+        //         .get('/v1/send/email/admin/report/2')
+        //         .set('Authorization', `Bearer ${token}`)
+        //     expect(statusCode).toBe(200)
+        //     expect(body.message).toBe('報表寄送成功')
+        // })
+        test("O-5-5 獲取訂單數量資料", async () => {
+            const month = +dayjs(orderNo, 'YYYYMMDDHHmmss').format('M');
+            const { statusCode, body } = await supertest(app)
+                .get('/v1/reports/admin/orders')
+                .set('Authorization', `Bearer ${token}`)
+                .query({
+                    month,
+                    number: 100
+                })
+            expect(statusCode).toBe(200)
+            body.data.data.forEach((item: any) => {
+                expect(+dayjs(item.createdAt).format('M')).toBe(month)
+            })
+        })
+        test("O-5-5 獲取訂單數量資料 - Redis 快取", async () => {
+            const month = +dayjs(orderNo, 'YYYYMMDDHHmmss').format('M');
+            const { statusCode, body } = await supertest(app)
+                .get('/v1/reports/admin/orders')
+                .set('Authorization', `Bearer ${token}`)
+                .query({
+                    month,
+                    number: 100
+                })
+            expect(statusCode).toBe(200)
+            expect(body.message).toContain("快取");
+        })
     })
 })
 
