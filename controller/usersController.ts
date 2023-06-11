@@ -218,10 +218,11 @@ export const users = {
           : await autoIncrement(Member, "B");
 
       // 職位代號不是4的話，在user collection新增，如果是4表示是會員，在member collection新增
+      let createdData = {};
       if (titleNo == 1) {
         // 加密
         const bcryptPassword = await bcrypt.hash(password, 12);
-        await User.create({
+        createdData = await User.create({
           name,
           phone,
           email,
@@ -232,7 +233,7 @@ export const users = {
           number: autoIncrementIndex,
         });
       } else if (titleNo == 4) {
-        await Member.create({
+        createdData = await Member.create({
           name,
           phone,
           titleNo,
@@ -243,7 +244,7 @@ export const users = {
       } else {
         // 加密
         const bcryptPassword = await bcrypt.hash(password, 12);
-        await User.create({
+        createdData = await User.create({
           name,
           phone,
           password: bcryptPassword,
@@ -253,7 +254,7 @@ export const users = {
           number: autoIncrementIndex,
         });
       }
-      handleSuccess(res, Message.CREATE_SUCCESS, null);
+      handleSuccess(res, Message.CREATE_SUCCESS, createdData);
     }
   ),
   // O-1-3 修改使用者API
@@ -377,7 +378,7 @@ export const users = {
       if (titleNo == 1) {
         params.email = email;
       }
-
+      let updatedData: object | null = {};
       // 職位代號不是4的話，在user collection新增，如果是4表示是會員，在member collection更新
       if (titleNo != 4) {
         if (password) {
@@ -385,12 +386,16 @@ export const users = {
           const bcryptPassword = await bcrypt.hash(password, 12);
           params.password = bcryptPassword;
         }
-        await User.findByIdAndUpdate(userId, params);
+        updatedData = await User.findByIdAndUpdate(userId, params, {
+          returnDocument: "after",
+        });
       } else {
-        await Member.findByIdAndUpdate(userId, params);
+        updatedData = await Member.findByIdAndUpdate(userId, params, {
+          returnDocument: "after",
+        });
       }
 
-      handleSuccess(res, Message.REVISE_SUCCESS, null);
+      handleSuccess(res, Message.REVISE_SUCCESS, updatedData);
     }
   ),
   // O-1-4 刪除使用者API
