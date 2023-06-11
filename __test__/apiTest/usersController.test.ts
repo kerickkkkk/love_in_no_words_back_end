@@ -13,7 +13,6 @@ describe("店長 - 使用者", () => {
     await mongoose.connection.close();
   });
   let token = "";
-  let tableNo = "";
   const userSignUpPayload = {
     name: "我是店長",
     phone: "0999999999",
@@ -107,7 +106,6 @@ describe("店長 - 使用者", () => {
       .post("/v1/users/admin")
       .set("Authorization", `Bearer ${token}`)
       .send(creatUserPayload);
-    tableNo = body.data.tableNo;
     expect(statusCode).toBe(200);
     expect(body.status).toBe("OK");
     expect(body.data).toEqual(responseUserPayload);
