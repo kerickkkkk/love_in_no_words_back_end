@@ -16,7 +16,7 @@ export const coupons = {
         isDisabled?: boolean;
       } = { isDeleted: false }
 
-      if (req.user && req.user.titleNo === 1) {
+      if (req.user && req.user.titleNo === 2) {
         searchType.isDisabled = false
       }
       const coupons = await CouponModel.find(searchType).sort({ couponNo: 1 });
