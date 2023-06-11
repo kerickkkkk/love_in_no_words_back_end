@@ -433,7 +433,7 @@ export const orders = {
         }
 
         const ordersList = orders.map((order) => {
-          const { _id, orderNo, tableName, createdAt, isDisabled } = order;
+          const { _id, orderNo, tableName, createdAt, isDisabled, payment } = order;
           //const transferDate = slashDate(createdAt);
           return {
             _id,
@@ -443,6 +443,8 @@ export const orders = {
             //createdAt: transferDate,
             createdAt,
             isDisabled,
+            payment,
+            //description
           };
         });
 
@@ -498,7 +500,10 @@ export const orders = {
 
         // 取得訂單詳細內容
         const orderDetail = order.orderDetail as any;
-        const rating = orderDetail.rating as any;
+        let rating = orderDetail.rating as any;
+        if (order.rating) {
+          rating = await Rating.findById(order.rating);
+        }
 
         // 組合訂單詳細內容
         const formattedOrderDetail = {
@@ -584,7 +589,13 @@ export const orders = {
       if (!order) {
         return next(appError(400, "無法更新訂單資訊", next));
       }
-
+      // Update order status based on payment method
+      if (order.payment === "現金") {
+        order.orderStatus = "已結帳";
+      } else if (order.payment === "linepay") {
+        // If payment method is "linepay", do not process checkout
+        // You can add additional logic here if needed
+      }
       const response = {
         status: "OK",
         message: "新增成功！",
