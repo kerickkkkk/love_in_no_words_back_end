@@ -399,7 +399,8 @@ export const orders = {
       interface Query {
         isDeleted: boolean;
         orderStatus?: string;
-        date?: string;
+        //date?: string;
+        createdAt?: { $gte: Date, $lt: Date };
       }
       const { orderStatus, date, page } = req.query as {
         orderStatus?: string;
@@ -414,7 +415,11 @@ export const orders = {
       }
 
       if (date !== undefined && date !== '') {
-        query.date = date;
+        //query.date = date;
+        const startDate = new Date(date);
+        const endDate = new Date(date);
+        endDate.setDate(endDate.getDate() + 1);
+        query.createdAt = { $gte: startDate, $lt: endDate };
       }
 
       const currentPage = parseInt(page ?? '1'); // 解析頁碼參數，預設為 1
@@ -422,7 +427,9 @@ export const orders = {
 
       try {
         const totalNum = await Order.countDocuments(query);
-        const orders = await Order.find(query).skip(skipCount).limit(perPage);
+        // const orders = await Order.find(query).skip(skipCount).limit(perPage);
+        const orders = await Order.find(query).sort({ createdAt: -1 }).skip(skipCount).limit(perPage);
+
 
         if (orders.length === 0) {
           // 若沒有符合條件的訂單，回傳訊息即可
@@ -433,7 +440,7 @@ export const orders = {
         }
 
         const ordersList = orders.map((order) => {
-          const { _id, orderNo, tableName, createdAt, isDisabled, payment } = order;
+          const { _id, orderNo, tableName, createdAt, isDisabled, orderStatus, payment } = order;
           //const transferDate = slashDate(createdAt);
           return {
             _id,
@@ -443,7 +450,8 @@ export const orders = {
             //createdAt: transferDate,
             createdAt,
             isDisabled,
-            payment,
+            orderStatus,
+            payment
             //description
           };
         });
@@ -526,6 +534,7 @@ export const orders = {
             isDeleted: item.isDeleted,
             qty: item.qty,
             subTotal: item.subTotal,
+            note: item.productNo,
           })),
           totalTime: orderDetail.totalTime,
           discount: orderDetail.discount,
@@ -551,7 +560,7 @@ export const orders = {
   //S-3-3 滿意度及建議回饋
   postRating: handleErrorAsync(async (req: Request, res: Response, next: NextFunction) => {
     // Destructure the request body
-    const { satisfaction, description } = req.body;
+    const { satisfaction, description, payment } = req.body;
     const { orderId: _id } = req.params;
     // Check if the required fields are present
     if (!satisfaction || !_id) {
@@ -577,10 +586,19 @@ export const orders = {
         order: _id
       });
 
+      let orderStatus;
+      if (payment === "現金") {
+        orderStatus = "已結帳";
+      } else if (payment === "linepay") {
+        orderStatus = "未結帳";
+      } else {
+        return next(appError(400, "未選擇付款類型!", next));
+      }
+
       // Update the corresponding order document with the rating
       const order = await Order.findByIdAndUpdate(_id, {
-        payment: "現金",
-        orderStatus: "已結帳",
+        payment,
+        orderStatus,
         rating: rating._id,
       }
         , { new: true }
@@ -589,13 +607,7 @@ export const orders = {
       if (!order) {
         return next(appError(400, "無法更新訂單資訊", next));
       }
-      // Update order status based on payment method
-      if (order.payment === "現金") {
-        order.orderStatus = "已結帳";
-      } else if (order.payment === "linepay") {
-        // If payment method is "linepay", do not process checkout
-        // You can add additional logic here if needed
-      }
+
       const response = {
         status: "OK",
         message: "新增成功！",

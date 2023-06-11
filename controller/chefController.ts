@@ -47,6 +47,7 @@ const chefController = {
                 description: item.description,
                 couponNo: item.couponNo,
                 couponName: item.couponName,
+                note: item.productNo,
               };
             }),
             totalTime: orderDetail.totalTime,
@@ -79,7 +80,6 @@ const chefController = {
         if (status && !validStatuses.includes(status)) {
           return next(appError(400, "無效的出餐狀態", next));
         }
-
 
         const updatedOrder = await orderDetail.findOneAndUpdate(
           { orderNo: _id },
