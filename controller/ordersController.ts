@@ -224,7 +224,7 @@ export const orders = {
       const abMinus: any = {}
       const products = tempProducts.reduce((prev: any[], next, index) => {
         const { qty, note } = inputProducts[index]
-        const originalPrice = index === 0 && next.price
+        const originalPrice = next.price
         // discount 無條件進位
         const tempDiscount = couponObj ? Math.ceil(next.price * (100 - couponObj.discount) / 100) : 0
         // price 無條件捨去
