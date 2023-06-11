@@ -224,6 +224,7 @@ export const orders = {
       const abMinus: any = {}
       const products = tempProducts.reduce((prev: any[], next, index) => {
         const { qty, note } = inputProducts[index]
+        const originalPrice = next.price
         // discount 無條件進位
         const tempDiscount = couponObj ? Math.ceil(next.price * (100 - couponObj.discount) / 100) : 0
         // price 無條件捨去
@@ -232,6 +233,7 @@ export const orders = {
           ...next,
           qty,
           note,
+          originalPrice,
           discount: tempDiscount * qty,
           subTotal: next.price * qty
         }
@@ -244,7 +246,7 @@ export const orders = {
           // 符合規則就在商品加上 couponName , 
           product.couponNo = tempItem.couponNo
           product.couponName = tempItem.couponName
-          product.discount = tempItem.discount
+          // product.discount = tempItem.discount
           if (abMinus[product.couponNo] === undefined) {
             abMinus[product.couponNo] = {}
           }
@@ -253,7 +255,7 @@ export const orders = {
             abMinus[product.couponNo][next.productsType.productsType] = [{
               productNo: next.productNo,
               price: next.price,
-              discount: product.discount,
+              // discount: product.discount,
               qty
             }]
           } else {
