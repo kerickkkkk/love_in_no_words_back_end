@@ -125,7 +125,7 @@ describe("店長 - 使用者", () => {
     expect(body.data).toEqual(expect.objectContaining(responUpdateUserPayload));
   });
 
-  test("O-4-4 刪除 優惠活動", async () => {
+  test("O-1-4 刪除使用者API", async () => {
     const { statusCode, body } = await supertest(app)
       .delete(
         `/v1/users/admin/${updateUserPayload._id}/${updateUserPayload.titleNo}`
