@@ -18,6 +18,8 @@ interface Order extends Document {
   payment?: string;
   // Reference to the Rating subdocument
   rating?: Rating;
+  //add note
+  note: string;
 }
 interface Rating {
   satisfaction?: number; // Make satisfaction field optional
@@ -112,6 +114,10 @@ const orderSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Rating",
       required: false,
+    },
+    note: {
+      type: String,
+      required: false
     }
   },
   {

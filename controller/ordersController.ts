@@ -402,10 +402,11 @@ export const orders = {
         //date?: string;
         createdAt?: { $gte: Date, $lt: Date };
       }
-      const { orderStatus, date, page } = req.query as {
+      const { orderStatus, date, page, createdAt } = req.query as {
         orderStatus?: string;
         date?: string;
         page?: string;
+        createdAt?: string;
       };
       const perPage = 10; // 每頁回傳的筆數
       const query: Query = { isDeleted: false };
@@ -414,10 +415,16 @@ export const orders = {
         query.orderStatus = orderStatus;
       }
 
-      if (date !== undefined && date !== '') {
-        //query.date = date;
-        const startDate = new Date(date);
-        const endDate = new Date(date);
+      // if (date !== undefined && date !== '') {
+      //   //query.date = date;
+      //   const startDate = new Date(date);
+      //   const endDate = new Date(date);
+      //   endDate.setDate(endDate.getDate() + 1);
+      //   query.createdAt = { $gte: startDate, $lt: endDate };
+      // }
+      if (createdAt !== undefined && createdAt !== '') {
+        const startDate = new Date(createdAt);
+        const endDate = new Date(createdAt);
         endDate.setDate(endDate.getDate() + 1);
         query.createdAt = { $gte: startDate, $lt: endDate };
       }
@@ -534,7 +541,8 @@ export const orders = {
             isDeleted: item.isDeleted,
             qty: item.qty,
             subTotal: item.subTotal,
-            note: item.productNo,
+            //note: item.productNo,
+            note: item.note || '',
           })),
           totalTime: orderDetail.totalTime,
           discount: orderDetail.discount,
