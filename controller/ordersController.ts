@@ -547,6 +547,9 @@ export const orders = {
           createdAt: orderDetail.createdAt,
           revisedAt: orderDetail.revisedAt,
           isDeleted: orderDetail.isDeleted,
+          //add coupon
+          couponNo: orderDetail.couponNo,
+          couponName: orderDetail.couponName,
           //add rating
           satisfaction: rating ? rating.satisfaction : null,
           description: rating ? rating.description : null,
