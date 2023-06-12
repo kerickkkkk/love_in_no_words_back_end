@@ -404,7 +404,7 @@ export const orders = {
         //date?: string;
         createdAt?: { $gte: Date, $lt: Date };
       }
-      const { orderStatus, date, page, createdAt } = req.query as {
+      const { orderStatus, page, createdAt } = req.query as {
         orderStatus?: string;
         date?: string;
         page?: string;
@@ -417,13 +417,6 @@ export const orders = {
         query.orderStatus = orderStatus;
       }
 
-      // if (date !== undefined && date !== '') {
-      //   //query.date = date;
-      //   const startDate = new Date(date);
-      //   const endDate = new Date(date);
-      //   endDate.setDate(endDate.getDate() + 1);
-      //   query.createdAt = { $gte: startDate, $lt: endDate };
-      // }
       if (createdAt !== undefined && createdAt !== '') {
         const startDate = new Date(createdAt);
         const endDate = new Date(createdAt);
@@ -431,14 +424,13 @@ export const orders = {
         query.createdAt = { $gte: startDate, $lt: endDate };
       }
 
-      const currentPage = parseInt(page ?? '1'); // 解析頁碼參數，預設為 1
-      const skipCount = (currentPage - 1) * perPage; // 要跳過的筆數
-
       try {
         const totalNum = await Order.countDocuments(query);
+        const totalPages = Math.ceil(totalNum / perPage); // 總頁數
+        const currentPage = Math.min(parseInt(page ?? '1'), totalPages); // 解析頁碼參數，並限制在合理範圍內
+        const skipCount = (currentPage - 1) * perPage; // 要跳過的筆數
         // const orders = await Order.find(query).skip(skipCount).limit(perPage);
         const orders = await Order.find(query).sort({ createdAt: -1 }).skip(skipCount).limit(perPage);
-
 
         if (orders.length === 0) {
           // 若沒有符合條件的訂單，回傳訊息即可
@@ -449,11 +441,12 @@ export const orders = {
         }
 
         const ordersList = orders.map((order) => {
-          const { _id, orderNo, tableName, createdAt, isDisabled, orderStatus, payment } = order;
+          const { _id, orderNo, tableNo, tableName, createdAt, isDisabled, orderStatus, payment } = order;
           //const transferDate = slashDate(createdAt);
           return {
             _id,
             orderNo,
+            tableNo,
             tableName,
             time: period(),
             //createdAt: transferDate,
@@ -465,17 +458,16 @@ export const orders = {
           };
         });
 
-        const totalPages = Math.ceil(totalNum / perPage); // 總頁數
         const meta: Meta = {
           pagination: {
-            total: ordersList.length,
+            total: totalNum,
             perPage: perPage,
             currentPage: currentPage,
             lastPage: totalPages,
             nextPage: currentPage < totalPages ? currentPage + 1 : null,
             prevPage: currentPage > 1 ? currentPage - 1 : null,
             from: skipCount + 1,
-            to: skipCount + ordersList.length,
+            to: Math.min(skipCount + ordersList.length, totalNum),
           },
         };
 
