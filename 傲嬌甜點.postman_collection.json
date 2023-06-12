@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "ea57d12c-0d56-420e-9d3d-cfea1650dd0d",
-		"name": "傲嬌甜點",
+		"_postman_id": "01f64b44-b227-46d9-b02d-03e19133e07e",
+		"name": "傲嬌甜點 0612",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "6878038"
+		"_exporter_id": "26724792"
 	},
 	"item": [
 		{
@@ -930,7 +930,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"productName\":\"Vite6-3\",\n        \"photoUrl\":\"{{photoUrl}}\",\n        \"price\":100,\n        \"inStockAmount\":60,\n        \"safeStockAmount\": 50,\n        \"productsType\": 6,\n        \"productionTime\": 1,\n        \"description\": \"忘情水2\",\n        \"isDisabled\": false\n}",
+							"raw": "{\n        \"productName\":\"Vite6-2\",\n        \"photoUrl\":\"{{photoUrl}}\",\n        \"price\":100,\n        \"inStockAmount\":60,\n        \"safeStockAmount\": 50,\n        \"productsType\": 6,\n        \"productionTime\": 1,\n        \"description\": \"忘情水2\",\n        \"isDisabled\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1114,7 +1114,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/products/admin/dessertcodes/6",
+							"raw": "{{base_url}}/v1/products/admin/dessertcodes/1",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1123,7 +1123,7 @@
 								"products",
 								"admin",
 								"dessertcodes",
-								"6"
+								"1"
 							]
 						}
 					},
@@ -1431,7 +1431,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableName\": 2,\n  \"products\":[\n\n        {\n            \"productNo\": 1,\n\t\t    \"qty\" :11 \n\n\t\t}\n  ],\n  \"couponNo\":\"A000000003\"\n}",
+							"raw": "{\n  \"tableName\": 1,\n  \"products\":[\n\n        {\n            \"productNo\": 1,\n\t\t    \"qty\" :11 \n\n\t\t}\n  ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1466,7 +1466,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tableName\": 2,\n  \"products\":[\n\n        {\n            \"productNo\": 1,\n\t\t    \"qty\" :1 \n\t\t}\n  ],\n    \"couponNo\":\"A000000003\"\n\n}",
+							"raw": "{\n  \"tableName\": 1,\n  \"products\":[\n\n        {\n            \"productNo\": 1,\n\t\t    \"qty\" :1 \n\t\t}\n  ]\n\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1637,93 +1637,7 @@
 							"variable": [
 								{
 									"key": "orderId",
-									"value": "6481b2a28d0142467503e4c0"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "C-1-1 訂單內容查詢",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/v1/orders/pick-up/?status=已出餐",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"v1",
-								"orders",
-								"pick-up",
-								""
-							],
-							"query": [
-								{
-									"key": "status",
-									"value": "已出餐",
-									"description": "未出餐 已出餐"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "C-1-2 訂單出餐",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"status\":\"已出餐\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/v1/orders/pick-up/:orderNo",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"v1",
-								"orders",
-								"pick-up",
-								":orderNo"
-							],
-							"variable": [
-								{
-									"key": "orderNo",
-									"value": "20230606233500"
+									"value": "646e10d3c5d43e553625d048"
 								}
 							]
 						}
@@ -1953,7 +1867,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/send/email/admin/revenue/report/",
+							"raw": "{{base_url}}/v1/send/email/admin/revenue/report/?year=2023",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1969,8 +1883,7 @@
 							"query": [
 								{
 									"key": "year",
-									"value": "2023",
-									"disabled": true
+									"value": "2023"
 								}
 							]
 						}
@@ -2001,7 +1914,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/send/email/admin/sell-quantity/report",
+							"raw": "{{base_url}}/v1/send/email/admin/sell-quantity/report?year=2023",
 							"host": [
 								"{{base_url}}"
 							],
@@ -2016,8 +1929,7 @@
 							"query": [
 								{
 									"key": "year",
-									"value": "2023",
-									"disabled": true
+									"value": "2023"
 								}
 							]
 						}
@@ -2155,7 +2067,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/v1/reports/admin/orders?month=6&number=100",
+							"raw": "{{base_url}}/v1/reports/admin/orders?month=5&number=100",
 							"host": [
 								"{{base_url}}"
 							],
@@ -2180,7 +2092,7 @@
 								},
 								{
 									"key": "month",
-									"value": "6"
+									"value": "5"
 								},
 								{
 									"key": "number",
@@ -2301,7 +2213,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"list\":[6,7],\n    \"discount\" : 10\n}",
+							"raw": "{\n    \"list\":[2,3],\n    \"discount\" : 10\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2323,48 +2235,7 @@
 					"response": []
 				},
 				{
-					"name": "O-6-3 修改 a+b 活動",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{token}}",
-								"type": "default"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"discount\" : 10\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/v1/abcoupons/admin/:couponNo",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"v1",
-								"abcoupons",
-								"admin",
-								":couponNo"
-							],
-							"variable": [
-								{
-									"key": "couponNo",
-									"value": "B000000005"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "O-6-4 刪除 a+b 活動",
+					"name": "O-6-3 刪除 a+b 活動",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -2376,7 +2247,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "",
+							"raw": "{\n    \"list\":[1,2],\n    \"discount\" : 10\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2397,7 +2268,7 @@
 							"variable": [
 								{
 									"key": "couponNo",
-									"value": "B000000003"
+									"value": "B000000002"
 								}
 							]
 						}
@@ -2527,7 +2398,7 @@
 			"name": "line_pay",
 			"item": [
 				{
-					"name": "S-5-1 結帳",
+					"name": "S- 結帳",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -2575,7 +2446,7 @@
 					"response": []
 				},
 				{
-					"name": "S-5-2 查詢是否結帳",
+					"name": "S- 查詢是否結帳",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -2594,8 +2465,13 @@
 							}
 						],
 						"body": {
-							"mode": "urlencoded",
-							"urlencoded": []
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{base_url}}/v1/line_pay/check/:orderNo",
@@ -2611,7 +2487,7 @@
 							"variable": [
 								{
 									"key": "orderNo",
-									"value": "20230608185050",
+									"value": "20230530212758",
 									"description": "payStatus :\nCAPTURE：已請款\nAUTHORIZATION：授權\nVOIDED_AUTHORIZATION：授權無效（在呼叫\"Void API\"的狀態）\nEXPIRED_AUTHORIZATION：授權到期（LINE Pay所允許的商家授權有效期已過期）"
 								}
 							]
