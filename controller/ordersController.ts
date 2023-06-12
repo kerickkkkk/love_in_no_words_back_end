@@ -423,12 +423,14 @@ export const orders = {
       }
 
       try {
-        const totalNum = await Order.countDocuments(query);
-        const totalPages = Math.ceil(totalNum / perPage); // 總頁數
+        const ordersCount = await Order.find(query).countDocuments();
+        const totalPages = Math.ceil(ordersCount / perPage); // 總頁數
         const currentPage = Math.min(parseInt(page ?? '1'), totalPages); // 解析頁碼參數，並限制在合理範圍內
         const skipCount = (currentPage - 1) * perPage; // 要跳過的筆數
-        // const orders = await Order.find(query).skip(skipCount).limit(perPage);
-        const orders = await Order.find(query).sort({ createdAt: -1 }).skip(skipCount).limit(perPage);
+        const orders = await Order.find(query)
+          .sort({ createdAt: -1 })
+          .skip(skipCount)
+          .limit(perPage);
 
         if (orders.length === 0) {
           // 若沒有符合條件的訂單，回傳訊息即可
@@ -458,14 +460,14 @@ export const orders = {
 
         const meta: Meta = {
           pagination: {
-            total: totalNum,
+            total: ordersCount,
             perPage: perPage,
             currentPage: currentPage,
             lastPage: totalPages,
             nextPage: currentPage < totalPages ? currentPage + 1 : null,
             prevPage: currentPage > 1 ? currentPage - 1 : null,
             from: skipCount + 1,
-            to: Math.min(skipCount + ordersList.length, totalNum),
+            to: Math.min(skipCount + ordersList.length, ordersCount),
           },
         };
 
