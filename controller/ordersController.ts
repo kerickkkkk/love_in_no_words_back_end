@@ -401,12 +401,14 @@ export const orders = {
       interface Query {
         isDeleted: boolean;
         orderStatus?: string;
-        date?: string;
+        //date?: string;
+        createdAt?: { $gte: Date, $lt: Date };
       }
-      const { orderStatus, date, page } = req.query as {
+      const { orderStatus, date, page, createdAt } = req.query as {
         orderStatus?: string;
         date?: string;
         page?: string;
+        createdAt?: string;
       };
       const perPage = 10; // 每頁回傳的筆數
       const query: Query = { isDeleted: false };
@@ -415,8 +417,18 @@ export const orders = {
         query.orderStatus = orderStatus;
       }
 
-      if (date !== undefined && date !== '') {
-        query.date = date;
+      // if (date !== undefined && date !== '') {
+      //   //query.date = date;
+      //   const startDate = new Date(date);
+      //   const endDate = new Date(date);
+      //   endDate.setDate(endDate.getDate() + 1);
+      //   query.createdAt = { $gte: startDate, $lt: endDate };
+      // }
+      if (createdAt !== undefined && createdAt !== '') {
+        const startDate = new Date(createdAt);
+        const endDate = new Date(createdAt);
+        endDate.setDate(endDate.getDate() + 1);
+        query.createdAt = { $gte: startDate, $lt: endDate };
       }
 
       const currentPage = parseInt(page ?? '1'); // 解析頁碼參數，預設為 1
@@ -424,7 +436,9 @@ export const orders = {
 
       try {
         const totalNum = await Order.countDocuments(query);
-        const orders = await Order.find(query).skip(skipCount).limit(perPage);
+        // const orders = await Order.find(query).skip(skipCount).limit(perPage);
+        const orders = await Order.find(query).sort({ createdAt: -1 }).skip(skipCount).limit(perPage);
+
 
         if (orders.length === 0) {
           // 若沒有符合條件的訂單，回傳訊息即可
@@ -435,7 +449,7 @@ export const orders = {
         }
 
         const ordersList = orders.map((order) => {
-          const { _id, orderNo, tableName, createdAt, isDisabled } = order;
+          const { _id, orderNo, tableName, createdAt, isDisabled, orderStatus, payment } = order;
           //const transferDate = slashDate(createdAt);
           return {
             _id,
@@ -445,6 +459,9 @@ export const orders = {
             //createdAt: transferDate,
             createdAt,
             isDisabled,
+            orderStatus,
+            payment
+            //description
           };
         });
 
@@ -500,7 +517,10 @@ export const orders = {
 
         // 取得訂單詳細內容
         const orderDetail = order.orderDetail as any;
-        const rating = orderDetail.rating as any;
+        let rating = orderDetail.rating as any;
+        if (order.rating) {
+          rating = await Rating.findById(order.rating);
+        }
 
         // 組合訂單詳細內容
         const formattedOrderDetail = {
@@ -523,6 +543,8 @@ export const orders = {
             isDeleted: item.isDeleted,
             qty: item.qty,
             subTotal: item.subTotal,
+            //note: item.productNo,
+            note: item.note || '',
           })),
           totalTime: orderDetail.totalTime,
           discount: orderDetail.discount,
@@ -548,7 +570,7 @@ export const orders = {
   //S-3-3 滿意度及建議回饋
   postRating: handleErrorAsync(async (req: Request, res: Response, next: NextFunction) => {
     // Destructure the request body
-    const { satisfaction, description } = req.body;
+    const { satisfaction, description, payment } = req.body;
     const { orderId: _id } = req.params;
     // Check if the required fields are present
     if (!satisfaction || !_id) {
@@ -574,10 +596,19 @@ export const orders = {
         order: _id
       });
 
+      let orderStatus;
+      if (payment === "現金") {
+        orderStatus = "已結帳";
+      } else if (payment === "linepay") {
+        orderStatus = "未結帳";
+      } else {
+        return next(appError(400, "未選擇付款類型!", next));
+      }
+
       // Update the corresponding order document with the rating
       const order = await Order.findByIdAndUpdate(_id, {
-        payment: "現金",
-        orderStatus: "已結帳",
+        payment,
+        orderStatus,
         rating: rating._id,
       }
         , { new: true }

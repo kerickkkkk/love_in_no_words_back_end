@@ -15,7 +15,6 @@ const chefController = {
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { status } = req.query;
-
         // 檢查 status 參數是否提供
         if (!status) {
           return next(appError(400, "請提供出餐狀態", next));
@@ -47,6 +46,7 @@ const chefController = {
                 description: item.description,
                 couponNo: item.couponNo,
                 couponName: item.couponName,
+                note: item.note || '',
               };
             }),
             totalTime: orderDetail.totalTime,
@@ -79,7 +79,6 @@ const chefController = {
         if (status && !validStatuses.includes(status)) {
           return next(appError(400, "無效的出餐狀態", next));
         }
-
 
         const updatedOrder = await orderDetail.findOneAndUpdate(
           { orderNo: _id },

@@ -21,6 +21,7 @@ export interface IOrderItem {
   description: string;
   couponNo: string;
   couponName: string;
+  note: string;
 }
 
 const chefSchema: Schema = new Schema<Chef>({
@@ -39,6 +40,8 @@ const chefSchema: Schema = new Schema<Chef>({
       description: { type: String, required: true },
       couponNo: { type: String, required: true },
       couponName: { type: String, required: true },
+      // 新增 note 字段
+      note: { type: String, required: true },
     },
   ],
   status: {
