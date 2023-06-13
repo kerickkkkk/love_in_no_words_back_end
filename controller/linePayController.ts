@@ -209,6 +209,7 @@ export const linePay = {
           },
           {
             orderStatus: '已結帳',
+            payment: 'linepay',
             transactionId
           },
           { new: true }
