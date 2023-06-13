@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "01f64b44-b227-46d9-b02d-03e19133e07e",
-		"name": "傲嬌甜點 0612",
+		"name": "傲嬌甜點",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "26724792"
 	},
@@ -1638,6 +1638,92 @@
 								{
 									"key": "orderId",
 									"value": "646e10d3c5d43e553625d048"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "C-1-1 訂單內容查詢",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/orders/pick-up/?status=已出餐",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"orders",
+								"pick-up",
+								""
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "已出餐",
+									"description": "未出餐 已出餐"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "C-1-2 訂單出餐",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\":\"已出餐\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/orders/pick-up/:orderNo",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"orders",
+								"pick-up",
+								":orderNo"
+							],
+							"variable": [
+								{
+									"key": "orderNo",
+									"value": "20230606233500"
 								}
 							]
 						}
