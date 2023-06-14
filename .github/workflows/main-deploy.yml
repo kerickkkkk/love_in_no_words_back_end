@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: '18'
       - run: npm ci
-      - run: npm run test:dev
+      - run: npm run test
   deploy:
     needs:
       - test
