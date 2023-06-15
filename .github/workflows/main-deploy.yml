@@ -26,6 +26,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
+      - run: echo "${{ secrets.love_in_no_words_back_end }}" > .env
       - run: npm ci
       - run: npm run test
   deploy:
