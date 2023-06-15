@@ -22,5 +22,11 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
+      - name: Load MongoDB binary cache
+        id: cache-mongodb-binaries
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/mongodb-binaries
+          key: '18'
       - run: npm ci
       - run: npm run test
