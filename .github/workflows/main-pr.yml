@@ -35,4 +35,4 @@ jobs:
           path: ~/.cache/mongodb-binaries
           key:  ${{ matrix.node-version }}
       - run: npm ci
-      - run: npm run test
+      - run: npm run test:dev
