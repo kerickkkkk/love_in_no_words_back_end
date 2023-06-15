@@ -78,5 +78,10 @@
     "execMap": {
       "ts": "node --require ts-node/register"
     }
-  }
+  },
+  "config": {
+    "mongodbMemoryServer": {
+      "debug": "1"
+    }
+  }  
 }
