@@ -21,17 +21,20 @@ jobs:
     # needs:
     #   - lint
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version:  ${{ matrix.node-version }}
       - name: Load MongoDB binary cache
         id: cache-mongodb-binaries
         uses: actions/cache@v3
         with:
           path: ~/.cache/mongodb-binaries
-          key: '18'
+          key:  ${{ matrix.node-version }}
       - run: npm ci
       - run: npm run test
   deploy:
