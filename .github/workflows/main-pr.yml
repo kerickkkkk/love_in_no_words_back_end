@@ -20,6 +20,9 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x]
+    env:
+      JWT_EXPIRES_DAY: ${{secrets.JWT_EXPIRES_DAY}}
+      JWT_SECRET: ${{secrets.JWT_SECRET}}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
