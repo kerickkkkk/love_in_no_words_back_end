@@ -3,9 +3,9 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import app from '../../app'
 import dayjs from '../../utils/dayjs'
-import redisMock from 'redis-mock'; // 导入模拟库
+// import redisMock from 'redis-mock'; // 导入模拟库
 
-const redisClient = redisMock.createClient();
+// const redisClient = redisMock.createClient();
 describe('店長', () => {
     beforeAll(async () => {
         const mongoServer = await MongoMemoryServer.create();
@@ -14,7 +14,7 @@ describe('店長', () => {
     afterAll(async () => {
         await mongoose.disconnect();
         await mongoose.connection.close();
-        redisClient.quit();
+        // redisClient.quit();
     });
     let token = ''
     const userSignUpPayload = {

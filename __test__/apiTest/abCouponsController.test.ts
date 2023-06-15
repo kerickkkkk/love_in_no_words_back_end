@@ -32,8 +32,6 @@ describe('店長 - 優惠券', () => {
         const { statusCode, body } = await supertest(app)
             .post('/v1/users/sign_up')
             .send(userSignUpPayload)
-        console.log(body);
-
         token = body.data.user.token
         expect(statusCode).toBe(200)
 
