@@ -1,0 +1,27 @@
+name: 主分支 Pull Requests 確認
+on: 
+  pull_request: 
+    branches:
+      - main
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    env:
+      JWT_EXPIRES_DAY: ${{secrets.JWT_EXPIRES_DAY}}
+      JWT_SECRET: ${{secrets.JWT_SECRET}}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version:  ${{ matrix.node-version }}
+      - name: Load MongoDB binary cache
+        id: cache-mongodb-binaries
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/mongodb-binaries
+          key:  ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run test

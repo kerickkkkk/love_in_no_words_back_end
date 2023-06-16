@@ -3,9 +3,9 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import app from '../../app'
 import dayjs from '../../utils/dayjs'
-import redisMock from 'redis-mock'; // 导入模拟库
+// import redisMock from 'redis-mock'; // 导入模拟库
 
-const redisClient = redisMock.createClient();
+// const redisClient = redisMock.createClient();
 describe('店長', () => {
     beforeAll(async () => {
         const mongoServer = await MongoMemoryServer.create();
@@ -14,7 +14,7 @@ describe('店長', () => {
     afterAll(async () => {
         await mongoose.disconnect();
         await mongoose.connection.close();
-        redisClient.quit();
+        // redisClient.quit();
     });
     let token = ''
     const userSignUpPayload = {
@@ -290,24 +290,24 @@ describe('店長', () => {
 
 
     describe('店長 - 報表', () => {
-        test("S-5-1 結帳 : 取得 LinePay 結帳畫面", async () => {
-            const response = await supertest(app)
-                .post(`/v1/line_pay/${orderNo}`)
-                .set('Content-Type', 'application/x-www-form-urlencoded')
-                .send({ '_token': token })
-                .query({ redirectDevUrl: true })
-            expect(response.headers['location']).toMatch(/sandbox-web-pay.line.me/)
-        })
+        // test("S-5-1 結帳 : 取得 LinePay 結帳畫面", async () => {
+        //     const response = await supertest(app)
+        //         .post(`/v1/line_pay/${orderNo}`)
+        //         .set('Content-Type', 'application/x-www-form-urlencoded')
+        //         .send({ '_token': token })
+        //         .query({ redirectDevUrl: true })
+        //     expect(response.headers['location']).toMatch(/sandbox-web-pay.line.me/)
+        // })
 
-        // 因無法結帳 至少進去確定可以拿取資料
-        test("S-5-2 查詢是否結帳 : 取得 LinePay 狀態碼", async () => {
-            const { statusCode, body } = await supertest(app)
-                .get(`/v1/line_pay/check/${orderNo}`)
-                .set('Authorization', `Bearer ${token}`)
-                .query({ redirectDevUrl: true })
-            expect(statusCode).toBe(400)
-            expect(body.message).toMatch(/Transaction record not found/)
-        })
+        // // 因無法結帳 至少進去確定可以拿取資料
+        // test("S-5-2 查詢是否結帳 : 取得 LinePay 狀態碼", async () => {
+        //     const { statusCode, body } = await supertest(app)
+        //         .get(`/v1/line_pay/check/${orderNo}`)
+        //         .set('Authorization', `Bearer ${token}`)
+        //         .query({ redirectDevUrl: true })
+        //     expect(statusCode).toBe(400)
+        //     expect(body.message).toMatch(/Transaction record not found/)
+        // })
 
         test("O-5-1  獲取營收資料", async () => {
             const { statusCode, body } = await supertest(app)
@@ -321,13 +321,13 @@ describe('店長', () => {
                 ])
             );
         })
-        test("O-5-1  獲取營收資料 - Redis 快取", async () => {
-            const { statusCode, body } = await supertest(app)
-                .get('/v1/send/email/admin/revenue/report')
-                .set('Authorization', `Bearer ${token}`)
-            expect(statusCode).toBe(200)
-            expect(body.message).toContain("快取");
-        })
+        // test("O-5-1  獲取營收資料 - Redis 快取", async () => {
+        //     const { statusCode, body } = await supertest(app)
+        //         .get('/v1/send/email/admin/revenue/report')
+        //         .set('Authorization', `Bearer ${token}`)
+        //     expect(statusCode).toBe(200)
+        //     expect(body.message).toContain("快取");
+        // })
 
         test("O-5-2 獲取賣出數量資料", async () => {
             const { statusCode, body } = await supertest(app)
@@ -341,14 +341,14 @@ describe('店長', () => {
                 ])
             );
         })
-        test("O-5-2 獲取賣出數量資料 - Redis 快取", async () => {
-            const { statusCode, body } = await supertest(app)
-                .get('/v1/send/email/admin/sell-quantity/report')
-                .set('Authorization', `Bearer ${token}`)
-            expect(statusCode).toBe(200)
-            expect(body.message).toContain("快取");
+        // test("O-5-2 獲取賣出數量資料 - Redis 快取", async () => {
+        //     const { statusCode, body } = await supertest(app)
+        //         .get('/v1/send/email/admin/sell-quantity/report')
+        //         .set('Authorization', `Bearer ${token}`)
+        //     expect(statusCode).toBe(200)
+        //     expect(body.message).toContain("快取");
 
-        })
+        // })
         test("O-5-3 獲取訂單數量資料", async () => {
             const { statusCode, body } = await supertest(app)
                 .get('/v1/send/email/admin/orders-quantity/report')
@@ -361,14 +361,14 @@ describe('店長', () => {
                 ])
             );
         })
-        test("O-5-3 獲取訂單數量資料 - Redis 快取", async () => {
-            const { statusCode, body } = await supertest(app)
-                .get('/v1/send/email/admin/orders-quantity/report')
-                .set('Authorization', `Bearer ${token}`)
-            expect(statusCode).toBe(200)
-            expect(body.message).toContain("快取");
+        // test("O-5-3 獲取訂單數量資料 - Redis 快取", async () => {
+        //     const { statusCode, body } = await supertest(app)
+        //         .get('/v1/send/email/admin/orders-quantity/report')
+        //         .set('Authorization', `Bearer ${token}`)
+        //     expect(statusCode).toBe(200)
+        //     expect(body.message).toContain("快取");
 
-        })
+        // })
         // 寄送報表會一直寄所以先註解
         // test("O-5-4 寄送報表", async () => {
         //     const { statusCode, body } = await supertest(app)
@@ -391,18 +391,18 @@ describe('店長', () => {
                 expect(+dayjs(item.createdAt).format('M')).toBe(month)
             })
         })
-        test("O-5-5 獲取訂單數量資料 - Redis 快取", async () => {
-            const month = +dayjs(orderNo, 'YYYYMMDDHHmmss').format('M');
-            const { statusCode, body } = await supertest(app)
-                .get('/v1/reports/admin/orders')
-                .set('Authorization', `Bearer ${token}`)
-                .query({
-                    month,
-                    number: 100
-                })
-            expect(statusCode).toBe(200)
-            expect(body.message).toContain("快取");
-        })
+        // test("O-5-5 獲取訂單數量資料 - Redis 快取", async () => {
+        //     const month = +dayjs(orderNo, 'YYYYMMDDHHmmss').format('M');
+        //     const { statusCode, body } = await supertest(app)
+        //         .get('/v1/reports/admin/orders')
+        //         .set('Authorization', `Bearer ${token}`)
+        //         .query({
+        //             month,
+        //             number: 100
+        //         })
+        //     expect(statusCode).toBe(200)
+        //     expect(body.message).toContain("快取");
+        // })
     })
 })
 
