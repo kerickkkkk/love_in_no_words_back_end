@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "01f64b44-b227-46d9-b02d-03e19133e07e",
+		"_postman_id": "ab6a3965-fffa-4093-84da-80ef771e14d2",
 		"name": "傲嬌甜點",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "26724792"
+		"_exporter_id": "6878038"
 	},
 	"item": [
 		{
@@ -1637,7 +1637,52 @@
 							"variable": [
 								{
 									"key": "orderId",
-									"value": "646e10d3c5d43e553625d048"
+									"value": "648663a64083e0cb14b64afc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "S-3-5 查詢訂單結帳狀態",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/orders/check/cash/:orderNo",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"orders",
+								"check",
+								"cash",
+								":orderNo"
+							],
+							"variable": [
+								{
+									"key": "orderNo",
+									"value": "20230612083213"
 								}
 							]
 						}
@@ -2484,7 +2529,7 @@
 			"name": "line_pay",
 			"item": [
 				{
-					"name": "S- 結帳",
+					"name": "S-5-1 結帳",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -2532,7 +2577,7 @@
 					"response": []
 				},
 				{
-					"name": "S- 查詢是否結帳",
+					"name": "S-5-2 查詢是否結帳",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
