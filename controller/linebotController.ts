@@ -3,14 +3,15 @@ import handleErrorAsync from "../service/handleErrorAsync";
 import { Client } from "@line/bot-sdk"
 import dotenv from 'dotenv'
 dotenv.config();
-
-const config: any = {
-  channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
-  channelSecret: process.env.CHANNEL_SECRET
-};
-// create LINE SDK client
-const client = new Client(config);
-
+let client: any
+if (process.env.NODE_ENV !== 'test') {
+  const config: any = {
+    channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
+    channelSecret: process.env.CHANNEL_SECRET
+  };
+  // create LINE SDK client
+  client = new Client(config);
+}
 // event handler
 const handleEvent = (event: any) => {
   if (event.type !== 'message' || event.message.type !== 'text') {
