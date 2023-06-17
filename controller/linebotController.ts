@@ -38,7 +38,6 @@ const handleEvent = (event: any) => {
 export const linebot = {
   webhook: handleErrorAsync(
     async (req: any, res: Response, next: NextFunction) => {
-      console.log(req.body.events);
       Promise
         .all(req.body.events.map(handleEvent))
         .then((result) => {
