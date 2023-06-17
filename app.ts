@@ -15,6 +15,7 @@ import onePlusOnesRouter from "./routes/onePlusOnes";
 import linePayRouter from "./routes/linePay";
 import membersRouter from "./routes/members";
 import reportsRouter from "./routes/reports";
+import linebotRouter from "./routes/linebot";
 import handleAllError from "./service/handleAllError";
 import notFound from "./service/notFound";
 
@@ -32,9 +33,12 @@ import "./connection";
 
 app.use(cors());
 app.use(logger("dev"));
-app.use(express.json());
+
+
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use("/v1/linebot", linebotRouter)
+app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 // app.use(history());
 
