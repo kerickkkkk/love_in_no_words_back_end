@@ -375,6 +375,18 @@ describe('店員 - 訂單查詢系列', () => {
                 orderStatus: '已結帳'
             });
         })
+        test("S-3-5 查詢訂單結帳狀態", async () => {
+            const { statusCode, body } = await supertest(app)
+                .get(`/v1/orders/check/cash/${orderNo}`)
+                .set('Authorization', `Bearer ${clerkToken}`)
+            expect(statusCode).toBe(200)
+            expect(body.message).toBe(`查詢成功，訂單 ${orderNo} 狀態為:${body.data.orderStatus}。`)
+            expect(body.data).toMatchObject({
+                orderNo: orderNo,
+                payment: '現金',
+                orderStatus: '已結帳'
+            });
+        })
     })
 
     // 獨立驗證可 一起驗證會有用到相同 ID 

@@ -630,8 +630,26 @@ export const orders = {
     } catch (error) {
       return next(appError(400, "提交評分資訊失敗!", next));
     }
-  })
+  }),
 
+  //S-3-5 查詢現金結帳
+  checkCash: handleErrorAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const { orderNo } = req.params
+
+    if (!orderNo) {
+      return next(appError(400, '訂單號碼不得為空', next));
+    }
+
+    // 查詢訂單號碼
+    const order = await Order.findOne({
+      orderNo,
+      isDeleted: false
+    })
+    if (!order) {
+      return next(appError(400, '查無訂單', next));
+    }
+    return handleSuccess(res, `查詢成功，訂單 ${orderNo} 狀態為:${order.orderStatus}。`, order);
+  })
 };
 
 export default orders;
