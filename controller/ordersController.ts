@@ -648,7 +648,6 @@ export const orders = {
     if (!order) {
       return next(appError(400, '查無訂單', next));
     }
-    console.log(order)
     return handleSuccess(res, `查詢成功，訂單 ${orderNo} 狀態為:${order.orderStatus}。`, order);
   })
 };
