@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@google-cloud/storage": "^6.10.0",
+    "@line/bot-sdk": "^7.5.2",
     "axios": "^1.4.0",
     "bcryptjs": "^2.4.3",
     "connect-history-api-fallback": "^2.0.0",
@@ -83,5 +84,5 @@
     "mongodbMemoryServer": {
       "debug": "1"
     }
-  }  
+  }
 }
