@@ -51,7 +51,7 @@ export enum Message {
   CREATE_SUCCESS = "新增成功",
   REVISE_SUCCESS = "修改成功",
   DELETE_SUCCESS = "刪除成功",
-  RESERVATION_CANCEL_SUCCESS = "預約取消成功",
+  RESERVATION_CANCEL_SUCCESS = "座位釋出成功",
   PRODUCT_TYPE_ADD_SUCCESS = "商品分類設定成功",
   PRODUCT_ADD_SUCCESS = "商品新增成功",
   PRODUCT_REVISE_SUCCESS = "商品修改成功",
