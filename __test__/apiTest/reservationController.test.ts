@@ -199,7 +199,7 @@ describe("店員 - 訂位", () => {
       .delete(`/v1/seats/reservation/${patchReservationId}`)
       .set("Authorization", `Bearer ${token}`);
     expect(statusCode).toBe(200);
-    expect(body.message).toBe("預約取消成功");
+    expect(body.message).toBe("座位釋出成功");
     // 呼叫修改訂位API確認該訂位ID已不存在
     const { statusCode: checkStatusCode, body: checkBody } = await supertest(
       app
