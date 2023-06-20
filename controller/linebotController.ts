@@ -243,7 +243,6 @@ const handleEvent = async (event: any) => {
       ]).sort({
         productNo: 1,
       })
-      console.log(products[0]);
       echo =
       {
         type: 'flex',
