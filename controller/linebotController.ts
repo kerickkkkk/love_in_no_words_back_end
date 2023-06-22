@@ -745,11 +745,11 @@ const handleEvent = async (event: any) => {
       }
 
       default:
-        echo = { type: 'text', text: "可輸入關鍵字：店名、組別、官網、商品、訂位" };
+        echo = { type: 'text', text: "可輸入關鍵字：店名、組別、官網、商品、訂位、座位、客服" };
         break;
     }
   } catch (error) {
-    echo = { type: 'text', text: "可輸入關鍵字：店名、組別、官網、商品、訂位" };
+    echo = { type: 'text', text: "可輸入關鍵字：店名、組別、官網、商品、訂位、座位、客服" };
   }
   // use reply API
   return client.replyMessage(event.replyToken, echo);
