@@ -4,6 +4,8 @@ import handleErrorAsync from "../service/handleErrorAsync";
 import ProductManagementModel from "../models/productManagementModel";
 import ProductTypeModel from "../models/productTypeModel";
 import ReservationModel from "../models/reservationModel";
+import TableManagementModel from '../models/tableManagementModel';
+import dayjs, { period } from '../utils/dayjs';
 import validator from 'validator';
 import { Client } from "@line/bot-sdk"
 import dotenv from 'dotenv'
@@ -17,7 +19,7 @@ if (process.env.NODE_ENV !== 'test') {
   // create LINE SDK client
   client = new Client(config);
 }
-const findReservation = async (phone: string) => {
+export const findReservation = async (phone: string) => {
   const result = await ReservationModel.find({
     phone,
     isCanceled: false
@@ -25,9 +27,8 @@ const findReservation = async (phone: string) => {
   return result || []
 }
 
-const validateTelephone = (telephone: string) => {
-  const pattern = /^09\d{8}$/; // 以 09 開頭，跟 8 位数字
-  return validator.isMobilePhone(telephone, 'any') && pattern.test(telephone);
+export const validateTelephone = (telephone: string) => {
+  return validator.isMobilePhone(telephone, 'zh-TW');
 }
 
 // event handler
@@ -624,12 +625,131 @@ const handleEvent = async (event: any) => {
         echo = { type: 'text', text: "請輸入：訂位-0912345678(共十碼)" };
         break;
       }
+      case /座位/i.test(text): {
+        const now = dayjs().format('YYYY-MM-DD')
+        const periodTime = period()
+
+        const getReservation = await ReservationModel.find({
+          reservationDate: now,
+          reservationTime: periodTime,
+          isCanceled: false,
+        })
+
+        const totalTable = await TableManagementModel.find({
+          isDisabled: false,
+          isDeleted: false,
+        })
+
+        const emptyTable = totalTable.filter(item => {
+          return (getReservation.find(reservation => reservation.tableInofo.tableNo === item.tableNo) === undefined)
+        })
+
+        echo = {
+          type: 'flex',
+          altText: '商品',
+          contents: {
+            "type": "bubble",
+            "hero": {
+              "type": "image",
+              "url": "https://storage.googleapis.com/love-in-no-words-back-end.appspot.com/images/e1214d2a-5e81-4fd0-a997-9d7a29f6420a.jpg?GoogleAccessId=firebase-adminsdk-vpr58%40love-in-no-words-back-end.iam.gserviceaccount.com&Expires=16756675200&Signature=HiHzLJCh7TropGbmSAPaRLPmRaWMeQ1TDWRc%2FMyV1WTx65YvLOlocgAA1GdAbYlivVgK5pDHyIt10%2FrCKZjix1f%2BabECPU6yTyBJbTXCfXbldDLY%2BXn26WMqS%2BLLrCykXiBkuSArzFmpS%2FTxOBqUfHDaLUZzmNhnD%2BYrGiu5lmCj9OOy5DFcQScNst%2Bvlcw3iGJBNWkAwOZl2UGKW3ZHuOdYaHIl81Ru1dU6Iuu5qoFgDQeLuNph6C9u6sfdpiOu3cLFfStg48YcH4gAEg3Ytsz29GHXZ%2FThVkH1VadvPHMc8bDFIVrx0o2s6y6wjM7s9BFunkKj4DbLFxs6Dk%2B6sA%3D%3D",
+              "size": "full",
+              "aspectRatio": "20:13",
+              "aspectMode": "cover"
+            },
+            "body": {
+              "type": "box",
+              "layout": "vertical",
+              "contents": [
+                {
+                  "type": "text",
+                  "text": "查詢座位數",
+                  "weight": "bold",
+                  "size": "lg"
+                },
+                {
+                  "type": "box",
+                  "layout": "vertical",
+                  "margin": "lg",
+                  "spacing": "sm",
+                  "contents": [
+                    {
+                      "type": "box",
+                      "layout": "baseline",
+                      "spacing": "sm",
+                      "contents": [
+                        {
+                          "type": "text",
+                          "text": "可預約桌數",
+                          "color": "#aaaaaa",
+                          "size": "sm",
+                          "flex": 2
+                        },
+                        {
+                          "type": "text",
+                          "text": emptyTable.length.toString(),
+                          "wrap": true,
+                          "size": "3xl",
+                          "flex": 5,
+                          "align": "center",
+                          "weight": "bold",
+                          "color": `${emptyTable.length <= 0 ? "#dc3545" : "#1DB446"}`
+                        }
+                      ]
+                    },
+                    {
+                      "type": "box",
+                      "layout": "baseline",
+                      "spacing": "sm",
+                      "contents": [
+                        {
+                          "type": "text",
+                          "text": "時段",
+                          "color": "#aaaaaa",
+                          "size": "sm",
+                          "flex": 2
+                        },
+                        {
+                          "type": "text",
+                          "text": `${now}(${periodTime})`,
+                          "color": "#aaaaaa",
+                          "size": "sm",
+                          "flex": 5
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "footer": {
+              "type": "box",
+              "layout": "vertical",
+              "spacing": "sm",
+              "contents": [
+                {
+                  "type": "button",
+                  "style": "link",
+                  "height": "sm",
+                  "action": {
+                    "type": "uri",
+                    "label": "[真人] 客服",
+                    "uri": "line://ti/p/@700iyjwu"
+                  }
+                }
+              ],
+              "flex": 0
+            }
+          }
+        }
+        break;
+      }
+
       default:
-        echo = { type: 'text', text: "可輸入關鍵字：店名、組別、官網、商品、訂位" };
+        echo = { type: 'text', text: "可輸入關鍵字：店名、組別、官網、商品、訂位、座位、客服" };
         break;
     }
   } catch (error) {
-    echo = { type: 'text', text: "可輸入關鍵字：店名、組別、官網、商品、訂位" };
+    echo = { type: 'text', text: "可輸入關鍵字：店名、組別、官網、商品、訂位、座位、客服" };
   }
   // use reply API
   return client.replyMessage(event.replyToken, echo);
